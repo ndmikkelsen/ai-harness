@@ -94,7 +94,7 @@ Use .codex/ entrypoints while keeping .rules/ and .planning/ canonical.
 
 ## Technical Notes
 
-Landing used the Codex wrapper scripts and shared Claude backend scripts.
+Landing used the Codex/OpenCode runtime scripts.
 EOF
 fi
 

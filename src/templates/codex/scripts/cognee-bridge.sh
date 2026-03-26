@@ -106,7 +106,7 @@ case "$command" in
       shift || true
     done
     if ! healthy; then echo "Cognee unavailable - skipping cognify"; exit 0; fi
-      payload='{}'
+    payload='{}'
     if [[ -n "$dataset" ]]; then
       payload="{\"datasets\":[\"${dataset}\"]}"
     fi

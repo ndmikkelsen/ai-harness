@@ -3,7 +3,7 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
-BRIDGE="$REPO_ROOT/.claude/scripts/cognee-bridge.sh"
+BRIDGE="$REPO_ROOT/.codex/scripts/cognee-bridge.sh"
 
 if [[ ! -x "$BRIDGE" ]]; then
   echo "Bridge script not found or not executable: $BRIDGE" >&2

@@ -6,16 +6,16 @@
 - added automated tests for project resolution, port logic, and end-to-end scaffold behavior
 - made existing-project adoption safer with merge behavior for key managed files
 - made remote port detection optional instead of always-on
-- added an assistant switch so scaffolds can target Claude or Codex/OpenCode
-- added generic governance and workflow surfacing documents as part of Claude scaffolds (`CONSTITUTION.md`, `VISION.md`, and shared role-command briefs)
+- added an assistant switch so scaffolds can target Codex or OpenCode
+- shifted governance toward `.planning/`, `.rules/`, `AGENTS.md`, and `STICKYNOTE.example.md` instead of extra root placeholder docs
 
 ## Preserved behavior
 
 - project name validation
 - project-name plus target-dir usage
-- Beads prefix support
+- native `bd` initialization and usage guidance
 - generation of the major AI workflow directories and templates
-- retention of Claude-compatible backend files for shared tooling
+- retention of Codex/OpenCode runtime scripts for shared tooling
 - offline-safe fallback ports for Kamal-related configs
 
 ## Intentionally improved behavior

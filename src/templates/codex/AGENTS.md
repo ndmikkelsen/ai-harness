@@ -4,15 +4,15 @@
 
 ## Overview
 
-This repository is prepared for {{COMPAT_LABEL}} through a thin compatibility layer while keeping .rules/ and .planning/ as the canonical project systems.
+This repository is prepared for {{COMPAT_LABEL}} through a focused runtime layer while keeping .rules/ and .planning/ as the canonical project systems.
 
 ## {{COMPAT_LABEL}} Workflow
 
-{{COMPAT_LABEL}} works in this repository through a thin adapter layer. The canonical systems remain:
+{{COMPAT_LABEL}} works in this repository through a focused runtime layer. The canonical systems remain:
 
 - .rules/ for architecture and workflow rules
 - .planning/ for GSD planning, execution, and handoff artifacts
-- .claude/scripts/ for working Cognee and planning sync backends
+- .codex/scripts/ for working Cognee and planning sync backends
 
 Use the {{COMPAT_LABEL}} compatibility docs and scripts under .codex/ as entrypoints, not as a separate source of truth.
 
@@ -20,10 +20,11 @@ Use the {{COMPAT_LABEL}} compatibility docs and scripts under .codex/ as entrypo
 
 1. Read the relevant .rules/ documents before changing code or infrastructure.
 2. Inspect .planning/STATE.md and any active phase docs in .planning/.
-3. Query Cognee with ./.codex/scripts/cognee-brief.sh "<query>".
-4. On a fresh worktree, run ./.codex/scripts/bootstrap-worktree.sh.
-5. Execute work in waves with explicit file ownership and validation boundaries.
-6. Land the session with ./.codex/scripts/land.sh.
+3. Use native `bd` for task tracking after the repository is initialized with `bd init`.
+4. Query Cognee with ./.codex/scripts/cognee-brief.sh "<query>".
+5. On a fresh worktree, run ./.codex/scripts/bootstrap-worktree.sh.
+6. Execute work in waves with explicit file ownership and validation boundaries.
+7. Land the session with ./.codex/scripts/land.sh.
 
 ### {{COMPAT_LABEL}} Guardrails
 

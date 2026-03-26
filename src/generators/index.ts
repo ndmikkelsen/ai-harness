@@ -1,6 +1,4 @@
 import type { ManagedEntry, ScaffoldContext } from '../core/types.js';
-import { isCodexCompatibleAssistant } from '../core/assistant.js';
-import { buildClaudeEntries } from './claude.js';
 import { buildConfigEntries } from './config.js';
 import { buildCodexEntries } from './codex.js';
 import { buildPlanningEntries } from './planning.js';
@@ -12,8 +10,7 @@ export function buildManagedEntries(context: ScaffoldContext): ManagedEntry[] {
   return [
     ...buildRootEntries(),
     ...buildPlanningEntries(),
-    ...buildClaudeEntries(),
-    ...(isCodexCompatibleAssistant(context.assistant) ? buildCodexEntries() : []),
+    ...buildCodexEntries(),
     ...buildConfigEntries(),
     ...buildRuleEntries(),
     ...buildProjectDocEntries()

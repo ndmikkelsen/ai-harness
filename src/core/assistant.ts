@@ -1,13 +1,8 @@
-import type { AssistantSelection, AssistantTarget } from './types.js';
-
-export function isCodexCompatibleAssistant(value: AssistantTarget | AssistantSelection): boolean {
-  return value === 'codex' || value === 'opencode';
-}
+import type { AssistantTarget } from './types.js';
 
 export function assistantDisplayName(value: AssistantTarget): string {
   if (value === 'opencode') return 'OpenCode';
-  if (value === 'codex') return 'Codex';
-  return 'Claude';
+  return 'Codex';
 }
 
 export function codexCompatibilityLabel(value: AssistantTarget): string {

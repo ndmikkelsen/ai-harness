@@ -1,7 +1,7 @@
 import os from 'node:os';
 import path from 'node:path';
 
-export const LOCAL_LAUNCHER_NAMES = ['scaff'] as const;
+export const LOCAL_LAUNCHER_NAMES = ['scaiff'] as const;
 
 export function defaultBinDir(): string {
   return path.join(os.homedir(), '.local', 'bin');
@@ -12,7 +12,7 @@ export function renderLauncherScript(repoPath: string): string {
 
 set -euo pipefail
 
-REPO="\${SCAFF_REPO:-${repoPath}}"
+REPO="\${SCAIFF_REPO:-${repoPath}}"
 DIST="$REPO/dist/src/cli.js"
 SRC="$REPO/src/cli.ts"
 TSX="$REPO/node_modules/.bin/tsx"

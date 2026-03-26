@@ -1,6 +1,6 @@
 ## Beads Integration Pattern
 
-Use `.claude/scripts/bd` for Beads commands.
+Use native `bd` commands for Beads.
 
 Run `bd init` once per repository to initialize Beads using the official defaults.
 Use `bd dolt show` to inspect the active Beads connection and `bd dolt set <key> <value>` when you need to override host, port, database, or user.

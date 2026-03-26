@@ -13,11 +13,11 @@ describe('template loader', () => {
     const content = await loadTemplate('template-loader.txt', {
       values: {
         NAME: 'World',
-        APP: 'ai-scaffolding'
+        APP: 'scaiff'
       }
     });
 
-    expect(content).toBe('Hello World,\nWelcome to ai-scaffolding project!\n{{MISSING}} should stay.\n');
+    expect(content).toBe('Hello World,\nWelcome to scaiff project!\n{{MISSING}} should stay.\n');
   });
 
   it('can opt out of trailing newline normalization', async () => {
