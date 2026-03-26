@@ -23,9 +23,11 @@ export async function applyManagedEntries(
     }
 
     if (existsSync(outputPath) && !options.force) {
-      if (entry.merge) {
+      const canMerge = entry.merge !== undefined && entry.mergeGroup === 'root' && options.mergeRootFiles === true;
+
+      if (canMerge) {
         const existingContent = await readFile(outputPath, 'utf8');
-        const mergedContent = entry.merge(existingContent, context);
+        const mergedContent = entry.merge!(existingContent, context);
 
         if (mergedContent !== null && mergedContent !== existingContent) {
           createdPaths.push(entry.path);

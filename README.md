@@ -35,6 +35,9 @@ pnpm exec tsx src/cli.ts sample-app --assistant opencode
 # adopt the current repository
 pnpm exec tsx src/cli.ts --mode existing .
 
+# adopt the current repository and opt into root-file merges
+pnpm exec tsx src/cli.ts --mode existing . --merge-root-files
+
 # preview changes only
 pnpm exec tsx src/cli.ts sample-app --dry-run
 
@@ -50,6 +53,8 @@ pnpm exec tsx src/cli.ts doctor . --assistant codex --json
 
 ## What gets scaffolded
 
+New repositories receive the full scaffold. Existing repositories create the same missing files while preserving pre-existing scaffold files by default.
+
 - root hygiene files like `.gitignore`, `.env.example`, `.gitleaks.toml`, `.pre-commit-config.yaml`
 - Beads docs for native `bd`; run `bd init` to create `.beads/`
 - `.planning/` for GSD planning artifacts
@@ -61,8 +66,8 @@ pnpm exec tsx src/cli.ts doctor . --assistant codex --json
 ## Safety model for existing projects
 
 - existing files are preserved by default
-- `.gitignore` is merged with required ignored entries instead of being skipped outright
-- `.env.example` gets an appended AI workflow block when needed
+- missing scaffold files are added without rewriting pre-existing scaffold files
+- `.gitignore` and `.env.example` are only merged when `--merge-root-files` is explicitly set
 - `STICKYNOTE.md` is intentionally local-only and can be seeded from `STICKYNOTE.example.md`
 - `AGENTS.md` is added for Codex/OpenCode-targeted projects
 - `--force` replaces managed files explicitly

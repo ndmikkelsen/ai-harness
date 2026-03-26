@@ -19,7 +19,7 @@ The project is intentionally split into small layers:
 2. Resolve safe service ports.
 3. Build a scaffold context from policy defaults plus user input, including the assistant target.
 4. Generate managed files and directories, then add the selected assistant runtime surface.
-5. Apply the plan with merge or skip rules for existing files.
+5. Apply the plan with strict preserve-by-default rules for existing files, plus optional root-file merges.
 6. Initialize git only when requested and only when no repo already exists.
 
 ## Design choices
@@ -27,7 +27,7 @@ The project is intentionally split into small layers:
 - TypeScript over Bash for testability and maintainability
 - generator modules grouped by domain (`root`, `planning`, `codex`, `config`, `rules`, `project-docs`)
 - Codex/OpenCode runtime assets now live directly under `.codex/` as the single assistant runtime surface.
-- merge-aware adoption for the most important shared files instead of blind overwrite-or-skip behavior
+- preserve-by-default adoption for existing repos, with explicit opt-in merging for `.gitignore` and `.env.example`
 - optional remote port detection instead of mandatory network coupling
 - Codex/OpenCode support shares one runtime surface so the scaffold stays assistant-focused without Claude-specific artifacts
 
