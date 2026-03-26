@@ -1,10 +1,10 @@
 {
-  "name": "ai-scaffolding",
+  "name": "scaiff",
   "version": "0.1.0",
   "description": "Modular CLI for bootstrapping AI workflow project scaffolding.",
   "type": "module",
   "bin": {
-    "scaff": "dist/src/cli.js"
+    "scaiff": "dist/src/cli.js"
   },
   "main": "dist/src/index.js",
   "types": "dist/src/index.d.ts",

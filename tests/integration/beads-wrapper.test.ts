@@ -1,23 +1,19 @@
-import { execFile as execFileCallback } from 'node:child_process';
-import { promisify } from 'node:util';
 import os from 'node:os';
 import path from 'node:path';
 
-import { chmod, mkdir, mkdtemp, writeFile } from 'node:fs/promises';
+import { mkdtemp, readFile } from 'node:fs/promises';
 import { describe, expect, it } from 'vitest';
 
 import { runInit } from '../../src/commands/init.js';
 
-const execFile = promisify(execFileCallback);
+describe('Beads integration', () => {
+  it('documents native bd usage without generating a wrapper script', async () => {
+    const workspace = await mkdtemp(path.join(os.tmpdir(), 'scaiff-bd-native-'));
 
-describe('Beads wrapper', () => {
-  it('acts as a thin wrapper around native bd defaults', async () => {
-    const workspace = await mkdtemp(path.join(os.tmpdir(), 'ai-scaffolding-bd-wrapper-'));
-
-    await runInit({
+    const result = await runInit({
       cwd: workspace,
-      projectArg: 'sample-bd-wrapper',
-      assistant: 'claude',
+      projectArg: 'sample-bd-native',
+      assistant: 'opencode',
       mode: 'auto',
       dryRun: false,
       force: false,
@@ -25,54 +21,20 @@ describe('Beads wrapper', () => {
       detectPorts: false
     });
 
-    const projectDir = path.join(workspace, 'sample-bd-wrapper');
-    const wrapperPath = path.join(projectDir, '.claude', 'scripts', 'bd');
-    const fakeBinDir = path.join(workspace, 'fake-bin');
-    const fakeBdPath = path.join(fakeBinDir, 'bd');
+    const projectDir = path.join(workspace, 'sample-bd-native');
+    const readme = await readFile(path.join(projectDir, 'README.md'), 'utf8');
+    const beadsGuide = await readFile(path.join(projectDir, '.rules', 'patterns', 'beads-integration.md'), 'utf8');
+    const codexReadme = await readFile(path.join(projectDir, '.codex', 'README.md'), 'utf8');
+    const agentsGuide = await readFile(path.join(projectDir, 'AGENTS.md'), 'utf8');
 
-    await mkdir(fakeBinDir, { recursive: true });
-    await writeFile(
-      fakeBdPath,
-      `#!/usr/bin/env bash
-echo "HOST=${'$'}{BEADS_DOLT_SERVER_HOST:-}"
-echo "PORT=${'$'}{BEADS_DOLT_SERVER_PORT:-}"
-echo "USER=${'$'}{BEADS_DOLT_SERVER_USER:-}"
-echo "DB=${'$'}{BEADS_DOLT_SERVER_DATABASE:-}"
-echo "LEGACY_PASS=${'$'}{BEADS_DOLT_SERVER_PASSWORD:-}"
-echo "PASS=${'$'}{BEADS_DOLT_PASSWORD:-}"
-echo "ARGS=$*"
-`,
-      'utf8'
-    );
-    await chmod(fakeBdPath, 0o755);
-
-    const result = await execFile(wrapperPath, ['ready'], {
-      cwd: projectDir,
-      env: {
-        ...process.env,
-        PATH: `${fakeBinDir}${path.delimiter}${process.env.PATH ?? ''}`,
-        BEADS_DOLT_PASSWORD: 'native_secret'
-      },
-      encoding: 'utf8'
-    });
-
-    const output = result.stdout;
-    const lines = Object.fromEntries(
-      output
-        .trim()
-        .split('\n')
-        .map((line) => {
-          const [key, ...rest] = line.split('=');
-          return [key, rest.join('=')];
-        })
-    );
-
-    expect(lines.HOST).toBe('');
-    expect(lines.PORT).toBe('');
-    expect(lines.USER).toBe('');
-    expect(lines.DB).toBe('');
-    expect(lines.LEGACY_PASS).toBe('');
-    expect(lines.PASS).toBe('native_secret');
-    expect(lines.ARGS).toBe('ready');
+    expect(result.createdPaths).not.toContain('.claude/scripts/bd');
+    expect(result.createdPaths).not.toContain('.claude/INDEX.md');
+    expect(readme).toContain('Run `bd init` once in the repository before using Beads.');
+    expect(readme).toContain('Review AGENTS.md, .codex/README.md, and the guides in .rules/.');
+    expect(beadsGuide).toContain('Use native `bd` commands for Beads.');
+    expect(beadsGuide).not.toContain('.claude/scripts/bd');
+    expect(codexReadme).toContain('Use native `bd` as the Beads task-tracking interface after `bd init`');
+    expect(codexReadme).toContain('.codex/scripts/cognee-bridge.sh');
+    expect(agentsGuide).toContain('Use native `bd` for task tracking after the repository is initialized with `bd init`.');
   });
 });

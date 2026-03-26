@@ -11,10 +11,11 @@ import { runInit } from '../../src/commands/init.js';
 
 const execFile = promisify(execFileCallback);
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
+const tsxCli = path.join(repoRoot, 'node_modules', 'tsx', 'dist', 'cli.mjs');
 
 describe('CLI doctor', () => {
   it('accepts auto assistant on the doctor subcommand for Codex-compatible scaffolds', async () => {
-    const workspace = await mkdtemp(path.join(os.tmpdir(), 'ai-scaffolding-cli-doctor-'));
+    const workspace = await mkdtemp(path.join(os.tmpdir(), 'scaiff-cli-doctor-'));
 
     await runInit({
       cwd: workspace,
@@ -29,8 +30,8 @@ describe('CLI doctor', () => {
 
     const targetDir = path.join(workspace, 'doctor-cli-opencode');
     const result = await execFile(
-      'pnpm',
-      ['exec', 'tsx', 'src/cli.ts', 'doctor', '--assistant', 'auto', '--json', targetDir],
+      process.execPath,
+      [tsxCli, 'src/cli.ts', 'doctor', '--assistant', 'auto', '--json', targetDir],
       {
         cwd: repoRoot,
         encoding: 'utf8'
@@ -39,7 +40,7 @@ describe('CLI doctor', () => {
 
     const payload = JSON.parse(result.stdout) as { assistant: string; status: string };
 
-    expect(payload.assistant).toBe('codex');
+    expect(payload.assistant).toBe('opencode');
     expect(payload.status).toBe('pass');
   });
 });

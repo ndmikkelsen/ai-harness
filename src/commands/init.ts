@@ -13,8 +13,7 @@ export async function runInit(options: InitCommandOptions): Promise<InitResult> 
     cwd: options.cwd,
     projectArg: options.projectArg,
     targetArg: options.targetArg,
-    mode: options.mode,
-    prefix: options.prefix
+    mode: options.mode
   });
 
   const portSettings = resolvePorts({
@@ -41,7 +40,8 @@ export async function runInit(options: InitCommandOptions): Promise<InitResult> 
   const entryResult = await applyManagedEntries(context, buildManagedEntries(context), {
     targetDir: context.targetDir,
     force: options.force,
-    dryRun: options.dryRun
+    dryRun: options.dryRun,
+    mergeRootFiles: options.mergeRootFiles
   });
 
   const notes = [...portSettings.notes];

@@ -6,10 +6,10 @@ import { LOCAL_LAUNCHER_NAMES, renderLauncherScript } from '../../src/local-laun
 
 describe('renderLauncherScript', () => {
   it('renders a wrapper that targets the selected repo', () => {
-    const repoPath = '/tmp/ai-scaffolding';
+    const repoPath = '/tmp/scaiff';
     const result = renderLauncherScript(repoPath);
 
-    expect(result).toContain(`REPO="\${SCAFF_REPO:-${repoPath}}"`);
+    expect(result).toContain(`REPO="\${SCAIFF_REPO:-${repoPath}}"`);
     expect(result).toContain('DIST="$REPO/dist/src/cli.js"');
     expect(result).toContain('TSX="$REPO/node_modules/.bin/tsx"');
     expect(result).toContain('exec node "$DIST" "$@"');
@@ -18,7 +18,7 @@ describe('renderLauncherScript', () => {
   });
 
   it('installs the CLI launcher name', () => {
-    expect(LOCAL_LAUNCHER_NAMES).toEqual(['scaff']);
+    expect(LOCAL_LAUNCHER_NAMES).toEqual(['scaiff']);
   });
 
   it('renders a stable basename-based error prefix', () => {

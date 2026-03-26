@@ -5,18 +5,19 @@ export function buildPlanningEntries(): ManagedEntry[] {
   return [
     { kind: 'directory', path: '.planning' },
     { kind: 'directory', path: '.planning/phases' },
+    { kind: 'directory', path: '.planning/quick' },
     { kind: 'directory', path: '.planning/research' },
     { kind: 'directory', path: '.planning/milestones' },
     { kind: 'directory', path: '.planning/codebase' },
     {
       kind: 'file',
-      path: '.planning/TRACEABILITY.md',
-      content: () => loadTemplate('planning/TRACEABILITY.md')
+      path: '.planning/phases/README.md',
+      content: () => loadTemplate('planning/phases/README.md')
     },
     {
       kind: 'file',
-      path: '.planning/phases/README.md',
-      content: () => loadTemplate('planning/phases/README.md')
+      path: '.planning/quick/README.md',
+      content: () => loadTemplate('planning/quick/README.md')
     },
     {
       kind: 'file',
@@ -42,6 +43,11 @@ export function buildPlanningEntries(): ManagedEntry[] {
       kind: 'file',
       path: '.planning/PROJECT.md',
       content: (context) => loadTemplate('planning/PROJECT.md', { APP_TITLE: context.appTitle })
+    },
+    {
+      kind: 'file',
+      path: '.planning/REQUIREMENTS.md',
+      content: (context) => loadTemplate('planning/REQUIREMENTS.md', { APP_TITLE: context.appTitle })
     },
     {
       kind: 'file',

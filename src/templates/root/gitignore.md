@@ -14,7 +14,6 @@ __pycache__/
 .vscode/
 .idea/
 .DS_Store
-.claude/settings.local.json
 STICKYNOTE.md
 .beads/.sync.lock
 .beads/sync_base.jsonl

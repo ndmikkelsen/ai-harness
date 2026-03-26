@@ -54,7 +54,6 @@ export function resolveProjectInput(options: ResolveProjectInputOptions): Resolv
   return {
     appName: candidateName,
     appSlug: candidateName,
-    appPrefix: options.prefix ?? candidateName,
     appTitle: titleCaseFromSlug(candidateName),
     appVar: envVarNameFromSlug(candidateName),
     targetDir,

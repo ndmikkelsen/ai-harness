@@ -8,7 +8,8 @@ The project is intentionally split into small layers:
 - `src/commands/init.ts` coordinates resolution, generation, file application, and optional git setup
 - `src/core/` holds reusable domain logic like project resolution, port selection, filesystem writes, and git detection
 - `src/generators/` defines scaffold content by concern instead of keeping one giant script
-- `src/generators/codex.ts` adds the Codex/OpenCode compatibility layer on top of the shared scaffold when requested
+- `src/generators/codex.ts` seeds the Codex/OpenCode runtime layer, including scripts, agents, templates, and deploy assets
+- `src/generators/planning.ts` seeds the official GSD planning surface (`PROJECT.md`, `REQUIREMENTS.md`, `ROADMAP.md`, `STATE.md`, research, milestones, codebase, quick tasks, and phases)
 - `tests/` covers unit and integration behavior
 - `apps/cli/features/` captures BDD scenarios for the expected user-facing workflow
 
@@ -17,18 +18,19 @@ The project is intentionally split into small layers:
 1. Resolve project mode and target directory.
 2. Resolve safe service ports.
 3. Build a scaffold context from policy defaults plus user input, including the assistant target.
-4. Generate managed files and directories, then add assistant-specific overlays.
-5. Apply the plan with merge or skip rules for existing files.
+4. Generate managed files and directories, then add the selected assistant runtime surface.
+5. Apply the plan with strict preserve-by-default rules for existing files, plus optional root-file merges.
 6. Initialize git only when requested and only when no repo already exists.
 
 ## Design choices
 
 - TypeScript over Bash for testability and maintainability
-- generator modules grouped by domain (`root`, `beads`, `planning`, `claude`, `codex`, `config`, `rules`, `project-docs`)
-- command-surface scaffolding now includes `.claude/commands`, `.claude/agents`, and `.agents`.
-- merge-aware adoption for the most important shared files instead of blind overwrite-or-skip behavior
+- generator modules grouped by domain (`root`, `planning`, `codex`, `config`, `rules`, `project-docs`)
+- Codex/OpenCode runtime assets now live directly under `.codex/` as the single assistant runtime surface.
+- preserve-by-default adoption for existing repos, with explicit opt-in merging for `.gitignore` and `.env.example`
+- preserve-by-default adoption for existing repos, with explicit opt-in merging for `.gitignore` and `.env.example`
 - optional remote port detection instead of mandatory network coupling
-- Codex/OpenCode support is layered on top of the shared Claude-compatible backend scripts so both workflows can coexist
+- Codex/OpenCode support shares one runtime surface so the scaffold stays assistant-focused without Claude-specific artifacts
 
 ## Deferred work
 

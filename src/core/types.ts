@@ -1,6 +1,6 @@
 import type { ProjectMode } from './policy.js';
 
-export type AssistantTarget = 'claude' | 'codex' | 'opencode';
+export type AssistantTarget = 'codex' | 'opencode';
 export type AssistantSelection = AssistantTarget | 'auto';
 
 export interface ResolveProjectInputOptions {
@@ -8,13 +8,11 @@ export interface ResolveProjectInputOptions {
   projectArg?: string;
   targetArg?: string;
   mode: ProjectMode;
-  prefix?: string;
 }
 
 export interface ResolvedProjectInput {
   appName: string;
   appSlug: string;
-  appPrefix: string;
   appTitle: string;
   appVar: string;
   targetDir: string;
@@ -33,9 +31,9 @@ export interface InitCommandOptions {
   targetArg?: string;
   assistant: AssistantTarget;
   mode: ProjectMode;
-  prefix?: string;
   dryRun: boolean;
   force: boolean;
+  mergeRootFiles?: boolean;
   skipGit: boolean;
   detectPorts: boolean;
   doltPort?: number;
@@ -67,6 +65,7 @@ export interface ManagedFile {
   executable?: boolean;
   content: (context: ScaffoldContext) => string;
   merge?: (existingContent: string, context: ScaffoldContext) => string | null;
+  mergeGroup?: 'root';
 }
 
 export type ManagedEntry = ManagedDirectory | ManagedFile;
@@ -75,6 +74,7 @@ export interface ApplyManagedEntriesOptions {
   targetDir: string;
   force: boolean;
   dryRun: boolean;
+  mergeRootFiles?: boolean;
 }
 
 export interface ApplyManagedEntriesResult {

@@ -3,9 +3,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { constants as fsConstants } from 'node:fs';
 
-import { isCodexCompatibleAssistant } from '../core/assistant.js';
 import type {
-  AssistantSelection,
   AssistantTarget,
   DoctorCommandOptions,
   DoctorGroupResult,
@@ -21,7 +19,6 @@ function createDoctorContext(targetDir: string, assistant: AssistantTarget): Sca
   return {
     appName: 'doctor-app',
     appSlug: 'doctor-app',
-    appPrefix: 'doctor-app',
     appTitle: 'Doctor App',
     appVar: 'DOCTOR_APP',
     targetDir,
@@ -44,11 +41,14 @@ function fileEntriesForAssistant(targetDir: string, assistant: AssistantTarget):
 }
 
 function inferAssistant(targetDir: string): AssistantTarget {
-  if (fs.existsSync(path.join(targetDir, '.codex')) || fs.existsSync(path.join(targetDir, 'AGENTS.md'))) {
-    return 'codex';
+  if (fs.existsSync(path.join(targetDir, 'AGENTS.md'))) {
+    const agentsGuide = fs.readFileSync(path.join(targetDir, 'AGENTS.md'), 'utf8');
+    if (agentsGuide.includes('OpenCode Workflow')) {
+      return 'opencode';
+    }
   }
 
-  return 'claude';
+  return 'codex';
 }
 
 async function fileExists(targetDir: string, relativePath: string): Promise<boolean> {
@@ -91,37 +91,26 @@ export async function runDoctor(options: DoctorCommandOptions): Promise<DoctorRe
   const targetDir = path.resolve(options.cwd, options.targetArg ?? '.');
   const assistant = options.assistant === 'auto' ? inferAssistant(targetDir) : options.assistant;
 
-  const sharedEntries = fileEntriesForAssistant(targetDir, 'claude');
   const selectedEntries = fileEntriesForAssistant(targetDir, assistant);
-  const sharedPaths = new Set(sharedEntries.map((entry) => entry.path));
-  const selectedPaths = new Set(selectedEntries.map((entry) => entry.path));
-  const codexPaths = [...selectedPaths].filter((entryPath) => !sharedPaths.has(entryPath));
 
   const missing: string[] = [];
   const invalid: DoctorIssue[] = [];
   const warnings: DoctorIssue[] = [];
 
-  for (const entry of sharedEntries) {
+  for (const entry of selectedEntries) {
     if (!(await fileExists(targetDir, entry.path))) {
       missing.push(entry.path);
-    }
-  }
-
-  if (isCodexCompatibleAssistant(assistant)) {
-    for (const entryPath of codexPaths) {
-      if (!(await fileExists(targetDir, entryPath))) {
-        missing.push(entryPath);
-      }
     }
   }
 
   const gitignore = await readFileIfPresent(targetDir, '.gitignore');
   if (gitignore !== null) {
     if (!gitignore.includes('.kamal/secrets')) {
-      invalid.push({ path: '.gitignore', reason: 'missing .kamal/secrets ignore rule' });
+      warnings.push({ path: '.gitignore', reason: 'missing .kamal/secrets ignore rule' });
     }
-    if (!gitignore.includes('.claude/settings.local.json')) {
-      invalid.push({ path: '.gitignore', reason: 'missing .claude/settings.local.json ignore rule' });
+    if (!gitignore.includes('STICKYNOTE.md')) {
+      warnings.push({ path: '.gitignore', reason: 'missing STICKYNOTE.md ignore rule' });
+      warnings.push({ path: '.gitignore', reason: 'missing STICKYNOTE.md ignore rule' });
     }
   }
 
@@ -129,31 +118,29 @@ export async function runDoctor(options: DoctorCommandOptions): Promise<DoctorRe
   if (envExample !== null) {
     for (const token of ['LLM_API_KEY', 'COGNEE_URL', 'BEADS_DOLT_PASSWORD']) {
       if (!envExample.includes(token)) {
-        invalid.push({ path: '.env.example', reason: `missing ${token} scaffold value` });
+        warnings.push({ path: '.env.example', reason: `missing ${token} scaffold value` });
       }
     }
   }
 
-  const claudeGuide = await readFileIfPresent(targetDir, 'CLAUDE.md');
-  if (claudeGuide !== null && !claudeGuide.includes('AI Workflow Scaffold') && !claudeGuide.includes('.rules/patterns/git-workflow.md')) {
-    invalid.push({ path: 'CLAUDE.md', reason: 'missing scaffold workflow guidance' });
+  const codexBrief = await readFileIfPresent(targetDir, '.codex/scripts/cognee-brief.sh');
+  if (codexBrief !== null && !codexBrief.includes('.codex/scripts/cognee-bridge.sh')) {
+    invalid.push({ path: '.codex/scripts/cognee-brief.sh', reason: 'missing runtime backend reference' });
   }
 
-  if (isCodexCompatibleAssistant(assistant)) {
-    const codexBrief = await readFileIfPresent(targetDir, '.codex/scripts/cognee-brief.sh');
-    if (codexBrief !== null && !codexBrief.includes('.claude/scripts/cognee-bridge.sh')) {
-      invalid.push({ path: '.codex/scripts/cognee-brief.sh', reason: 'missing shared backend reference' });
-    }
+  const codexSync = await readFileIfPresent(targetDir, '.codex/scripts/sync-planning-to-cognee.sh');
+  if (codexSync !== null && !codexSync.includes('.codex/scripts/cognee-sync-planning.sh')) {
+    invalid.push({ path: '.codex/scripts/sync-planning-to-cognee.sh', reason: 'missing runtime backend reference' });
+  }
 
-    const codexSync = await readFileIfPresent(targetDir, '.codex/scripts/sync-planning-to-cognee.sh');
-    if (codexSync !== null && !codexSync.includes('.claude/scripts/cognee-sync-planning.sh')) {
-      invalid.push({ path: '.codex/scripts/sync-planning-to-cognee.sh', reason: 'missing shared backend reference' });
-    }
+  const codexReadme = await readFileIfPresent(targetDir, '.codex/README.md');
+  if (codexReadme !== null && !codexReadme.includes('.codex/scripts/cognee-bridge.sh')) {
+    invalid.push({ path: '.codex/README.md', reason: 'missing runtime backend guidance' });
+  }
 
-    const agentsGuide = await readFileIfPresent(targetDir, 'AGENTS.md');
-    if (agentsGuide !== null && !agentsGuide.includes('.claude/scripts/')) {
-      invalid.push({ path: 'AGENTS.md', reason: 'missing shared backend guidance' });
-    }
+  const agentsGuide = await readFileIfPresent(targetDir, 'AGENTS.md');
+  if (agentsGuide !== null && !agentsGuide.includes('.codex/scripts/')) {
+    invalid.push({ path: 'AGENTS.md', reason: 'missing runtime backend guidance' });
   }
 
   for (const entry of selectedEntries.filter((candidate) => candidate.executable)) {
@@ -164,20 +151,15 @@ export async function runDoctor(options: DoctorCommandOptions): Promise<DoctorRe
     }
   }
 
-  const sharedMissingCount = missing.filter((entryPath) => sharedPaths.has(entryPath)).length;
-  const codexMissingCount = isCodexCompatibleAssistant(assistant)
-    ? missing.filter((entryPath) => codexPaths.includes(entryPath)).length
-    : 0;
-  const invalidRootCount = invalid.filter((issue) => ['.gitignore', '.env.example', 'CLAUDE.md'].includes(issue.path)).length;
+  const runtimeMissingCount = missing.length;
+  const rootWarningCount = warnings.filter((issue) => ['.gitignore', '.env.example'].includes(issue.path)).length;
   const invalidCodexCount = invalid.filter((issue) => issue.path.startsWith('.codex/') || issue.path === 'AGENTS.md').length;
-  const executableWarningCount = warnings.length;
+  const executableWarningCount = warnings.filter((issue) => !['.gitignore', '.env.example'].includes(issue.path)).length;
 
   const groups: DoctorGroupResult[] = [
-    buildGroupStatus('shared-backend', { missing: sharedMissingCount }),
-    ...(isCodexCompatibleAssistant(assistant)
-      ? [buildGroupStatus('codex-overlay', { missing: codexMissingCount, invalid: invalidCodexCount })]
-      : []),
-    buildGroupStatus('root-merged-files', { invalid: invalidRootCount }),
+    buildGroupStatus('codex-runtime', { missing: runtimeMissingCount, invalid: invalidCodexCount }),
+    buildGroupStatus('root-scaffold-hints', { warnings: rootWarningCount }),
+    buildGroupStatus('root-scaffold-hints', { warnings: rootWarningCount }),
     buildGroupStatus('executables', { warnings: executableWarningCount })
   ];
 

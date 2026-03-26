@@ -1,10 +1,16 @@
 Feature: Adopt an existing project into the AI workflow scaffold
 
-  Scenario: Add missing managed files without overwriting existing files
-    Given an existing project directory with a custom README
+  Scenario: Add missing managed files without modifying pre-existing scaffold files
+    Given an existing project directory with custom root files
     When I apply the scaffold in existing-project mode
     Then missing AI workflow files are created
-    And existing files are left unchanged
+    And pre-existing scaffold files are left unchanged
+
+  Scenario: Merge root scaffold entries only when explicitly requested
+    Given an existing project directory with custom root files
+    When I apply the scaffold in existing-project mode with root-file merging enabled
+    Then missing AI workflow files are created
+    And scaffold entries are appended to `.gitignore` and `.env.example` without removing custom content
 
   Scenario: Add Codex compatibility files to an existing project
     Given an existing project directory without Codex files

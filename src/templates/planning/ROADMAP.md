@@ -1,3 +1,11 @@
 # {{APP_TITLE}} Roadmap
 
-Roadmap entries will appear here.
+## Phase Overview
+
+| Phase | Goal | Requirements |
+| --- | --- | --- |
+| 1 | Define the first buildable slice | CORE-01 |
+
+## Phase Notes
+
+- Replace this starter roadmap during `/gsd:new-project` with requirement-mapped phases.

@@ -16,33 +16,34 @@ function parseMode(value: string): ProjectMode {
 }
 
 function parseAssistant(value: string): AssistantSelection {
-  if (value === 'auto' || value === 'claude' || value === 'codex' || value === 'opencode') {
+  if (value === 'auto' || value === 'codex' || value === 'opencode') {
     return value;
   }
 
-  throw new InvalidArgumentError('Assistant must be one of: auto, claude, codex, opencode.');
+  throw new InvalidArgumentError('Assistant must be one of: auto, codex, opencode.');
 }
 
 function parseDoctorAssistant(value: string): AssistantSelection {
-  if (value === 'auto' || value === 'claude' || value === 'codex' || value === 'opencode') {
+  if (value === 'auto' || value === 'codex' || value === 'opencode') {
     return value;
   }
 
-  throw new InvalidArgumentError('Assistant must be one of: auto, claude, codex, opencode.');
+  throw new InvalidArgumentError('Assistant must be one of: auto, codex, opencode.');
 }
 
 const program = new Command();
 
 program
-  .name('scaff')
+  .name('scaiff')
   .description('Modular AI workflow scaffolder for new and existing projects.')
   .argument('[project]', 'project name or target path')
   .argument('[target]', 'target directory')
-  .option('--assistant <assistant>', 'assistant target: claude, codex, or opencode', parseAssistant, 'codex')
-  .option('--prefix <prefix>', 'Beads issue prefix')
+  .option('--assistant <assistant>', 'assistant target: codex or opencode', parseAssistant, 'codex')
   .option('--mode <mode>', 'scaffold mode: auto, new, existing', parseMode, 'auto')
+  .option('--init-json', 'emit machine-readable JSON output for scaffold runs', false)
   .option('--dry-run', 'show planned changes without writing files', false)
   .option('--force', 'overwrite managed files', false)
+  .option('--merge-root-files', 'in existing-project mode, merge scaffold entries into .gitignore and .env.example', false)
   .option('--skip-git', 'skip git initialization', false)
   .option('--detect-ports', 'probe the compute host for available service ports', false)
   .option('--dolt-port <port>', 'explicit Dolt port', (value) => Number.parseInt(value, 10))
@@ -56,10 +57,10 @@ program
       projectArg,
       targetArg,
       assistant: options.assistant === 'auto' ? 'codex' : (options.assistant as AssistantTarget),
-      prefix: options.prefix,
       mode: options.mode,
       dryRun: options.dryRun,
       force: options.force,
+      mergeRootFiles: options.mergeRootFiles,
       skipGit: options.skipGit,
       detectPorts: options.detectPorts,
       doltPort: options.doltPort,
@@ -69,14 +70,19 @@ program
       sshKeyPath: options.sshKeyPath
     });
 
+    if (options.initJson) {
+      process.stdout.write(`${JSON.stringify(result, null, 2)}\n`);
+      return;
+    }
+
     process.stdout.write(formatInitReport(result));
   });
 
 program
   .command('doctor')
-  .description('Audit whether a repository is scaffolded correctly for Claude or Codex.')
+  .description('Audit whether a repository is scaffolded correctly for Codex/OpenCode.')
   .argument('[target]', 'target directory', '.')
-  .option('--assistant <assistant>', 'assistant target: auto, claude, codex, or opencode', parseDoctorAssistant, 'auto')
+  .option('--assistant <assistant>', 'assistant target: auto, codex, or opencode', parseDoctorAssistant, 'auto')
   .option('--json', 'emit machine-readable JSON output', false)
   .action(async (targetArg: string, options) => {
     const result = await runDoctor({
