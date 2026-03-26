@@ -83,7 +83,6 @@ The scaffold no longer generates:
 - default behavior: create missing scaffold files and skip all pre-existing scaffold files unchanged
 - optional behavior: `--merge-root-files` appends scaffold entries into `.gitignore` and `.env.example`
 - `--force` still overwrites managed files explicitly when you want full regeneration
-
 ## Deploy Review
 
 ### Kept templates

@@ -110,6 +110,7 @@ export async function runDoctor(options: DoctorCommandOptions): Promise<DoctorRe
     }
     if (!gitignore.includes('STICKYNOTE.md')) {
       warnings.push({ path: '.gitignore', reason: 'missing STICKYNOTE.md ignore rule' });
+      warnings.push({ path: '.gitignore', reason: 'missing STICKYNOTE.md ignore rule' });
     }
   }
 
@@ -157,6 +158,7 @@ export async function runDoctor(options: DoctorCommandOptions): Promise<DoctorRe
 
   const groups: DoctorGroupResult[] = [
     buildGroupStatus('codex-runtime', { missing: runtimeMissingCount, invalid: invalidCodexCount }),
+    buildGroupStatus('root-scaffold-hints', { warnings: rootWarningCount }),
     buildGroupStatus('root-scaffold-hints', { warnings: rootWarningCount }),
     buildGroupStatus('executables', { warnings: executableWarningCount })
   ];
