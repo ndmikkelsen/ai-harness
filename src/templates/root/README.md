@@ -6,6 +6,7 @@ This project is scaffolded for the local AI workflow used across {{ASSISTANT_LAB
 
 - Planning artifacts in .planning/
 - Codex/OpenCode runtime files in .codex/
+- Repo setup skill in .codex/skills/scaiff-repo-setup/
 - Beads workflow guidance using native `bd`
 - Deployment templates in config/ and .kamal/
 {{CODEx_BULLET}}
@@ -17,3 +18,4 @@ This project is scaffolded for the local AI workflow used across {{ASSISTANT_LAB
 3. Copy .env.example to .env and fill in local values.
 4. Run `bd init` once in the repository before using Beads.
 5. Create a feature branch before your first commit.
+6. Use `.codex/skills/scaiff-repo-setup/SKILL.md` when adopting or bootstrapping another repository.

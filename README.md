@@ -35,6 +35,12 @@ pnpm exec tsx src/cli.ts sample-app --assistant opencode
 # adopt the current repository
 pnpm exec tsx src/cli.ts --mode existing .
 
+# adopt the current repository and opt into root-file merges
+pnpm exec tsx src/cli.ts --mode existing . --merge-root-files
+
+# emit machine-readable scaffold results
+pnpm exec tsx src/cli.ts --mode existing . --init-json
+
 # preview changes only
 pnpm exec tsx src/cli.ts sample-app --dry-run
 
@@ -50,10 +56,13 @@ pnpm exec tsx src/cli.ts doctor . --assistant codex --json
 
 ## What gets scaffolded
 
+New repositories receive the full scaffold. Existing repositories create the same missing files while preserving pre-existing scaffold files by default.
+
 - root hygiene files like `.gitignore`, `.env.example`, `.gitleaks.toml`, `.pre-commit-config.yaml`
 - Beads docs for native `bd`; run `bd init` to create `.beads/`
 - `.planning/` for GSD planning artifacts
 - `.codex/` runtime scripts, docs, templates, agents, and docker assets shared by Codex and OpenCode
+- `.codex/skills/scaiff-repo-setup/` for reusable repository setup guidance
 - `AGENTS.md` for the repo-level Codex/OpenCode operating guide
 - `.kamal/` and `config/` deployment templates
 - `.rules/`, `STICKYNOTE.example.md`, and `.planning/` as the canonical guidance surface
@@ -61,11 +70,19 @@ pnpm exec tsx src/cli.ts doctor . --assistant codex --json
 ## Safety model for existing projects
 
 - existing files are preserved by default
-- `.gitignore` is merged with required ignored entries instead of being skipped outright
-- `.env.example` gets an appended AI workflow block when needed
+- missing scaffold files are added without rewriting pre-existing scaffold files
+- `.gitignore` and `.env.example` are only merged when `--merge-root-files` is explicitly set
 - `STICKYNOTE.md` is intentionally local-only and can be seeded from `STICKYNOTE.example.md`
 - `AGENTS.md` is added for Codex/OpenCode-targeted projects
 - `--force` replaces managed files explicitly
+
+## Existing repo workflow
+
+1. gather project context from git, docs, manifests, Beads, and Cognee when available
+2. run `scaiff --mode existing <path> --init-json`
+3. customize only the files listed in `createdPaths`
+4. rerun with `--merge-root-files` only if you explicitly want `.gitignore` and `.env.example` merged
+5. finish with `scaiff doctor <path> --assistant <codex|opencode>`
 
 ## Development
 

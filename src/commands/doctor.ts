@@ -106,10 +106,11 @@ export async function runDoctor(options: DoctorCommandOptions): Promise<DoctorRe
   const gitignore = await readFileIfPresent(targetDir, '.gitignore');
   if (gitignore !== null) {
     if (!gitignore.includes('.kamal/secrets')) {
-      invalid.push({ path: '.gitignore', reason: 'missing .kamal/secrets ignore rule' });
+      warnings.push({ path: '.gitignore', reason: 'missing .kamal/secrets ignore rule' });
     }
     if (!gitignore.includes('STICKYNOTE.md')) {
-      invalid.push({ path: '.gitignore', reason: 'missing STICKYNOTE.md ignore rule' });
+      warnings.push({ path: '.gitignore', reason: 'missing STICKYNOTE.md ignore rule' });
+      warnings.push({ path: '.gitignore', reason: 'missing STICKYNOTE.md ignore rule' });
     }
   }
 
@@ -117,7 +118,7 @@ export async function runDoctor(options: DoctorCommandOptions): Promise<DoctorRe
   if (envExample !== null) {
     for (const token of ['LLM_API_KEY', 'COGNEE_URL', 'BEADS_DOLT_PASSWORD']) {
       if (!envExample.includes(token)) {
-        invalid.push({ path: '.env.example', reason: `missing ${token} scaffold value` });
+        warnings.push({ path: '.env.example', reason: `missing ${token} scaffold value` });
       }
     }
   }
@@ -151,13 +152,14 @@ export async function runDoctor(options: DoctorCommandOptions): Promise<DoctorRe
   }
 
   const runtimeMissingCount = missing.length;
-  const invalidRootCount = invalid.filter((issue) => ['.gitignore', '.env.example'].includes(issue.path)).length;
+  const rootWarningCount = warnings.filter((issue) => ['.gitignore', '.env.example'].includes(issue.path)).length;
   const invalidCodexCount = invalid.filter((issue) => issue.path.startsWith('.codex/') || issue.path === 'AGENTS.md').length;
-  const executableWarningCount = warnings.length;
+  const executableWarningCount = warnings.filter((issue) => !['.gitignore', '.env.example'].includes(issue.path)).length;
 
   const groups: DoctorGroupResult[] = [
     buildGroupStatus('codex-runtime', { missing: runtimeMissingCount, invalid: invalidCodexCount }),
-    buildGroupStatus('root-merged-files', { invalid: invalidRootCount }),
+    buildGroupStatus('root-scaffold-hints', { warnings: rootWarningCount }),
+    buildGroupStatus('root-scaffold-hints', { warnings: rootWarningCount }),
     buildGroupStatus('executables', { warnings: executableWarningCount })
   ];
 

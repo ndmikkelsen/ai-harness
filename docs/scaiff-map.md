@@ -20,7 +20,7 @@ The kept systems are:
 
 ### Core generators
 
-- `src/generators/root.ts` creates root docs and merged hygiene files
+- `src/generators/root.ts` creates root docs and optional root-file merge behavior for adoption mode
 - `src/generators/planning.ts` creates the official GSD planning surface
 - `src/generators/codex.ts` creates the only assistant runtime surface under `.codex/`
 - `src/generators/config.ts` creates `.kamal/` and `config/` deploy templates
@@ -51,6 +51,9 @@ The kept systems are:
 - `.codex/scripts/bootstrap-worktree.sh`
 - `.codex/scripts/land.sh`
 - `.codex/agents/*.md`
+- `.codex/skills/scaiff-repo-setup/SKILL.md`
+- `.codex/skills/scaiff-repo-setup/references/*.md`
+- `.codex/skills/scaiff-repo-setup/assets/adoption-notes-template.md`
 - `.codex/workflows/parallel-execution.md`
 - `.codex/templates/phase-execution.md`
 - `.codex/docker/Dockerfile.cognee`
@@ -75,6 +78,11 @@ The scaffold no longer generates:
 - broad Cognee repo sync helpers
 - dead `.codex` template files
 
+## Existing Repository Adoption
+
+- default behavior: create missing scaffold files and skip all pre-existing scaffold files unchanged
+- optional behavior: `--merge-root-files` appends scaffold entries into `.gitignore` and `.env.example`
+- `--force` still overwrites managed files explicitly when you want full regeneration
 ## Deploy Review
 
 ### Kept templates

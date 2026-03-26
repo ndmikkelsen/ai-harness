@@ -4,7 +4,7 @@
 
 - separated policy, command orchestration, file application, and scaffold generation into dedicated modules
 - added automated tests for project resolution, port logic, and end-to-end scaffold behavior
-- made existing-project adoption safer with merge behavior for key managed files
+- made existing-project adoption safer with preserve-by-default behavior and explicit opt-in root-file merges
 - made remote port detection optional instead of always-on
 - added an assistant switch so scaffolds can target Codex or OpenCode
 - shifted governance toward `.planning/`, `.rules/`, `AGENTS.md`, and `STICKYNOTE.example.md` instead of extra root placeholder docs
@@ -21,7 +21,7 @@
 ## Intentionally improved behavior
 
 - no nested git repository initialization when scaffolding inside an existing repository
-- safer adoption of existing repos through merge rules
+- safer adoption of existing repos through strict preservation plus optional root-file merges
 - clearer separation of template groups and policies
 - stronger validation for explicit port values
 - Codex/OpenCode compatibility files are adapted from `compute-stack/.codex/` and parameterized for generic reuse

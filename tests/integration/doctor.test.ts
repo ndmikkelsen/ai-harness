@@ -1,4 +1,4 @@
-import { chmod, mkdtemp, rm } from 'node:fs/promises';
+import { chmod, mkdtemp, rm, writeFile } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
 
@@ -146,6 +146,44 @@ describe('runDoctor', () => {
     expect(result.warnings).toEqual(
       expect.arrayContaining([
         expect.objectContaining({ path: '.codex/scripts/bootstrap-worktree.sh', reason: 'not executable' })
+      ])
+    );
+  });
+
+  it('does not fail adopted existing repos when preserved root files lack scaffold values', async () => {
+    const workspace = await mkdtemp(path.join(os.tmpdir(), 'scaiff-doctor-'));
+
+    await runInit({
+      cwd: workspace,
+      projectArg: 'doctor-existing',
+      assistant: 'codex',
+      mode: 'auto',
+      dryRun: false,
+      force: false,
+      skipGit: true,
+      detectPorts: false
+    });
+
+    const targetDir = path.join(workspace, 'doctor-existing');
+    await writeFile(path.join(targetDir, '.gitignore'), 'dist/\n', 'utf8');
+    await writeFile(path.join(targetDir, '.env.example'), 'EXISTING_ONLY=true\n', 'utf8');
+
+    const result = await runDoctor({
+      cwd: workspace,
+      targetArg: targetDir,
+      assistant: 'codex',
+      json: false
+    });
+
+    expect(result.status).toBe('warn');
+    expect(result.invalid).toEqual([]);
+    expect(result.groups).toEqual(
+      expect.arrayContaining([expect.objectContaining({ name: 'root-scaffold-hints', status: 'warn' })])
+    );
+    expect(result.warnings).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ path: '.gitignore', reason: 'missing .kamal/secrets ignore rule' }),
+        expect.objectContaining({ path: '.env.example', reason: 'missing LLM_API_KEY scaffold value' })
       ])
     );
   });

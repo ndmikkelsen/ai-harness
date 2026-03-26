@@ -40,8 +40,10 @@ program
   .argument('[target]', 'target directory')
   .option('--assistant <assistant>', 'assistant target: codex or opencode', parseAssistant, 'codex')
   .option('--mode <mode>', 'scaffold mode: auto, new, existing', parseMode, 'auto')
+  .option('--init-json', 'emit machine-readable JSON output for scaffold runs', false)
   .option('--dry-run', 'show planned changes without writing files', false)
   .option('--force', 'overwrite managed files', false)
+  .option('--merge-root-files', 'in existing-project mode, merge scaffold entries into .gitignore and .env.example', false)
   .option('--skip-git', 'skip git initialization', false)
   .option('--detect-ports', 'probe the compute host for available service ports', false)
   .option('--dolt-port <port>', 'explicit Dolt port', (value) => Number.parseInt(value, 10))
@@ -58,6 +60,7 @@ program
       mode: options.mode,
       dryRun: options.dryRun,
       force: options.force,
+      mergeRootFiles: options.mergeRootFiles,
       skipGit: options.skipGit,
       detectPorts: options.detectPorts,
       doltPort: options.doltPort,
@@ -66,6 +69,11 @@ program
       computeUser: options.computeUser,
       sshKeyPath: options.sshKeyPath
     });
+
+    if (options.initJson) {
+      process.stdout.write(`${JSON.stringify(result, null, 2)}\n`);
+      return;
+    }
 
     process.stdout.write(formatInitReport(result));
   });

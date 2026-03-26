@@ -33,6 +33,7 @@ export interface InitCommandOptions {
   mode: ProjectMode;
   dryRun: boolean;
   force: boolean;
+  mergeRootFiles?: boolean;
   skipGit: boolean;
   detectPorts: boolean;
   doltPort?: number;
@@ -64,6 +65,7 @@ export interface ManagedFile {
   executable?: boolean;
   content: (context: ScaffoldContext) => string;
   merge?: (existingContent: string, context: ScaffoldContext) => string | null;
+  mergeGroup?: 'root';
 }
 
 export type ManagedEntry = ManagedDirectory | ManagedFile;
@@ -72,6 +74,7 @@ export interface ApplyManagedEntriesOptions {
   targetDir: string;
   force: boolean;
   dryRun: boolean;
+  mergeRootFiles?: boolean;
 }
 
 export interface ApplyManagedEntriesResult {

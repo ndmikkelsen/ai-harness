@@ -26,6 +26,7 @@ describe('runInit', () => {
     expect(result.createdPaths).toContain('.planning/config.json');
     expect(result.createdPaths).toContain('.planning/REQUIREMENTS.md');
     expect(result.createdPaths).toContain('.codex/README.md');
+    expect(result.createdPaths).toContain('.codex/skills/scaiff-repo-setup/SKILL.md');
     expect(result.createdPaths).toContain('.codex/scripts/cognee-bridge.sh');
     expect(result.createdPaths).toContain('.codex/scripts/cognee-sync-planning.sh');
     expect(result.createdPaths).toContain('.codex/scripts/sync-planning-to-cognee.sh');
@@ -98,6 +99,7 @@ describe('runInit', () => {
 
     expect(result.assistant).toBe('codex');
     expect(result.createdPaths).toContain('.codex/README.md');
+    expect(result.createdPaths).toContain('.codex/skills/scaiff-repo-setup/SKILL.md');
     expect(result.createdPaths).toContain('AGENTS.md');
     expect(result.createdPaths).toContain('.codex/docker/Dockerfile.cognee');
     expect(result.createdPaths).not.toContain('.codex/scripts/sync-to-cognee.sh');
@@ -105,6 +107,7 @@ describe('runInit', () => {
     expect(result.createdPaths).not.toContain('.claude/settings.json');
     expect(codexReadme).toContain('Codex Compatibility Layer');
     expect(codexReadme).toContain('./.codex/scripts/sync-planning-to-cognee.sh');
+    expect(codexReadme).toContain('.codex/skills/scaiff-repo-setup/SKILL.md');
     expect(codexReadme).not.toContain('./.codex/scripts/sync-to-cognee.sh');
     expect(agentsGuide).toContain('Codex Workflow');
     expect(codexBridgeWrapper).toContain('.codex/scripts/cognee-bridge.sh');
@@ -129,6 +132,7 @@ describe('runInit', () => {
 
     expect(result.assistant).toBe('opencode');
     expect(result.createdPaths).toContain('.codex/README.md');
+    expect(result.createdPaths).toContain('.codex/skills/scaiff-repo-setup/SKILL.md');
     expect(result.createdPaths).toContain('AGENTS.md');
     expect(result.createdPaths).toContain('.codex/scripts/cognee-bridge.sh');
     expect(result.createdPaths).not.toContain('.codex/templates/session-handoff.md');
@@ -142,11 +146,16 @@ describe('runInit', () => {
     const targetDir = path.join(workspace, 'existing-project');
     const readmePath = path.join(targetDir, 'README.md');
     const gitignorePath = path.join(targetDir, '.gitignore');
+    const envExamplePath = path.join(targetDir, '.env.example');
+    const originalReadme = '# Custom README\n';
+    const originalGitignore = 'dist/\ncustom-cache/\n';
+    const originalEnvExample = 'EXISTING_ONLY=true\n';
 
     await writeFile(path.join(workspace, 'placeholder.txt'), 'placeholder', 'utf8');
     await mkdir(targetDir, { recursive: true });
-    await writeFile(readmePath, '# Custom README\n', 'utf8');
-    await writeFile(gitignorePath, 'dist/\n', 'utf8');
+    await writeFile(readmePath, originalReadme, 'utf8');
+    await writeFile(gitignorePath, originalGitignore, 'utf8');
+    await writeFile(envExamplePath, originalEnvExample, 'utf8');
 
     const result = await runInit({
       cwd: workspace,
@@ -161,12 +170,74 @@ describe('runInit', () => {
 
     const readme = await readFile(readmePath, 'utf8');
     const gitignore = await readFile(gitignorePath, 'utf8');
+    const envExample = await readFile(envExamplePath, 'utf8');
 
-    expect(readme).toBe('# Custom README\n');
-    expect(gitignore).toContain('.env');
-    expect(gitignore).toContain('.kamal/secrets');
+    expect(readme).toBe(originalReadme);
+    expect(gitignore).toBe(originalGitignore);
+    expect(envExample).toBe(originalEnvExample);
     expect(result.skippedPaths).toContain('README.md');
-    expect(result.createdPaths).toContain('.gitignore');
+    expect(result.skippedPaths).toContain('.gitignore');
+    expect(result.skippedPaths).toContain('.env.example');
+    expect(result.createdPaths).not.toContain('.gitignore');
+    expect(result.createdPaths).not.toContain('.env.example');
+    expect(result.createdPaths).toContain('.planning/config.json');
+    expect(result.createdPaths).toContain('.codex/README.md');
+    expect(result.createdPaths).toContain('.codex/skills/scaiff-repo-setup/SKILL.md');
+  });
+
+  it('merges root files in existing-project mode only when explicitly requested', async () => {
+    const workspace = await mkdtemp(path.join(os.tmpdir(), 'scaiff-'));
+    const targetDir = path.join(workspace, 'existing-project-merge');
+    const gitignorePath = path.join(targetDir, '.gitignore');
+    const envExamplePath = path.join(targetDir, '.env.example');
+
+    await mkdir(targetDir, { recursive: true });
+    await writeFile(gitignorePath, 'dist/\n', 'utf8');
+    await writeFile(envExamplePath, 'EXISTING_ONLY=true\n', 'utf8');
+
+    const firstResult = await runInit({
+      cwd: workspace,
+      projectArg: targetDir,
+      assistant: 'codex',
+      mode: 'existing',
+      dryRun: false,
+      force: false,
+      skipGit: true,
+      detectPorts: false,
+      mergeRootFiles: true
+    });
+
+    const firstGitignore = await readFile(gitignorePath, 'utf8');
+    const firstEnvExample = await readFile(envExamplePath, 'utf8');
+
+    expect(firstResult.createdPaths).toContain('.gitignore');
+    expect(firstResult.createdPaths).toContain('.env.example');
+    expect(firstGitignore).toContain('dist/');
+    expect(firstGitignore).toContain('.env');
+    expect(firstGitignore).toContain('.kamal/secrets');
+    expect(firstEnvExample).toContain('EXISTING_ONLY=true');
+    expect(firstEnvExample).toContain('# AI workflow scaffold');
+    expect(firstEnvExample).toContain('LLM_API_KEY=YOUR_OPENAI_API_KEY_HERE');
+
+    const secondResult = await runInit({
+      cwd: workspace,
+      projectArg: targetDir,
+      assistant: 'codex',
+      mode: 'existing',
+      dryRun: false,
+      force: false,
+      skipGit: true,
+      detectPorts: false,
+      mergeRootFiles: true
+    });
+
+    const secondGitignore = await readFile(gitignorePath, 'utf8');
+    const secondEnvExample = await readFile(envExamplePath, 'utf8');
+
+    expect(secondGitignore).toBe(firstGitignore);
+    expect(secondEnvExample).toBe(firstEnvExample);
+    expect(secondResult.skippedPaths).toContain('.gitignore');
+    expect(secondResult.skippedPaths).toContain('.env.example');
   });
 
   it('supports dry-run mode without writing files', async () => {

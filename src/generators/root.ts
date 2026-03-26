@@ -72,6 +72,7 @@ export function buildRootEntries(): ManagedEntry[] {
       kind: 'file',
       path: '.gitignore',
       content: () => gitignore(),
+      mergeGroup: 'root',
       merge: (existingContent) => mergeUniqueLines(existingContent, gitignore())
     },
     { kind: 'file', path: '.gitleaks.toml', content: (context) => gitleaks(context) },
@@ -80,6 +81,7 @@ export function buildRootEntries(): ManagedEntry[] {
         kind: 'file',
         path: '.env.example',
         content: (context) => envExample(context),
+        mergeGroup: 'root',
         merge: (existingContent, context) => {
           if (existingContent.includes(scaffoldMarker)) {
             return null;
