@@ -13,8 +13,7 @@ export async function runInit(options: InitCommandOptions): Promise<InitResult> 
     cwd: options.cwd,
     projectArg: options.projectArg,
     targetArg: options.targetArg,
-    mode: options.mode,
-    prefix: options.prefix
+    mode: options.mode
   });
 
   const portSettings = resolvePorts({

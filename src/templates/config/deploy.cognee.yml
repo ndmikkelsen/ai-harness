@@ -20,7 +20,7 @@ ssh:
 
 builder:
   arch: amd64
-  dockerfile: .claude/docker/Dockerfile.cognee
+  dockerfile: .codex/docker/Dockerfile.cognee
 
 env:
   clear:

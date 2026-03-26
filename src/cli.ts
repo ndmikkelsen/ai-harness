@@ -16,30 +16,29 @@ function parseMode(value: string): ProjectMode {
 }
 
 function parseAssistant(value: string): AssistantSelection {
-  if (value === 'auto' || value === 'claude' || value === 'codex' || value === 'opencode') {
+  if (value === 'auto' || value === 'codex' || value === 'opencode') {
     return value;
   }
 
-  throw new InvalidArgumentError('Assistant must be one of: auto, claude, codex, opencode.');
+  throw new InvalidArgumentError('Assistant must be one of: auto, codex, opencode.');
 }
 
 function parseDoctorAssistant(value: string): AssistantSelection {
-  if (value === 'auto' || value === 'claude' || value === 'codex' || value === 'opencode') {
+  if (value === 'auto' || value === 'codex' || value === 'opencode') {
     return value;
   }
 
-  throw new InvalidArgumentError('Assistant must be one of: auto, claude, codex, opencode.');
+  throw new InvalidArgumentError('Assistant must be one of: auto, codex, opencode.');
 }
 
 const program = new Command();
 
 program
-  .name('scaff')
+  .name('scaiff')
   .description('Modular AI workflow scaffolder for new and existing projects.')
   .argument('[project]', 'project name or target path')
   .argument('[target]', 'target directory')
-  .option('--assistant <assistant>', 'assistant target: claude, codex, or opencode', parseAssistant, 'codex')
-  .option('--prefix <prefix>', 'Beads issue prefix')
+  .option('--assistant <assistant>', 'assistant target: codex or opencode', parseAssistant, 'codex')
   .option('--mode <mode>', 'scaffold mode: auto, new, existing', parseMode, 'auto')
   .option('--dry-run', 'show planned changes without writing files', false)
   .option('--force', 'overwrite managed files', false)
@@ -56,7 +55,6 @@ program
       projectArg,
       targetArg,
       assistant: options.assistant === 'auto' ? 'codex' : (options.assistant as AssistantTarget),
-      prefix: options.prefix,
       mode: options.mode,
       dryRun: options.dryRun,
       force: options.force,
@@ -74,9 +72,9 @@ program
 
 program
   .command('doctor')
-  .description('Audit whether a repository is scaffolded correctly for Claude or Codex.')
+  .description('Audit whether a repository is scaffolded correctly for Codex/OpenCode.')
   .argument('[target]', 'target directory', '.')
-  .option('--assistant <assistant>', 'assistant target: auto, claude, codex, or opencode', parseDoctorAssistant, 'auto')
+  .option('--assistant <assistant>', 'assistant target: auto, codex, or opencode', parseDoctorAssistant, 'auto')
   .option('--json', 'emit machine-readable JSON output', false)
   .action(async (targetArg: string, options) => {
     const result = await runDoctor({

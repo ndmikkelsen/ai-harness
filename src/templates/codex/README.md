@@ -1,23 +1,32 @@
 # {{COMPAT_LABEL}} Compatibility Layer
 
 This repository already has working project systems for backlog tracking, planning, and knowledge capture.
-{{COMPAT_LABEL}} should use them directly through this thin adapter layer.
+{{COMPAT_LABEL}} should use them directly through this runtime layer.
 
 ## Canonical Systems
 
 - .rules/ is the source of truth for architecture and workflow patterns
 - .planning/ is the GSD execution and handoff workspace
-- .claude/scripts/ contains the live Cognee and planning sync plumbing
+- .codex/scripts/ contains the live Cognee and planning sync plumbing
+- Use native `bd` as the Beads task-tracking interface after `bd init`
 
 ## {{COMPAT_LABEL}} Mapping
 
 | Existing project surface | {{COMPAT_LABEL}} entrypoint |
 | --- | --- |
-| Claude-compatible backend scripts | .codex/scripts/*.sh |
+| Runtime scripts | .codex/scripts/*.sh |
 | Agent role briefs | .codex/agents/*.md |
 | Cognee advisor | ./.codex/scripts/cognee-brief.sh |
 | Planning sync | ./.codex/scripts/sync-planning-to-cognee.sh |
 | Landing protocol | ./.codex/scripts/land.sh |
+
+## Runtime Surface
+
+- `./.codex/scripts/cognee-bridge.sh` - low-level Cognee query, upload, and cognify entrypoint
+- `./.codex/scripts/cognee-sync-planning.sh` - sync GSD planning artifacts into Cognee
+- `./.codex/scripts/sync-planning-to-cognee.sh` - user-facing planning sync entrypoint
+- `./.codex/scripts/bootstrap-worktree.sh` - seed local worktree state
+- `.codex/docker/Dockerfile.cognee` - container build source for the Cognee deploy template
 
 ## Default Workflow
 
@@ -32,5 +41,5 @@ This repository already has working project systems for backlog tracking, planni
 ## Rules
 
 - Do not create parallel planning systems under .codex/.
-- Treat .codex/ as documentation and wrappers only.
+- Treat .codex/ as the runtime surface for assistant-specific scripts and docs while keeping `.planning/` and `.rules/` canonical.
 - If Cognee is unavailable, continue with .rules/, .planning/, and repo search.

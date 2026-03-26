@@ -1,3 +1,12 @@
-# Codebase Notes
+# Codebase Map
 
-Architectural notes, assumptions, and discovered facts should be added here.
+Use `.planning/codebase/` for brownfield analysis before or during GSD planning.
+
+Common files:
+
+- `ARCHITECTURE.md`
+- `STACK.md`
+- `CONVENTIONS.md`
+- `CONCERNS.md`
+
+Populate this area through `/gsd:map-codebase` or equivalent repo analysis.

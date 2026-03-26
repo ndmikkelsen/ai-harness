@@ -1,5 +1,5 @@
 import type { ManagedEntry, ScaffoldContext } from '../core/types.js';
-import { assistantDisplayName, isCodexCompatibleAssistant } from '../core/assistant.js';
+import { assistantDisplayName } from '../core/assistant.js';
 import { loadTemplate } from '../core/template-loader.js';
 
 function mergeUniqueLines(existingContent: string, generatedContent: string): string | null {
@@ -55,15 +55,14 @@ function envrc(context: ScaffoldContext): string {
 
 function readme(context: ScaffoldContext): string {
   const assistantLabel = assistantDisplayName(context.assistant);
-  const codexBullet =
-    isCodexCompatibleAssistant(context.assistant)
-      ? `- ${context.assistant === 'opencode' ? 'OpenCode' : 'Codex'} compatibility files in .codex/ and AGENTS.md`
-      : '';
+  const codexBullet = `- ${context.assistant === 'opencode' ? 'OpenCode' : 'Codex'} runtime files in .codex/ and AGENTS.md`;
+  const workflowGuideLine = 'Review AGENTS.md, .codex/README.md, and the guides in .rules/.';
 
   return loadTemplate('root/README.md', {
     APP_TITLE: context.appTitle,
     ASSISTANT_LABEL: assistantLabel,
-    CODEx_BULLET: codexBullet
+    CODEx_BULLET: codexBullet,
+    WORKFLOW_GUIDE_LINE: workflowGuideLine
   });
 }
 
