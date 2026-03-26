@@ -20,6 +20,7 @@ Codex should use them directly through this runtime layer.
 | --- | --- |
 | Runtime scripts | .codex/scripts/*.sh |
 | Agent role briefs | .codex/agents/*.md |
+| Repo setup skill | .codex/skills/scaiff-repo-setup/SKILL.md |
 | Cognee advisor | ./.codex/scripts/cognee-brief.sh |
 | Planning sync | ./.codex/scripts/sync-planning-to-cognee.sh |
 | Landing protocol | ./.codex/scripts/land.sh |
@@ -31,6 +32,7 @@ Codex should use them directly through this runtime layer.
 - \`./.codex/scripts/sync-planning-to-cognee.sh\` - user-facing planning sync entrypoint
 - \`./.codex/scripts/bootstrap-worktree.sh\` - seed local worktree state
 - \`.codex/docker/Dockerfile.cognee\` - container build source for the Cognee deploy template
+- \`.codex/skills/scaiff-repo-setup/SKILL.md\` - reusable setup workflow for new and existing repositories
 
 ## Default Workflow
 
@@ -112,6 +114,7 @@ Use the Codex compatibility docs and scripts under .codex/ as entrypoints, not a
 - Do not mirror .planning/ into .codex-specific directories.
 - Keep Cognee integration non-blocking; if it is down, continue using local docs and planning artifacts.
 - Treat .codex/agents/*.md as reusable role briefs and .codex/scripts/*.sh as the executable surface.
+- Use \`.codex/skills/scaiff-repo-setup/SKILL.md\` when bootstrapping or adopting another repository with scaiff.
 - When the user asks for \`task table\`, format the response as a Markdown table with columns \`ID | Priority | Status | Title\`.
 ",
   "README.md": "# Snapshot Codex
@@ -122,6 +125,7 @@ This project is scaffolded for the local AI workflow used across Codex, GSD, Bea
 
 - Planning artifacts in .planning/
 - Codex/OpenCode runtime files in .codex/
+- Repo setup skill in .codex/skills/scaiff-repo-setup/
 - Beads workflow guidance using native \`bd\`
 - Deployment templates in config/ and .kamal/
 - Codex runtime files in .codex/ and AGENTS.md
@@ -133,6 +137,7 @@ This project is scaffolded for the local AI workflow used across Codex, GSD, Bea
 3. Copy .env.example to .env and fill in local values.
 4. Run \`bd init\` once in the repository before using Beads.
 5. Create a feature branch before your first commit.
+6. Use \`.codex/skills/scaiff-repo-setup/SKILL.md\` when adopting or bootstrapping another repository.
 ",
   "STICKYNOTE.example.md": "# Snapshot Codex Sticky Note
 
@@ -169,6 +174,12 @@ Last updated: 2026-03-26
     ".codex/scripts/cognee-sync-planning.sh",
     ".codex/scripts/land.sh",
     ".codex/scripts/sync-planning-to-cognee.sh",
+    ".codex/skills/scaiff-repo-setup/SKILL.md",
+    ".codex/skills/scaiff-repo-setup/assets/adoption-notes-template.md",
+    ".codex/skills/scaiff-repo-setup/references/existing-repo-context-checklist.md",
+    ".codex/skills/scaiff-repo-setup/references/manifest-discovery.md",
+    ".codex/skills/scaiff-repo-setup/references/scaffold-customization-map.md",
+    ".codex/skills/scaiff-repo-setup/references/scaiff-command-matrix.md",
     ".codex/templates/phase-execution.md",
     ".codex/workflows/parallel-execution.md",
     ".env.example",
@@ -224,6 +235,7 @@ OpenCode should use them directly through this runtime layer.
 | --- | --- |
 | Runtime scripts | .codex/scripts/*.sh |
 | Agent role briefs | .codex/agents/*.md |
+| Repo setup skill | .codex/skills/scaiff-repo-setup/SKILL.md |
 | Cognee advisor | ./.codex/scripts/cognee-brief.sh |
 | Planning sync | ./.codex/scripts/sync-planning-to-cognee.sh |
 | Landing protocol | ./.codex/scripts/land.sh |
@@ -235,6 +247,7 @@ OpenCode should use them directly through this runtime layer.
 - \`./.codex/scripts/sync-planning-to-cognee.sh\` - user-facing planning sync entrypoint
 - \`./.codex/scripts/bootstrap-worktree.sh\` - seed local worktree state
 - \`.codex/docker/Dockerfile.cognee\` - container build source for the Cognee deploy template
+- \`.codex/skills/scaiff-repo-setup/SKILL.md\` - reusable setup workflow for new and existing repositories
 
 ## Default Workflow
 
@@ -316,6 +329,7 @@ Use the OpenCode compatibility docs and scripts under .codex/ as entrypoints, no
 - Do not mirror .planning/ into .codex-specific directories.
 - Keep Cognee integration non-blocking; if it is down, continue using local docs and planning artifacts.
 - Treat .codex/agents/*.md as reusable role briefs and .codex/scripts/*.sh as the executable surface.
+- Use \`.codex/skills/scaiff-repo-setup/SKILL.md\` when bootstrapping or adopting another repository with scaiff.
 - When the user asks for \`task table\`, format the response as a Markdown table with columns \`ID | Priority | Status | Title\`.
 ",
   "README.md": "# Snapshot Opencode
@@ -326,6 +340,7 @@ This project is scaffolded for the local AI workflow used across OpenCode, GSD, 
 
 - Planning artifacts in .planning/
 - Codex/OpenCode runtime files in .codex/
+- Repo setup skill in .codex/skills/scaiff-repo-setup/
 - Beads workflow guidance using native \`bd\`
 - Deployment templates in config/ and .kamal/
 - OpenCode runtime files in .codex/ and AGENTS.md
@@ -337,6 +352,7 @@ This project is scaffolded for the local AI workflow used across OpenCode, GSD, 
 3. Copy .env.example to .env and fill in local values.
 4. Run \`bd init\` once in the repository before using Beads.
 5. Create a feature branch before your first commit.
+6. Use \`.codex/skills/scaiff-repo-setup/SKILL.md\` when adopting or bootstrapping another repository.
 ",
   "STICKYNOTE.example.md": "# Snapshot Opencode Sticky Note
 
@@ -373,6 +389,12 @@ Last updated: 2026-03-26
     ".codex/scripts/cognee-sync-planning.sh",
     ".codex/scripts/land.sh",
     ".codex/scripts/sync-planning-to-cognee.sh",
+    ".codex/skills/scaiff-repo-setup/SKILL.md",
+    ".codex/skills/scaiff-repo-setup/assets/adoption-notes-template.md",
+    ".codex/skills/scaiff-repo-setup/references/existing-repo-context-checklist.md",
+    ".codex/skills/scaiff-repo-setup/references/manifest-discovery.md",
+    ".codex/skills/scaiff-repo-setup/references/scaffold-customization-map.md",
+    ".codex/skills/scaiff-repo-setup/references/scaiff-command-matrix.md",
     ".codex/templates/phase-execution.md",
     ".codex/workflows/parallel-execution.md",
     ".env.example",

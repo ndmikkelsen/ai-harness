@@ -32,4 +32,5 @@ Use the {{COMPAT_LABEL}} compatibility docs and scripts under .codex/ as entrypo
 - Do not mirror .planning/ into .codex-specific directories.
 - Keep Cognee integration non-blocking; if it is down, continue using local docs and planning artifacts.
 - Treat .codex/agents/*.md as reusable role briefs and .codex/scripts/*.sh as the executable surface.
+- Use `.codex/skills/scaiff-repo-setup/SKILL.md` when bootstrapping or adopting another repository with scaiff.
 - When the user asks for `task table`, format the response as a Markdown table with columns `ID | Priority | Status | Title`.

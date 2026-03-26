@@ -51,6 +51,9 @@ The kept systems are:
 - `.codex/scripts/bootstrap-worktree.sh`
 - `.codex/scripts/land.sh`
 - `.codex/agents/*.md`
+- `.codex/skills/scaiff-repo-setup/SKILL.md`
+- `.codex/skills/scaiff-repo-setup/references/*.md`
+- `.codex/skills/scaiff-repo-setup/assets/adoption-notes-template.md`
 - `.codex/workflows/parallel-execution.md`
 - `.codex/templates/phase-execution.md`
 - `.codex/docker/Dockerfile.cognee`

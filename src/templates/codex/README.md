@@ -16,6 +16,7 @@ This repository already has working project systems for backlog tracking, planni
 | --- | --- |
 | Runtime scripts | .codex/scripts/*.sh |
 | Agent role briefs | .codex/agents/*.md |
+| Repo setup skill | .codex/skills/scaiff-repo-setup/SKILL.md |
 | Cognee advisor | ./.codex/scripts/cognee-brief.sh |
 | Planning sync | ./.codex/scripts/sync-planning-to-cognee.sh |
 | Landing protocol | ./.codex/scripts/land.sh |
@@ -27,6 +28,7 @@ This repository already has working project systems for backlog tracking, planni
 - `./.codex/scripts/sync-planning-to-cognee.sh` - user-facing planning sync entrypoint
 - `./.codex/scripts/bootstrap-worktree.sh` - seed local worktree state
 - `.codex/docker/Dockerfile.cognee` - container build source for the Cognee deploy template
+- `.codex/skills/scaiff-repo-setup/SKILL.md` - reusable setup workflow for new and existing repositories
 
 ## Default Workflow
 

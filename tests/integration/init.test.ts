@@ -26,6 +26,7 @@ describe('runInit', () => {
     expect(result.createdPaths).toContain('.planning/config.json');
     expect(result.createdPaths).toContain('.planning/REQUIREMENTS.md');
     expect(result.createdPaths).toContain('.codex/README.md');
+    expect(result.createdPaths).toContain('.codex/skills/scaiff-repo-setup/SKILL.md');
     expect(result.createdPaths).toContain('.codex/scripts/cognee-bridge.sh');
     expect(result.createdPaths).toContain('.codex/scripts/cognee-sync-planning.sh');
     expect(result.createdPaths).toContain('.codex/scripts/sync-planning-to-cognee.sh');
@@ -98,6 +99,7 @@ describe('runInit', () => {
 
     expect(result.assistant).toBe('codex');
     expect(result.createdPaths).toContain('.codex/README.md');
+    expect(result.createdPaths).toContain('.codex/skills/scaiff-repo-setup/SKILL.md');
     expect(result.createdPaths).toContain('AGENTS.md');
     expect(result.createdPaths).toContain('.codex/docker/Dockerfile.cognee');
     expect(result.createdPaths).not.toContain('.codex/scripts/sync-to-cognee.sh');
@@ -105,6 +107,7 @@ describe('runInit', () => {
     expect(result.createdPaths).not.toContain('.claude/settings.json');
     expect(codexReadme).toContain('Codex Compatibility Layer');
     expect(codexReadme).toContain('./.codex/scripts/sync-planning-to-cognee.sh');
+    expect(codexReadme).toContain('.codex/skills/scaiff-repo-setup/SKILL.md');
     expect(codexReadme).not.toContain('./.codex/scripts/sync-to-cognee.sh');
     expect(agentsGuide).toContain('Codex Workflow');
     expect(codexBridgeWrapper).toContain('.codex/scripts/cognee-bridge.sh');
@@ -129,6 +132,7 @@ describe('runInit', () => {
 
     expect(result.assistant).toBe('opencode');
     expect(result.createdPaths).toContain('.codex/README.md');
+    expect(result.createdPaths).toContain('.codex/skills/scaiff-repo-setup/SKILL.md');
     expect(result.createdPaths).toContain('AGENTS.md');
     expect(result.createdPaths).toContain('.codex/scripts/cognee-bridge.sh');
     expect(result.createdPaths).not.toContain('.codex/templates/session-handoff.md');
@@ -178,6 +182,7 @@ describe('runInit', () => {
     expect(result.createdPaths).not.toContain('.env.example');
     expect(result.createdPaths).toContain('.planning/config.json');
     expect(result.createdPaths).toContain('.codex/README.md');
+    expect(result.createdPaths).toContain('.codex/skills/scaiff-repo-setup/SKILL.md');
   });
 
   it('merges root files in existing-project mode only when explicitly requested', async () => {

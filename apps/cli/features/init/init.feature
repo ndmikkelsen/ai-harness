@@ -16,10 +16,10 @@ Feature: Initialize a new AI workflow project
     Given an empty target directory
     When I initialize a new project named "codex-app" for the "codex" assistant
     Then the CLI creates Codex compatibility files
-    And the shared Claude backend files are still available
+    And the Codex/OpenCode runtime files are available
 
   Scenario: Prepare a new project for OpenCode
     Given an empty target directory
     When I initialize a new project named "opencode-app" for the "opencode" assistant
     Then the CLI creates Codex compatibility files
-    And the shared Claude backend files are still available
+    And the Codex/OpenCode runtime files are available
