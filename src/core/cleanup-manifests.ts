@@ -6,7 +6,7 @@ const LEGACY_RUNTIME_GUIDE = ['CL', 'AUDE.md'].join('');
 const LEGACY_AI_FRAMEWORKS_V1: CleanupManifest = {
   id: 'legacy-ai-frameworks-v1',
   version: 1,
-  description: 'Curated cleanup entries for legacy assistant runtime artifacts replaced by scaiff.',
+  description: 'Curated cleanup entries for legacy assistant runtime artifacts replaced by ai-harness.',
   entries: [
     {
       id: 'legacy-runtime-dir',

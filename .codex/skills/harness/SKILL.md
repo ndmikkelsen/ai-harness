@@ -1,31 +1,31 @@
 ---
-name: scaiff-repo-setup
-description: Use the scaiff CLI to scaffold new and existing repositories for Codex/OpenCode with GSD, Beads, and Cognee. For existing repositories, gather project context first and then customize only newly created scaffold files.
+name: harness
+description: Use the ai-harness CLI to scaffold new and existing repositories for Codex/OpenCode with GSD, Beads, and Cognee. For existing repositories, gather project context first and then customize only newly created scaffold files.
 ---
 
-# Scaiff Repo Setup
+# Harness
 
-Use this skill when the user wants to bootstrap a repository with `scaiff`, adopt an existing codebase into the scaffold, or tailor newly created AI workflow files to the project's real history and stack.
+Use this skill when the user wants to bootstrap a repository with `ai-harness`, adopt an existing codebase into the scaffold, or tailor newly created AI workflow files to the project's real history and stack.
 
 ## Rules
 
-- Decide `greenfield` (`new` mode) vs `existing` before running `scaiff`
-- Never run `scaiff` in `new` mode against a non-empty directory
+- Decide `greenfield` (`new` mode) vs `existing` before running `ai-harness`
+- Never run `ai-harness` in `new` mode against a non-empty directory
 - Never use `--force` by default
 - In existing repos, preserve pre-existing scaffold files by default
 - Only use `--cleanup-manifest legacy-ai-frameworks-v1` when the user explicitly wants curated legacy AI-framework files removed
 - Only use `--merge-root-files` when the user explicitly wants `.gitignore` and `.env.example` merged
 - Treat Cognee as optional; continue when unavailable
-- Customize only files that `scaiff` just created unless the user explicitly asks to rewrite existing scaffold files
+- Customize only files that `ai-harness` just created unless the user explicitly asks to rewrite existing scaffold files
 
 ## Workflow
 
-1. Determine repository mode using `references/scaiff-command-matrix.md`
+1. Determine repository mode using `references/ai-harness-command-matrix.md`
 2. If the repository is existing, gather context using `references/existing-repo-context-checklist.md`
-3. If the repo contains curated legacy AI-framework files and the user wants them cleaned up, run `scaiff --mode existing <target> --cleanup-manifest legacy-ai-frameworks-v1 --init-json` first
-4. Run `scaiff` with `--init-json` so you can distinguish `createdPaths` from `skippedPaths`
+3. If the repo contains curated legacy AI-framework files and the user wants them cleaned up, run `ai-harness --mode existing . --cleanup-manifest legacy-ai-frameworks-v1 --init-json` first
+4. When adopting the current repository, run `ai-harness --mode existing . --init-json` so you can distinguish `createdPaths` from `skippedPaths`
 5. In existing repos, customize only the files listed in `createdPaths`, guided by `references/scaffold-customization-map.md`
-6. Run `scaiff doctor <target> --assistant <codex|opencode>` after setup
+6. Run `ai-harness doctor <target> --assistant <codex|opencode>` after setup
 7. Summarize what was created, what was preserved, what was removed, and any follow-up gaps
 
 ## Existing Repository Adaptation

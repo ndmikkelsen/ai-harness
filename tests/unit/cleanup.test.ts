@@ -27,7 +27,7 @@ describe('cleanup manifests', () => {
 
 describe('runCleanup', () => {
   it('reports prompt-required for ambiguous curated entries in non-interactive mode', async () => {
-    const targetDir = await mkdtemp(path.join(os.tmpdir(), 'scaiff-cleanup-'));
+    const targetDir = await mkdtemp(path.join(os.tmpdir(), 'ai-harness-cleanup-'));
     await mkdir(path.join(targetDir, legacyRuntimeDir), { recursive: true });
     await writeFile(path.join(targetDir, legacyRuntimeDir, 'custom-notes.md'), '# custom\n', 'utf8');
 
@@ -49,7 +49,7 @@ describe('runCleanup', () => {
   });
 
   it('deletes prompt-before-delete entries when explicitly confirmed', async () => {
-    const targetDir = await mkdtemp(path.join(os.tmpdir(), 'scaiff-cleanup-'));
+    const targetDir = await mkdtemp(path.join(os.tmpdir(), 'ai-harness-cleanup-'));
     await mkdir(path.join(targetDir, '.agents'), { recursive: true });
     await writeFile(path.join(targetDir, '.agents', 'reviewer.md'), '# reviewer\n', 'utf8');
 
@@ -70,7 +70,7 @@ describe('runCleanup', () => {
   });
 
   it('plans safe deletions during dry-run without touching disk', async () => {
-    const targetDir = await mkdtemp(path.join(os.tmpdir(), 'scaiff-cleanup-'));
+    const targetDir = await mkdtemp(path.join(os.tmpdir(), 'ai-harness-cleanup-'));
     await mkdir(path.join(targetDir, '.codex', 'templates'), { recursive: true });
     await writeFile(path.join(targetDir, '.codex', 'templates', 'session-handoff.md'), '# old\n', 'utf8');
 

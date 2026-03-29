@@ -10,3 +10,5 @@ Common files:
 - `CONCERNS.md`
 
 Populate this area through `/gsd:map-codebase` or equivalent repo analysis.
+
+Capture the real module layout, conventions, hotspots, and ownership boundaries that matter for safe changes.

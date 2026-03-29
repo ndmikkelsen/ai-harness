@@ -102,10 +102,19 @@ bd close bd-42 --reason "Completed" --json
 
 1. **Check ready work**: `bd ready` shows unblocked issues
 2. **Claim your task atomically**: `bd update <id> --claim`
-3. **Work on it**: Implement, test, document
-4. **Discover new work?** Create linked issue:
+3. **Run the GSD loop when phase-based planning is needed**: `/gsd:discuss-phase` -> `/gsd:plan-phase` -> `/gsd:execute-phase` -> `/gsd:verify-work`
+4. **Work on it**: Implement, test, document
+5. **Discover new work?** Create linked issue:
    - `bd create "Found bug" --description="Details about what was found" -p 1 --deps discovered-from:<parent-id>`
-5. **Complete**: `bd close <id> --reason "Done"`
+6. **Complete only after verification passes**: `bd close <id> --reason "Verified"`
+
+### Beads + GSD Harmonization
+
+- Prefer the loop `bd ready -> claim -> /gsd:discuss-phase -> /gsd:plan-phase -> /gsd:execute-phase -> /gsd:verify-work -> bd close`
+- Use `.codex/workflows/autonomous-execution.md` for one-agent phase execution, or `.codex/workflows/parallel-execution.md` for multi-wave work
+- Reference active Beads issue IDs in phase context and handoff notes when the work maps to a phase
+- If `/gsd:verify-work` finds gaps, create bug or follow-up issues instead of closing the parent issue early
+- If `.beads/` or `bd` is unavailable, continue with GSD rather than blocking execution
 
 ### Auto-Sync
 

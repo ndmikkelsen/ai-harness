@@ -5,6 +5,7 @@ import { Command, InvalidArgumentError } from 'commander';
 import { DEFAULT_POLICY, type ProjectMode } from './core/policy.js';
 import type { AssistantSelection, AssistantTarget } from './core/types.js';
 import { formatDoctorReport, runDoctor } from './commands/doctor.js';
+import { formatInstallSkillReport, runInstallSkill } from './commands/install-skill.js';
 import { formatInitReport, runInit } from './commands/init.js';
 
 function parseMode(value: string): ProjectMode {
@@ -34,7 +35,7 @@ function parseDoctorAssistant(value: string): AssistantSelection {
 const program = new Command();
 
 program
-  .name('scaiff')
+  .name('ai-harness')
   .description('Modular AI workflow scaffolder for new and existing projects.')
   .argument('[project]', 'project name or target path')
   .argument('[target]', 'target directory')
@@ -114,6 +115,27 @@ program
     if (result.status === 'fail') {
       process.exitCode = 1;
     }
+  });
+
+program
+  .command('install-skill')
+  .description('Install the global OpenCode skill bundle for ai-harness.')
+  .option('--assistant <assistant>', 'assistant target: opencode', parseAssistant, 'opencode')
+  .option('--target-root <path>', 'override the OpenCode skills root directory')
+  .option('--json', 'emit machine-readable JSON output', false)
+  .action(async (options) => {
+    const result = await runInstallSkill({
+      cwd: process.cwd(),
+      assistant: options.assistant as AssistantTarget,
+      targetRoot: options.targetRoot
+    });
+
+    if (options.json) {
+      process.stdout.write(`${JSON.stringify(result, null, 2)}\n`);
+      return;
+    }
+
+    process.stdout.write(formatInstallSkillReport(result));
   });
 
 program.parseAsync(process.argv).catch((error: unknown) => {

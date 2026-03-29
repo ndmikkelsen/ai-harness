@@ -10,6 +10,10 @@ function parallelExecutionWorkflow(): string {
   return loadTemplate('codex/workflows/parallel-execution.md');
 }
 
+function autonomousExecutionWorkflow(): string {
+  return loadTemplate('codex/workflows/autonomous-execution.md');
+}
+
 function orchestrator(): string {
   return loadTemplate('codex/agents/orchestrator.md');
 }
@@ -26,28 +30,28 @@ function gsdCogneeAdvisor(): string {
   return loadTemplate('codex/agents/gsd-cognee-advisor.md');
 }
 
-function scaiffRepoSetupSkill(): string {
-  return loadTemplate('codex/skills/scaiff-repo-setup/SKILL.md');
+function harnessSkill(): string {
+  return loadTemplate('codex/skills/harness/SKILL.md');
 }
 
-function scaiffCommandMatrix(): string {
-  return loadTemplate('codex/skills/scaiff-repo-setup/references/scaiff-command-matrix.md');
+function aiHarnessCommandMatrix(): string {
+  return loadTemplate('codex/skills/harness/references/ai-harness-command-matrix.md');
 }
 
 function existingRepoContextChecklist(): string {
-  return loadTemplate('codex/skills/scaiff-repo-setup/references/existing-repo-context-checklist.md');
+  return loadTemplate('codex/skills/harness/references/existing-repo-context-checklist.md');
 }
 
 function scaffoldCustomizationMap(): string {
-  return loadTemplate('codex/skills/scaiff-repo-setup/references/scaffold-customization-map.md');
+  return loadTemplate('codex/skills/harness/references/scaffold-customization-map.md');
 }
 
 function manifestDiscoveryGuide(): string {
-  return loadTemplate('codex/skills/scaiff-repo-setup/references/manifest-discovery.md');
+  return loadTemplate('codex/skills/harness/references/manifest-discovery.md');
 }
 
 function adoptionNotesTemplate(): string {
-  return loadTemplate('codex/skills/scaiff-repo-setup/assets/adoption-notes-template.md');
+  return loadTemplate('codex/skills/harness/assets/adoption-notes-template.md');
 }
 
 function phaseExecutionTemplate(): string {
@@ -68,9 +72,9 @@ export function buildCodexEntries(): ManagedEntry[] {
     { kind: 'directory', path: '.codex/agents' },
     { kind: 'directory', path: '.codex/scripts' },
     { kind: 'directory', path: '.codex/skills' },
-    { kind: 'directory', path: '.codex/skills/scaiff-repo-setup' },
-    { kind: 'directory', path: '.codex/skills/scaiff-repo-setup/references' },
-    { kind: 'directory', path: '.codex/skills/scaiff-repo-setup/assets' },
+    { kind: 'directory', path: '.codex/skills/harness' },
+    { kind: 'directory', path: '.codex/skills/harness/references' },
+    { kind: 'directory', path: '.codex/skills/harness/assets' },
     { kind: 'directory', path: '.codex/templates' },
     { kind: 'directory', path: '.codex/workflows' },
     { kind: 'directory', path: '.codex/docker' },
@@ -84,38 +88,43 @@ export function buildCodexEntries(): ManagedEntry[] {
       path: '.codex/workflows/parallel-execution.md',
       content: () => parallelExecutionWorkflow()
     },
+    {
+      kind: 'file',
+      path: '.codex/workflows/autonomous-execution.md',
+      content: () => autonomousExecutionWorkflow()
+    },
     { kind: 'file', path: '.codex/agents/orchestrator.md', content: () => orchestrator() },
     { kind: 'file', path: '.codex/agents/implementer.md', content: () => implementer() },
     { kind: 'file', path: '.codex/agents/reviewer.md', content: () => reviewer() },
     { kind: 'file', path: '.codex/agents/gsd-cognee-advisor.md', content: () => gsdCogneeAdvisor() },
     {
       kind: 'file',
-      path: '.codex/skills/scaiff-repo-setup/SKILL.md',
-      content: () => scaiffRepoSetupSkill()
+      path: '.codex/skills/harness/SKILL.md',
+      content: () => harnessSkill()
     },
     {
       kind: 'file',
-      path: '.codex/skills/scaiff-repo-setup/references/scaiff-command-matrix.md',
-      content: () => scaiffCommandMatrix()
+      path: '.codex/skills/harness/references/ai-harness-command-matrix.md',
+      content: () => aiHarnessCommandMatrix()
     },
     {
       kind: 'file',
-      path: '.codex/skills/scaiff-repo-setup/references/existing-repo-context-checklist.md',
+      path: '.codex/skills/harness/references/existing-repo-context-checklist.md',
       content: () => existingRepoContextChecklist()
     },
     {
       kind: 'file',
-      path: '.codex/skills/scaiff-repo-setup/references/scaffold-customization-map.md',
+      path: '.codex/skills/harness/references/scaffold-customization-map.md',
       content: () => scaffoldCustomizationMap()
     },
     {
       kind: 'file',
-      path: '.codex/skills/scaiff-repo-setup/references/manifest-discovery.md',
+      path: '.codex/skills/harness/references/manifest-discovery.md',
       content: () => manifestDiscoveryGuide()
     },
     {
       kind: 'file',
-      path: '.codex/skills/scaiff-repo-setup/assets/adoption-notes-template.md',
+      path: '.codex/skills/harness/assets/adoption-notes-template.md',
       content: () => adoptionNotesTemplate()
     },
     {

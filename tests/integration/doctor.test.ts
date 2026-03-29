@@ -9,7 +9,7 @@ import { runInit } from '../../src/commands/init.js';
 
 describe('runDoctor', () => {
   it('passes for a fresh Codex scaffold', async () => {
-    const workspace = await mkdtemp(path.join(os.tmpdir(), 'scaiff-doctor-'));
+    const workspace = await mkdtemp(path.join(os.tmpdir(), 'ai-harness-doctor-'));
 
     await runInit({
       cwd: workspace,
@@ -36,7 +36,7 @@ describe('runDoctor', () => {
   });
 
   it('auto-detects Codex and validates the shared backend', async () => {
-    const workspace = await mkdtemp(path.join(os.tmpdir(), 'scaiff-doctor-'));
+    const workspace = await mkdtemp(path.join(os.tmpdir(), 'ai-harness-doctor-'));
 
     await runInit({
       cwd: workspace,
@@ -62,7 +62,7 @@ describe('runDoctor', () => {
   });
 
   it('validates OpenCode against the Codex-compatible scaffold layout', async () => {
-    const workspace = await mkdtemp(path.join(os.tmpdir(), 'scaiff-doctor-'));
+    const workspace = await mkdtemp(path.join(os.tmpdir(), 'ai-harness-doctor-'));
 
     await runInit({
       cwd: workspace,
@@ -91,7 +91,7 @@ describe('runDoctor', () => {
   });
 
   it('fails when a Codex repo is missing a shared backend file', async () => {
-    const workspace = await mkdtemp(path.join(os.tmpdir(), 'scaiff-doctor-'));
+    const workspace = await mkdtemp(path.join(os.tmpdir(), 'ai-harness-doctor-'));
 
     await runInit({
       cwd: workspace,
@@ -119,7 +119,7 @@ describe('runDoctor', () => {
   });
 
   it('warns when an expected executable loses its execute bit', async () => {
-    const workspace = await mkdtemp(path.join(os.tmpdir(), 'scaiff-doctor-'));
+    const workspace = await mkdtemp(path.join(os.tmpdir(), 'ai-harness-doctor-'));
 
     await runInit({
       cwd: workspace,
@@ -151,7 +151,7 @@ describe('runDoctor', () => {
   });
 
   it('does not fail adopted existing repos when preserved root files lack scaffold values', async () => {
-    const workspace = await mkdtemp(path.join(os.tmpdir(), 'scaiff-doctor-'));
+    const workspace = await mkdtemp(path.join(os.tmpdir(), 'ai-harness-doctor-'));
 
     await runInit({
       cwd: workspace,

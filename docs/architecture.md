@@ -6,10 +6,13 @@ The project is intentionally split into small layers:
 
 - `src/cli.ts` parses CLI arguments and prints reports
 - `src/commands/init.ts` coordinates resolution, generation, file application, and optional git setup
+- `src/commands/install-skill.ts` installs the global OpenCode `harness` skill bundle
 - `src/core/` holds reusable domain logic like project resolution, port selection, filesystem writes, and git detection
 - `src/generators/` defines scaffold content by concern instead of keeping one giant script
+- `src/templates/` is the canonical scaffold source; `dist/templates/` is the built copy used by the shipped CLI
 - `src/generators/codex.ts` seeds the Codex/OpenCode runtime layer, including scripts, agents, templates, and deploy assets
 - `src/generators/planning.ts` seeds the official GSD planning surface (`PROJECT.md`, `REQUIREMENTS.md`, `ROADMAP.md`, `STATE.md`, research, milestones, codebase, quick tasks, and phases)
+- `src/local-launcher.ts` and `scripts/install-local-launcher.ts` install the local `ai-harness` wrapper in `~/.local/bin/`
 - `tests/` covers unit and integration behavior
 - `apps/cli/features/` captures BDD scenarios for the expected user-facing workflow
 
@@ -34,5 +37,6 @@ The project is intentionally split into small layers:
 ## Deferred work
 
 - deeper YAML-aware merging for files like `.pre-commit-config.yaml`
-- richer CLI subcommands like `inspect` or `doctor`
+- package or release distribution beyond a local checkout and source install
+- clearer migration guidance for older `scaiff` users outside this repository
 - fuller parity for deploy/runtime automation that still depends on machine-specific tools

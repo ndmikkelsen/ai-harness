@@ -15,7 +15,7 @@ const tsxCli = path.join(repoRoot, 'node_modules', 'tsx', 'dist', 'cli.mjs');
 
 describe('CLI doctor', () => {
   it('accepts auto assistant on the doctor subcommand for Codex-compatible scaffolds', async () => {
-    const workspace = await mkdtemp(path.join(os.tmpdir(), 'scaiff-cli-doctor-'));
+    const workspace = await mkdtemp(path.join(os.tmpdir(), 'ai-harness-cli-doctor-'));
 
     await runInit({
       cwd: workspace,
