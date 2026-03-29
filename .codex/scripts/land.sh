@@ -104,7 +104,8 @@ fi
 
 if command -v bd >/dev/null 2>&1 && [[ -d .beads ]]; then
   printf 'Beads detected. Ensure issue status reflects /gsd:verify-work before landing.\n'
-  run_cmd bd sync
+  run_cmd bd dolt pull
+  run_cmd bd dolt push
 fi
 
 run_cmd git status
