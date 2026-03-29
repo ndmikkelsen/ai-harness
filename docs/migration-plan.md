@@ -1,33 +1,23 @@
-# Project Plan Notes
+# Migration Notes
 
-## Design foundations
+## Completed changes
 
-- separated policy, command orchestration, file application, and scaffold generation into dedicated modules
-- added automated tests for project resolution, port logic, and end-to-end scaffold behavior
-- made existing-project adoption safer with preserve-by-default behavior and explicit opt-in root-file merges
-- made remote port detection optional instead of always-on
-- added an assistant switch so scaffolds can target Codex or OpenCode
-- shifted governance toward `.planning/`, `.rules/`, `AGENTS.md`, and `STICKYNOTE.example.md` instead of extra root placeholder docs
+- renamed the project from `scaiff` to `ai-harness`
+- renamed the global OpenCode skill from `scaiff-repo-setup` to `harness`
+- updated package metadata, CLI help, launcher naming, templates, docs, and tests to match the new names
+- added a dedicated `install-skill` command and global skill bundle installer
+- applied the scaffold back onto this repository in preserve-by-default existing mode
 
-## Preserved behavior
+## Behavior that stayed stable
 
-- project name validation
-- project-name plus target-dir usage
-- native `bd` initialization and usage guidance
-- generation of the major AI workflow directories and templates
-- retention of Codex/OpenCode runtime scripts for shared tooling
-- offline-safe fallback ports for Kamal-related configs
+- new-project scaffolding and existing-repo adoption share the same generator pipeline
+- existing repositories preserve pre-existing managed files by default
+- curated cleanup remains opt-in via `--cleanup-manifest legacy-ai-frameworks-v1`
+- Codex and OpenCode continue to share one `.codex/` runtime surface
+- local verification still centers on `pnpm typecheck`, `pnpm test`, and `pnpm test:smoke:dist`
 
-## Intentionally improved behavior
+## Current migration follow-up
 
-- no nested git repository initialization when scaffolding inside an existing repository
-- safer adoption of existing repos through strict preservation plus optional root-file merges
-- clearer separation of template groups and policies
-- stronger validation for explicit port values
-- Codex/OpenCode compatibility files are adapted from `compute-stack/.codex/` and parameterized for generic reuse
-
-## Follow-up candidates
-
-- add a `doctor` command for auditing existing repositories
-- add fixture-based snapshot tests for larger generated trees
-- replace string-based YAML generation with structured serializers where it adds value
+- decide whether to publish `ai-harness` beyond local checkout installs
+- document any compatibility story for older `scaiff` users, if needed
+- keep source templates, self-scaffolded repo files, and built `dist/` assets aligned as the product evolves

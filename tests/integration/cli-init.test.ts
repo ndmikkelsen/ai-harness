@@ -17,7 +17,7 @@ const legacyRuntimeDir = manifest.entries.find((entry) => entry.id === 'legacy-r
 
 describe('CLI init', () => {
   it('preserves existing scaffold files by default in existing mode', async () => {
-    const workspace = await mkdtemp(path.join(os.tmpdir(), 'scaiff-cli-init-'));
+    const workspace = await mkdtemp(path.join(os.tmpdir(), 'ai-harness-cli-init-'));
     const targetDir = path.join(workspace, 'existing-preserve');
     const gitignorePath = path.join(targetDir, '.gitignore');
     const envExamplePath = path.join(targetDir, '.env.example');
@@ -46,7 +46,7 @@ describe('CLI init', () => {
   });
 
   it('merges root files only when merge-root-files is set', async () => {
-    const workspace = await mkdtemp(path.join(os.tmpdir(), 'scaiff-cli-init-'));
+    const workspace = await mkdtemp(path.join(os.tmpdir(), 'ai-harness-cli-init-'));
     const targetDir = path.join(workspace, 'existing-merge');
     const gitignorePath = path.join(targetDir, '.gitignore');
     const envExamplePath = path.join(targetDir, '.env.example');
@@ -76,7 +76,7 @@ describe('CLI init', () => {
   });
 
   it('reports curated cleanup removals in init-json output', async () => {
-    const workspace = await mkdtemp(path.join(os.tmpdir(), 'scaiff-cli-init-'));
+    const workspace = await mkdtemp(path.join(os.tmpdir(), 'ai-harness-cli-init-'));
     const targetDir = path.join(workspace, 'existing-cleanup');
 
     await mkdir(path.join(targetDir, '.codex', 'templates'), { recursive: true });
@@ -112,7 +112,7 @@ describe('CLI init', () => {
   });
 
   it('returns prompt-required cleanup actions in non-interactive mode', async () => {
-    const workspace = await mkdtemp(path.join(os.tmpdir(), 'scaiff-cli-init-'));
+    const workspace = await mkdtemp(path.join(os.tmpdir(), 'ai-harness-cli-init-'));
     const targetDir = path.join(workspace, 'existing-ambiguous');
 
     await mkdir(path.join(targetDir, legacyRuntimeDir), { recursive: true });

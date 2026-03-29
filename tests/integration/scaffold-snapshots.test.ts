@@ -40,7 +40,7 @@ async function snapshotForProject(rootDir: string, includeCodex: boolean) {
 
 describe('scaffold snapshots', () => {
   it('matches the Codex scaffold snapshot', async () => {
-    const workspace = await mkdtemp(path.join(os.tmpdir(), 'scaiff-snapshot-'));
+    const workspace = await mkdtemp(path.join(os.tmpdir(), 'ai-harness-snapshot-'));
 
     await runInit({
       cwd: workspace,
@@ -56,6 +56,7 @@ describe('scaffold snapshots', () => {
     const result = await snapshotForProject(path.join(workspace, 'snapshot-codex'), true);
     const envrc = await readFile(path.join(workspace, 'snapshot-codex', '.envrc'), 'utf8');
     const beadsGuide = await readFile(path.join(workspace, 'snapshot-codex', '.rules', 'patterns', 'beads-integration.md'), 'utf8');
+    const autonomousWorkflow = await readFile(path.join(workspace, 'snapshot-codex', '.codex', 'workflows', 'autonomous-execution.md'), 'utf8');
 
     expect(envrc).not.toContain('metadata.json');
     expect(envrc).not.toContain('$_DOLT_');
@@ -68,14 +69,18 @@ describe('scaffold snapshots', () => {
     expect(result['README.md']).toContain('Review AGENTS.md, .codex/README.md, and the guides in .rules/.');
     expect(result['.codex/README.md']).toContain('Use native `bd` as the Beads task-tracking interface after `bd init`');
     expect(result['.codex/README.md']).toContain('./.codex/scripts/sync-planning-to-cognee.sh');
+    expect(result['.codex/README.md']).toContain('.codex/workflows/autonomous-execution.md');
     expect(result['.codex/README.md']).not.toContain('./.codex/scripts/sync-to-cognee.sh');
     expect(beadsGuide).toContain('Run `bd init` once per repository');
     expect(beadsGuide).toContain('Use native `bd` commands for Beads.');
+    expect(autonomousWorkflow).toContain('BEADS_AVAILABLE');
+    expect(autonomousWorkflow).toContain('bd ready --json');
+    expect(autonomousWorkflow).toContain('/gsd:verify-work');
     expect(result).toMatchSnapshot();
   });
 
   it('matches the OpenCode scaffold snapshot', async () => {
-    const workspace = await mkdtemp(path.join(os.tmpdir(), 'scaiff-snapshot-'));
+    const workspace = await mkdtemp(path.join(os.tmpdir(), 'ai-harness-snapshot-'));
 
     await runInit({
       cwd: workspace,

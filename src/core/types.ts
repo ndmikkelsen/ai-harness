@@ -138,6 +138,27 @@ export interface InitResult extends ApplyManagedEntriesResult {
   cleanup: CleanupResult;
 }
 
+export interface OpenCodeSkillEntry {
+  path: string;
+  content: () => string;
+}
+
+export interface InstallSkillCommandOptions {
+  cwd: string;
+  assistant: AssistantTarget;
+  targetRoot?: string;
+}
+
+export interface InstallSkillResult {
+  assistant: AssistantTarget;
+  skillName: string;
+  targetRoot: string;
+  installDir: string;
+  writtenPaths: string[];
+  unchangedPaths: string[];
+  notes: string[];
+}
+
 export interface DoctorCommandOptions {
   cwd: string;
   targetArg?: string;

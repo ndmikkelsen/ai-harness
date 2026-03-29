@@ -17,6 +17,8 @@ __pycache__/
 .idea/
 STICKYNOTE.md
 .beads/.sync.lock
+.beads/dolt-monitor.pid
+.beads/dolt-server.activity
 .beads/sync_base.jsonl
 .beads/*.db
 .beads/export/
@@ -30,3 +32,7 @@ STICKYNOTE.md
 cognee_data/
 
 .beads/backup/
+
+# Dolt database files (added by bd init)
+.dolt/
+*.db

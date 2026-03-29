@@ -32,5 +32,15 @@ Use the {{COMPAT_LABEL}} compatibility docs and scripts under .codex/ as entrypo
 - Do not mirror .planning/ into .codex-specific directories.
 - Keep Cognee integration non-blocking; if it is down, continue using local docs and planning artifacts.
 - Treat .codex/agents/*.md as reusable role briefs and .codex/scripts/*.sh as the executable surface.
-- Use `.codex/skills/scaiff-repo-setup/SKILL.md` when bootstrapping or adopting another repository with scaiff.
+- Use `.codex/skills/harness/SKILL.md` when bootstrapping or adopting another repository with ai-harness.
 - When the user asks for `task table`, format the response as a Markdown table with columns `ID | Priority | Status | Title`.
+
+### Beads + GSD Loop
+
+- When Beads is available, use `bd ready --json` and `bd update <id> --claim --json` before phase work.
+- Use `.codex/workflows/autonomous-execution.md` for one-agent phase execution, or `.codex/workflows/parallel-execution.md` for multi-wave work.
+- Carry the active Beads issue ID through phase notes, execution context, and handoff docs.
+- Use `/gsd:discuss-phase`, `/gsd:plan-phase`, `/gsd:execute-phase`, and `/gsd:verify-work` in sequence for phase-based work.
+- Close Beads issues only after verification passes.
+- If verification finds gaps, create follow-up Beads bug issues instead of closing the parent work early.
+- If `.beads/` or `bd` is unavailable, continue the GSD workflow without blocking on issue tracking.
