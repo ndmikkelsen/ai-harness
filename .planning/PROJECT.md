@@ -2,25 +2,40 @@
 
 ## What This Is
 
-AI Harness is a TypeScript CLI that bootstraps new and existing repositories with a Codex/OpenCode-focused runtime layer plus GSD planning artifacts, Beads guidance, and optional Cognee plumbing.
+AI Harness is a TypeScript CLI that bootstraps new and existing repositories with an opinionated Beads + GSD + Codex/OpenCode foundation, plus optional Cognee plumbing.
 
 ## Core Value
 
-Give a repository a safe, repeatable AI development scaffold without clobbering existing files, while keeping one canonical workflow across local CLI use and the global `harness` skill.
+Give a repository a safe, repeatable AI development scaffold without clobbering existing files, while keeping one canonical workflow across local CLI use and the global `harness` skill. Existing repositories should keep user-owned files by default and remove known non-harness AI workflow droppings only through curated cleanup manifests.
 
 ## Constraints
 
 - Technical: preserve existing files by default, keep generators modular and testable, and keep source templates aligned with built `dist/` output.
-- Product: support both greenfield setup and existing-repo adoption, keep `harness` simple to invoke from OpenCode, and maintain one shared Codex/OpenCode runtime surface.
+- Product: support both greenfield setup and existing-repo adoption, keep `harness` simple to invoke from OpenCode, maintain one shared Codex/OpenCode runtime surface, and keep the default foundation opinionated around Beads, GSD, Codex, and OpenCode.
 - Timeline: current work is focused on self-hosting the scaffold in this repository and hardening rename/install flows before broader distribution.
+
+## Doctrine
+
+- Install the Beads + GSD + Codex/OpenCode foundation by default, with Cognee kept optional.
+- Preserve user-owned files in existing repositories unless a narrow merge or force path is explicitly selected.
+- Remove known non-harness AI workflow droppings only through curated cleanup manifests.
+- Treat `src/templates/**` as the canonical scaffold source and this repository as the dogfooded reference implementation.
+
+## Validated Requirements
+
+- `CORE-06` - validated in Phase 3: downstream repos now record their `ai-harness` scaffold baseline, the supported local-source refresh path is explicit, and `scaiff` remains migration-only history with no shipped alias.
+
+## Current State
+
+- Phase 3 is complete: distribution readiness is documented across repo docs, generated templates, and shipped skill references.
 
 ## Open Questions
 
-- Should `ai-harness` be published as a package, or remain local-first for now?
-- Do we want a temporary compatibility alias for older `scaiff` users outside this repo?
+- When should package-manager distribution graduate from deferred to supported beyond the current local-source path?
 - How much of the generated runtime should stay Codex-compatible under `.codex/` versus move to more OpenCode-native surfaces later?
 
 ## Notes
 
 - This repository is both the source of the scaffold and a live example of the scaffold applied to itself.
+- `src/templates/**` remains the canonical source of truth; dogfooded files in this repo must track that source rather than drift from it.
 - Primary context lives in `README.md`, `docs/ai-harness-premise.md`, `docs/ai-harness-map.md`, and `docs/architecture.md`.
