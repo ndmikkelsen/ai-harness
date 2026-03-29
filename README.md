@@ -91,15 +91,25 @@ New repositories receive the full scaffold. Existing repositories create the sam
 - `.kamal/` and `config/` deployment templates
 - `.rules/`, `STICKYNOTE.example.md`, and `.planning/` as the canonical guidance surface
 
+## Foundation doctrine
+
+- `ai-harness` installs an opinionated Beads + GSD + Codex/OpenCode foundation; Cognee stays optional plumbing around that core
+- the canonical assistant runtime surface is `.codex/`, shared by both Codex and OpenCode
+- `src/templates/**` is the source of truth for scaffold content, this repository dogfoods those templates, and `dist/` is the built copy of that source
+- existing repositories preserve user-owned files by default and only merge select root files when explicitly requested
+- known non-harness AI workflow droppings are removed only through explicit curated cleanup manifests, never broad heuristic deletion
+
 ## Safety model for existing projects
 
 - existing files are preserved by default
 - missing scaffold files are added without rewriting pre-existing scaffold files
-- curated legacy AI-framework cleanup is opt-in via `--cleanup-manifest legacy-ai-frameworks-v1`
+- curated cleanup is opt-in via `--cleanup-manifest ...`; the current manifest targets known legacy AI-framework droppings
 - `.gitignore` and `.env.example` are only merged when `--merge-root-files` is explicitly set
 - `STICKYNOTE.md` is intentionally local-only and can be seeded from `STICKYNOTE.example.md`
 - `AGENTS.md` is added for Codex/OpenCode-targeted projects
 - `--force` replaces managed files explicitly
+
+`ai-harness` does not auto-delete unknown AI notes, custom prompts, or bespoke repo scripts just because they look AI-related. Removal has to be backed by a curated manifest entry.
 
 ## Existing repo workflow
 
@@ -132,6 +142,30 @@ pnpm test
 pnpm build
 pnpm install:local
 ```
+
+## Distribution status
+
+Current supported distribution is local-source installation from a checkout of this repository.
+
+- supported now: `pnpm install`, `pnpm build`, `pnpm install:local`, and `ai-harness install-skill --assistant opencode`
+- supported update path: pull the repo forward, rebuild `dist/`, refresh the local launcher, and reinstall the OpenCode skill when needed
+- deferred for later Phase 3 work: publishing a package-manager distribution before versioning and migration guidance are explicit
+
+## Downstream scaffold generations
+
+Downstream repositories should treat each scaffold or refresh as pinned to the `ai-harness` version and source commit that produced it.
+
+- new scaffolds now seed `.planning/STATE.md` with the `ai-harness` version and generated date so repos have an explicit starting baseline
+- when you refresh an existing repo, record the previous and new `ai-harness` versions plus the source commit in the update PR, handoff note, or `.planning/STATE.md`
+- supported upgrade flow remains preserve-by-default: pull this repo forward, run `pnpm build`, rerun `ai-harness --mode existing <path> --assistant <codex|opencode> --init-json`, customize only the files listed in `createdPaths`, then finish with `ai-harness doctor <path> --assistant <codex|opencode>`
+- there is no general in-place migrator yet; use the existing-repo adoption flow and explicit review instead of assuming managed files will merge automatically
+
+## scaiff compatibility
+
+- `ai-harness` is the renamed successor to `scaiff`
+- use `ai-harness` for installs and updates; there is no separate `scaiff` binary, package, or global skill alias
+- the old OpenCode skill name `scaiff-repo-setup` is replaced by `harness`
+- if an older repo still carries curated `scaiff`-era workflow leftovers, remove them deliberately with `--cleanup-manifest legacy-ai-frameworks-v1`
 
 ## Local launcher
 

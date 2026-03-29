@@ -7,6 +7,20 @@
 
 ## Commands
 
+### Install or refresh the local ai-harness launcher
+
+```bash
+pnpm install
+pnpm build
+pnpm install:local
+```
+
+### Install or refresh the global OpenCode skill
+
+```bash
+ai-harness install-skill --assistant opencode
+```
+
 ### New repository
 
 ```bash
@@ -50,6 +64,14 @@ After any scaffold run:
 ```bash
 ai-harness doctor <target> --assistant <codex|opencode>
 ```
+
+When you update an existing repo, record the previous and new `ai-harness` versions plus the source commit in the PR or handoff note.
+
+## scaiff compatibility
+
+- `ai-harness` replaces `scaiff`; install and invoke `ai-harness` directly
+- there is no separate `scaiff` package or CLI alias to keep old commands alive
+- if a repo still has curated `scaiff`-era leftovers, remove them deliberately with `--cleanup-manifest legacy-ai-frameworks-v1`
 
 ## Defaults
 
