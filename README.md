@@ -1,8 +1,10 @@
-# scaiff
+# ai-harness
 
-`scaiff` is the local AI workflow bootstrapper.
+`ai-harness` is the source repository for the local AI workflow bootstrapper.
 
-It provides a modular TypeScript CLI that can:
+This repo contains the TypeScript CLI, scaffold templates, generator code, regression tests, and the globally installed OpenCode skill named `harness`.
+
+The CLI can:
 
 - scaffold a brand new project directory
 - adopt an existing repository without clobbering user files
@@ -15,9 +17,9 @@ This repository is a modular TypeScript CLI with clear module boundaries, execut
 
 ## Current command surface
 
-`scaiff` defaults to `--assistant codex` and also accepts `--assistant opencode` as a Codex-compatible alias.
+`ai-harness` defaults to `--assistant codex` and also accepts `--assistant opencode` as a Codex-compatible alias.
 
-After building, the CLI is available as `scaiff`.
+After building, the CLI is available as `ai-harness`.
 
 ```bash
 pnpm install
@@ -55,7 +57,26 @@ pnpm exec tsx src/cli.ts doctor . --assistant auto
 
 # audit with JSON output
 pnpm exec tsx src/cli.ts doctor . --assistant codex --json
+
+# install the global OpenCode skill bundle
+pnpm exec tsx src/cli.ts install-skill --assistant opencode
 ```
+
+## Global OpenCode skill
+
+Install the skill bundle into OpenCode's global skills directory:
+
+```bash
+ai-harness install-skill --assistant opencode
+```
+
+That command writes the skill bundle to `~/.opencode/skills/ai-harness/skills/harness/`.
+
+After installing or updating the skill:
+
+- restart OpenCode so it reloads global skills
+- make sure `ai-harness` is on your `PATH`
+- `cd` into an existing repository and invoke the `harness` skill
 
 ## What gets scaffolded
 
@@ -65,7 +86,7 @@ New repositories receive the full scaffold. Existing repositories create the sam
 - Beads docs for native `bd`; run `bd init` to create `.beads/`
 - `.planning/` for GSD planning artifacts
 - `.codex/` runtime scripts, docs, templates, agents, and docker assets shared by Codex and OpenCode
-- `.codex/skills/scaiff-repo-setup/` for reusable repository setup guidance
+- `.codex/skills/harness/` for reusable repository setup guidance
 - `AGENTS.md` for the repo-level Codex/OpenCode operating guide
 - `.kamal/` and `config/` deployment templates
 - `.rules/`, `STICKYNOTE.example.md`, and `.planning/` as the canonical guidance surface
@@ -83,11 +104,25 @@ New repositories receive the full scaffold. Existing repositories create the sam
 ## Existing repo workflow
 
 1. gather project context from git, docs, manifests, Beads, and Cognee when available
-2. optionally run `scaiff --mode existing <path> --cleanup-manifest legacy-ai-frameworks-v1 --init-json` to remove curated legacy AI-framework files
-3. run `scaiff --mode existing <path> --init-json`
+2. optionally run `ai-harness --mode existing <path> --cleanup-manifest legacy-ai-frameworks-v1 --init-json` to remove curated legacy AI-framework files
+3. run `ai-harness --mode existing <path> --init-json`
 4. customize only the files listed in `createdPaths`
 5. rerun with `--merge-root-files` only if you explicitly want `.gitignore` and `.env.example` merged
-6. finish with `scaiff doctor <path> --assistant <codex|opencode>`
+6. finish with `ai-harness doctor <path> --assistant <codex|opencode>`
+
+## Beads + GSD loop
+
+When a repository uses both Beads and GSD, the intended default loop is:
+
+1. `bd ready --json`
+2. `bd update <id> --claim --json`
+3. `/gsd:discuss-phase`
+4. `/gsd:plan-phase`
+5. `/gsd:execute-phase`
+6. `/gsd:verify-work`
+7. `bd close <id> --reason "Verified"`
+
+If verification finds gaps, create follow-up bug issues instead of closing the parent work early. If a repo has no `.beads/` folder or no `bd` binary, GSD should continue without Beads rather than blocking execution.
 
 ## Development
 
@@ -100,12 +135,12 @@ pnpm install:local
 
 ## Local launcher
 
-`~/.local/bin/scaiff` is now a thin wrapper around this repository.
+`~/.local/bin/ai-harness` is now a thin wrapper around this repository.
 
 - it prefers `dist/src/cli.js`
 - it will try `pnpm build` if `dist/` is missing
 - it falls back to the repo-installed `tsx` binary to run `src/cli.ts` when dependencies are already installed
-- set `SCAIFF_REPO` if you want the launcher to target a different checkout
+- set `AI_HARNESS_REPO` if you want the launcher to target a different checkout
 
 Refresh the installed launchers after moving this repo:
 
@@ -113,7 +148,21 @@ Refresh the installed launchers after moving this repo:
 pnpm install:local
 ```
 
-That command installs `scaiff` into `~/.local/bin/`.
+That command installs `ai-harness` into `~/.local/bin/`.
+
+To use both the local checkout and the global OpenCode skill together:
+
+```bash
+pnpm install
+pnpm build
+pnpm install:local
+ai-harness install-skill --assistant opencode
+```
+
+That flow gives you:
+
+- a local `ai-harness` command on your `PATH` backed by this checkout
+- a global OpenCode skill that can scaffold whichever repository you `cd` into
 
 BDD specs live in `apps/cli/features/`, and executable regression coverage lives in `tests/`.
 
@@ -121,4 +170,5 @@ BDD specs live in `apps/cli/features/`, and executable regression coverage lives
 
 - `docs/architecture.md`
 - `docs/migration-plan.md`
-- `docs/scaiff-map.md`
+- `docs/ai-harness-map.md`
+- `docs/ai-harness-premise.md`

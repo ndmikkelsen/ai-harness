@@ -8,7 +8,7 @@ import { runInit } from '../../src/commands/init.js';
 
 describe('Beads integration', () => {
   it('documents native bd usage without generating a wrapper script', async () => {
-    const workspace = await mkdtemp(path.join(os.tmpdir(), 'scaiff-bd-native-'));
+    const workspace = await mkdtemp(path.join(os.tmpdir(), 'ai-harness-bd-native-'));
 
     const result = await runInit({
       cwd: workspace,
@@ -30,8 +30,14 @@ describe('Beads integration', () => {
     expect(readme).toContain('Run `bd init` once in the repository before using Beads.');
     expect(readme).toContain('Review AGENTS.md, .codex/README.md, and the guides in .rules/.');
     expect(beadsGuide).toContain('Use native `bd` commands for Beads.');
+    expect(beadsGuide).toContain('## Beads -> GSD -> Beads');
+    expect(beadsGuide).toContain('`bd update <id> --claim --json`');
+    expect(beadsGuide).toContain('`/gsd:verify-work`');
     expect(codexReadme).toContain('Use native `bd` as the Beads task-tracking interface after `bd init`');
+    expect(codexReadme).toContain('Close or update Beads issues only after verification passes');
     expect(codexReadme).toContain('.codex/scripts/cognee-bridge.sh');
     expect(agentsGuide).toContain('Use native `bd` for task tracking after the repository is initialized with `bd init`.');
+    expect(agentsGuide).toContain('### Beads + GSD Loop');
+    expect(agentsGuide).toContain('.codex/workflows/autonomous-execution.md');
   });
 });

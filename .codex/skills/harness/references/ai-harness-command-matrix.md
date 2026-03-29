@@ -1,4 +1,4 @@
-# Scaiff Command Matrix
+# AI Harness Command Matrix
 
 ## Choose the mode first
 
@@ -10,37 +10,37 @@
 ### New repository
 
 ```bash
-scaiff <project-slug> --assistant <codex|opencode> --init-json
+ai-harness <project-slug> --assistant <codex|opencode> --init-json
 ```
 
 ### Existing current repository
 
 ```bash
-scaiff --mode existing . --assistant <codex|opencode> --init-json
+ai-harness --mode existing . --assistant <codex|opencode> --init-json
 ```
 
 ### Existing external path
 
 ```bash
-scaiff --mode existing <path> --assistant <codex|opencode> --init-json
+ai-harness --mode existing <path> --assistant <codex|opencode> --init-json
 ```
 
 ### Existing repository with root-file merges
 
 ```bash
-scaiff --mode existing <path> --assistant <codex|opencode> --merge-root-files --init-json
+ai-harness --mode existing <path> --assistant <codex|opencode> --merge-root-files --init-json
 ```
 
 ### Existing repository with curated legacy cleanup
 
 ```bash
-scaiff --mode existing <path> --assistant <codex|opencode> --cleanup-manifest legacy-ai-frameworks-v1 --init-json
+ai-harness --mode existing <path> --assistant <codex|opencode> --cleanup-manifest legacy-ai-frameworks-v1 --init-json
 ```
 
 ### Existing repository automation with cleanup and no prompts
 
 ```bash
-scaiff --mode existing <path> --assistant <codex|opencode> --cleanup-manifest legacy-ai-frameworks-v1 --non-interactive --init-json
+ai-harness --mode existing <path> --assistant <codex|opencode> --cleanup-manifest legacy-ai-frameworks-v1 --non-interactive --init-json
 ```
 
 ## Follow-up
@@ -48,7 +48,7 @@ scaiff --mode existing <path> --assistant <codex|opencode> --cleanup-manifest le
 After any scaffold run:
 
 ```bash
-scaiff doctor <target> --assistant <codex|opencode>
+ai-harness doctor <target> --assistant <codex|opencode>
 ```
 
 ## Defaults

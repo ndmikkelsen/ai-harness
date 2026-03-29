@@ -1,8 +1,8 @@
-# Scaiff Map
+# AI Harness Map
 
 ## Purpose
 
-`scaiff` is a TypeScript CLI that bootstraps a repository for a Codex/OpenCode-first development workflow.
+`ai-harness` is a TypeScript CLI that bootstraps a repository for a Codex/OpenCode-first development workflow.
 
 The kept systems are:
 - GSD for planning and execution context
@@ -14,7 +14,7 @@ The kept systems are:
 
 ### CLI and orchestration
 
-- `src/cli.ts` exposes `scaiff` and `scaiff doctor`
+- `src/cli.ts` exposes `ai-harness` and `ai-harness doctor`
 - `src/commands/init.ts` builds scaffold context and applies files
 - `src/commands/doctor.ts` validates the generated Codex/OpenCode runtime layout
 
@@ -51,9 +51,11 @@ The kept systems are:
 - `.codex/scripts/bootstrap-worktree.sh`
 - `.codex/scripts/land.sh`
 - `.codex/agents/*.md`
-- `.codex/skills/scaiff-repo-setup/SKILL.md`
-- `.codex/skills/scaiff-repo-setup/references/*.md`
-- `.codex/skills/scaiff-repo-setup/assets/adoption-notes-template.md`
+- `.codex/skills/harness/SKILL.md`
+- `.codex/skills/harness/references/*.md`
+- `.codex/skills/harness/assets/adoption-notes-template.md`
+- `.codex/workflows/autonomous-execution.md`
+- global install target: `~/.opencode/skills/ai-harness/skills/harness/`
 - `.codex/workflows/parallel-execution.md`
 - `.codex/templates/phase-execution.md`
 - `.codex/docker/Dockerfile.cognee`
@@ -103,9 +105,4 @@ The scaffold no longer generates:
 - `config/deploy.yml` is intentionally incomplete and should be treated as an app-specific starting point, not a production-ready manifest
 - `config/deploy.cognee.yml` is the stronger template because it includes proxy, env, accessory DB, and dockerfile wiring
 - Cognee is optional at runtime; the scaffold keeps the integration non-blocking when the service is unavailable
-
-## Commit-ready summary
-
-If you want to commit this cleanup, a good conventional message is:
-
-`refactor: simplify scaiff around codex, gsd, beads, and cognee`
+- deploy templates are scaffold outputs maintained here because `ai-harness` ships them to downstream repositories

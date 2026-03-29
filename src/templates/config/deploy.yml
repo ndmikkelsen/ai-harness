@@ -1,19 +1,20 @@
-service: {{APP_SLUG}}
-image: {{APP_SLUG}}/base
+# Starter manifest only. Replace service/image details and add app-specific env before deploying.
+service: "{{APP_SLUG}}"
+image: "{{APP_SLUG}}/base"
 
 servers:
-  - {{COMPUTE_HOST}}
+  - "{{COMPUTE_HOST}}"
 
 registry:
-  server: {{REGISTRY_HOST}}
+  server: "{{REGISTRY_HOST}}"
   username: admin
   password:
     - KAMAL_REGISTRY_PASSWORD
 
 ssh:
-  user: {{COMPUTE_USER}}
+  user: "{{COMPUTE_USER}}"
   keys:
-    - {{SSH_KEY_PATH}}
+    - "{{SSH_KEY_PATH}}"
 
 builder:
   arch: amd64

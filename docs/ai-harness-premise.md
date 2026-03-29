@@ -1,12 +1,8 @@
-# Scaiff Premise
-
-## Working name
-
-This project is named `scaiff`.
+# AI Harness Premise
 
 ## What this project is
 
-`scaiff` is a modular TypeScript CLI for bootstrapping an AI-assisted repository workflow.
+`ai-harness` is a modular TypeScript CLI for bootstrapping an AI-assisted repository workflow.
 
 It supports:
 - new project scaffolding
@@ -26,17 +22,18 @@ Canonical systems:
 - `.codex/` for Codex/OpenCode runtime scripts, guidance, and adapters
 - native `bd` for Beads task tracking after `bd init`
 
-## Current cleanup goal
+## Product intent
 
-Keep only the systems needed for:
-- GSD
-- Beads
-- Cognee
-- Codex via OpenCode
+The tool should let a user or assistant scaffold a repository quickly, safely, and consistently, whether they are starting from scratch or adopting an existing codebase.
 
-Remove or simplify anything unused, duplicated, or misleading.
+The most important product promises are:
 
-## Component review status
+- preserve existing files by default during adoption
+- keep one shared Codex/OpenCode runtime surface under `.codex/`
+- make the workflow usable both from the local CLI and from the global OpenCode `harness` skill
+- keep the scaffold source, generated docs, and shipped `dist/` output aligned
+
+## System decisions
 
 | Component | Decision | Notes |
 | --- | --- | --- |
@@ -47,6 +44,13 @@ Remove or simplify anything unused, duplicated, or misleading.
 | Codex/OpenCode runtime | Keep `.codex/` only | Use `.codex/` as the only assistant runtime surface |
 | Deploy templates | Keep with infra assumptions | Keep `.kamal/secrets.example`, `config/deploy.yml`, and `config/deploy.cognee.yml`; treat `deploy.yml` as a starter and `deploy.cognee.yml` as the concrete service template |
 | Governance docs | Keep lean docs only | Remove root governance placeholders, keep `STICKYNOTE.example.md`, and use `AGENTS.md` + `.planning/` + `.rules/` as the main guidance surface |
+
+## Operating model
+
+- `src/templates/**` is the source of truth for generated scaffold content
+- `src/generators/**` maps those templates into concrete repository outputs
+- `dist/` must stay in sync with source after scaffold or runtime changes
+- this repository dogfoods the scaffold so repo-level docs and planning artifacts should reflect the real product, not placeholder starter text
 
 ## Beads decision
 
@@ -107,7 +111,8 @@ Approved direction:
 - treat `config/deploy.cognee.yml` as the concrete Cognee deployment template backed by `.codex/docker/Dockerfile.cognee`
 - keep secrets placeholder-only and continue ignoring `.kamal/secrets*` in git
 
-## Follow-up checkpoints
+## Current product questions
 
-- finish subsystem review one group at a time
-- clean up duplicated or stale docs after the final keep/remove decisions
+- what is the right distribution model for `ai-harness` beyond a local checkout?
+- should there be any temporary compatibility alias for older `scaiff` users?
+- how much additional upgrade or merge behavior should existing-repo adoption support without sacrificing safety?
