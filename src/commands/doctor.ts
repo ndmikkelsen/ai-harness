@@ -116,7 +116,7 @@ export async function runDoctor(options: DoctorCommandOptions): Promise<DoctorRe
 
   const envExample = await readFileIfPresent(targetDir, '.env.example');
   if (envExample !== null) {
-    for (const token of ['LLM_API_KEY', 'COGNEE_URL', 'BEADS_DOLT_PASSWORD']) {
+    for (const token of ['LLM_API_KEY', 'COGNEE_URL']) {
       if (!envExample.includes(token)) {
         warnings.push({ path: '.env.example', reason: `missing ${token} scaffold value` });
       }

@@ -103,9 +103,7 @@ if [[ -x "$SYNC_PLANNING" ]]; then
 fi
 
 if command -v bd >/dev/null 2>&1 && [[ -d .beads ]]; then
-  printf 'Beads detected. Ensure issue status reflects /gsd:verify-work before landing.\n'
-  run_cmd bd dolt pull
-  run_cmd bd dolt push
+  printf 'Beads detected. Ensure issue status reflects /gsd:verify-work before landing; no separate Beads remote sync is required.\n'
 fi
 
 run_cmd git status
