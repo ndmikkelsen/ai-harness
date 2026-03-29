@@ -30,3 +30,7 @@ STICKYNOTE.md
 cognee_data/
 
 .beads/backup/
+
+# Dolt database files (added by bd init)
+.dolt/
+*.db
