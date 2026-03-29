@@ -116,13 +116,13 @@ bd close bd-42 --reason "Completed" --json
 - If `/gsd:verify-work` finds gaps, create bug or follow-up issues instead of closing the parent issue early
 - If `.beads/` or `bd` is unavailable, continue with GSD rather than blocking execution
 
-### Auto-Sync
+### Project-Local Beads State
 
-bd automatically syncs via Dolt:
+Beads is project-local in this repository:
 
-- Each write auto-commits to Dolt history
-- Use `bd dolt push`/`bd dolt pull` for remote sync
-- No manual export/import needed!
+- Each write updates local Beads state under `.beads/`
+- No separate Beads Dolt remote sync is required for normal usage
+- Keep issue status current in the repo before landing or handing off work
 
 ### Important Rules
 
@@ -150,8 +150,6 @@ For more details, see README.md and docs/QUICKSTART.md.
 4. **PUSH TO REMOTE** - This is MANDATORY:
    ```bash
    git pull --rebase
-   bd dolt pull
-   bd dolt push
    git push
    git status  # MUST show "up to date with origin"
    ```

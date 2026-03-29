@@ -16,6 +16,7 @@ __pycache__/
 .DS_Store
 STICKYNOTE.md
 .beads/.sync.lock
+.beads/dolt-server.port
 .beads/sync_base.jsonl
 .beads/*.db
 .beads/backup/
