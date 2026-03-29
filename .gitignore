@@ -17,6 +17,7 @@ __pycache__/
 .idea/
 STICKYNOTE.md
 .beads/.sync.lock
+.beads/dolt-server.port
 .beads/dolt-monitor.pid
 .beads/dolt-server.activity
 .beads/sync_base.jsonl
