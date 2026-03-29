@@ -36,8 +36,8 @@
 | CORE-02 Existing-repo adoption | Phase 1 | Done |
 | CORE-03 Shared Codex/OpenCode runtime | Phase 1 | Done |
 | CORE-04 Global `harness` skill install | Phase 2 | Done |
-| CORE-05 Self-hosted scaffold adoption | Phase 2 | In Progress |
-| CORE-06 Packaging and distribution hardening | Phase 3 | Planned |
+| CORE-05 Self-hosted scaffold adoption | Phase 2 | Done |
+| CORE-06 Packaging and distribution hardening | Phase 3 | Done |
 
 ## Notes
 
