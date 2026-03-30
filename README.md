@@ -200,6 +200,7 @@ That flow gives you:
 
 - a local `ai-harness` command on your `PATH` backed by this checkout
 - a global OpenCode skill that can scaffold whichever repository you `cd` into
+- a managed backlog-driven `/gsd-autonomous` workflow refreshed under `~/.config/opencode/get-shit-done/workflows/autonomous.md`
 
 ## Quickstart
 
@@ -211,6 +212,8 @@ pnpm build
 pnpm install:local
 ai-harness install-skill --assistant opencode
 ```
+
+That install also refreshes the managed `/gsd-autonomous` workflow used by OpenCode.
 
 New repo:
 

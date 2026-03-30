@@ -23,6 +23,7 @@ That gives you:
 
 - `ai-harness` on your `PATH`
 - the global OpenCode `harness` skill
+- the managed OpenCode `/gsd-autonomous` workflow at `~/.config/opencode/get-shit-done/workflows/autonomous.md`
 
 ## Mental model
 

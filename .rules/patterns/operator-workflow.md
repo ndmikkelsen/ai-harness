@@ -45,6 +45,7 @@ Use `/gsd-autonomous` when you want the system to drain ready work without promp
 - keep retrying until code, validation, verification, and acceptance criteria pass or a true blocker stops progress
 - close issues only after verification passes
 - land from the current feature branch before moving to the next issue
+- if you use OpenCode, rerun `ai-harness install-skill --assistant opencode` after harness updates to refresh the managed `/gsd-autonomous` workflow
 
 ## Landing
 

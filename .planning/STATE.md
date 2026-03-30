@@ -10,10 +10,10 @@ Generated on: 2026-03-29
 
 ## Active Context
 
-- Current focus: simplify the day-to-day AI workflow so Beads -> GSD -> land is interactive-first, uses real GSD command names, and includes executable Muninn-style BDD coverage for CLI behavior.
+- Current focus: version the backlog-driven `/gsd-autonomous` behavior inside the repo by shipping a managed OpenCode workflow override through `ai-harness install-skill` instead of relying on an untracked local patch.
 - Current branch: `feat/ai-workflow-ux`
-- Active Beads epic: `ai-harness-f8n`
-- Latest artifact reviewed: `.rules/patterns/operator-workflow.md`
+- Active Beads epic: `ai-harness-4cp`
+- Latest artifact reviewed: `src/templates/opencode/get-shit-done/workflows/autonomous.md`
 
 ## Recent Decisions
 
@@ -29,13 +29,14 @@ Generated on: 2026-03-29
 - The canonical operator runbook now lives in `.rules/patterns/operator-workflow.md` and uses `/gsd-next` plus `/gsd-resume-work` as the default interactive GSD entrypoints.
 - `/land` is being re-scoped to feature-branch closeout only: push the feature branch, open or update the PR to `dev`, and never touch `main`.
 - This repo is adopting a Muninn-style executable BDD lane with `.feature`, `.plan.md`, and `.spec.ts` under `apps/cli/features/` plus `pnpm test:bdd`.
+- `ai-harness install-skill --assistant opencode` now owns both the global `harness` skill refresh and the managed OpenCode `/gsd-autonomous` workflow refresh.
 
 ## Open Questions
 
-- How much of the backlog-driven `/gsd-autonomous` behavior should live in repo-scaffolded docs and runtime versus companion changes in the shared GSD layer?
+- Which additional shared GSD files, if any, should be managed through the same versioned OpenCode override mechanism beyond `autonomous.md`?
 - Which v2 ergonomics improvements should land first after the workflow UX pass: refresh flow, merge/update help, or richer doctor/adoption guidance?
 
 ## Next Actions
 
-- Finish the workflow UX pass by validating docs, BDD, landing, and dist smoke behavior together.
-- Decide whether to upstream companion changes to the shared `gsd-autonomous` workflow after the scaffold/runtime side is landed.
+- Validate the managed `/gsd-autonomous` override through install-skill, full tests, and dist smoke coverage.
+- Decide whether to upstream companion changes to the shared `gsd-autonomous` workflow after the versioned override path is landed.
