@@ -28,7 +28,7 @@ Give a repository a safe, repeatable AI development scaffold without clobbering 
 
 ## Current State
 
-- Phase 3 is complete: local-use distribution readiness is documented across repo docs, generated templates, and shipped skill references.
+- v1.0 is complete: Phases 1-3 delivered the preserve-by-default scaffold engine, self-hosted harness rollout, and local-use distribution readiness.
 
 ## Open Questions
 

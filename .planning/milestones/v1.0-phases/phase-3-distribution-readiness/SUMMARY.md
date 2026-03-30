@@ -15,7 +15,7 @@ tech-stack:
   added: []
   patterns: [local-use distribution, versioned scaffold baseline, preserve-by-default upgrades]
 key-files:
-  created: [.planning/phases/phase-3-distribution-readiness/SUMMARY.md, src/core/harness-release.ts]
+  created: [.planning/milestones/v1.0-phases/phase-3-distribution-readiness/SUMMARY.md, src/core/harness-release.ts]
   modified: [README.md, docs/migration-plan.md, src/templates/root/README.md, src/templates/planning/STATE.md, src/templates/codex/skills/harness/references/ai-harness-command-matrix.md, src/commands/init.ts]
 key-decisions:
   - "Generated repos now record an ai-harness baseline version and generation date in .planning/STATE.md."
@@ -91,5 +91,5 @@ None - no external service configuration required.
 
 ## Self-Check: PASSED
 
-- Confirmed `.planning/phases/phase-3-distribution-readiness/SUMMARY.md` exists on disk.
+- Confirmed `.planning/milestones/v1.0-phases/phase-3-distribution-readiness/SUMMARY.md` exists on disk.
 - Confirmed task commits `9cbeeb0` and `66ee0e2` exist in git history.
