@@ -147,9 +147,10 @@ This project is scaffolded for the local AI workflow used across Codex, GSD, Bea
 
 ## Harness baseline
 
-- Scaffolded with \`ai-harness\` v0.1.0 on 2026-03-29
+- Scaffolded with \`ai-harness\` v0.1.0 on 2026-03-30
 - Record the \`ai-harness\` version and source commit in the PR or handoff note each time you refresh this scaffold
-- Supported update flow today is local-source: pull the \`ai-harness\` checkout forward, rebuild \`dist/\`, rerun \`ai-harness --mode existing <path> --assistant <codex|opencode> --init-json\`, then customize only \`createdPaths\`
+- Supported update flow today is checkout-based: pull the \`ai-harness\` checkout forward, rebuild \`dist/\`, rerun \`ai-harness --mode existing <path> --assistant <codex|opencode> --init-json\`, then customize only \`createdPaths\`
+- This scaffold assumes \`ai-harness\` is used locally to set up and refresh repos, not consumed as a registry-published package
 - Finish updates with \`ai-harness doctor <path> --assistant <codex|opencode>\`
 
 ## If you are migrating from scaiff
@@ -393,9 +394,10 @@ This project is scaffolded for the local AI workflow used across OpenCode, GSD, 
 
 ## Harness baseline
 
-- Scaffolded with \`ai-harness\` v0.1.0 on 2026-03-29
+- Scaffolded with \`ai-harness\` v0.1.0 on 2026-03-30
 - Record the \`ai-harness\` version and source commit in the PR or handoff note each time you refresh this scaffold
-- Supported update flow today is local-source: pull the \`ai-harness\` checkout forward, rebuild \`dist/\`, rerun \`ai-harness --mode existing <path> --assistant <codex|opencode> --init-json\`, then customize only \`createdPaths\`
+- Supported update flow today is checkout-based: pull the \`ai-harness\` checkout forward, rebuild \`dist/\`, rerun \`ai-harness --mode existing <path> --assistant <codex|opencode> --init-json\`, then customize only \`createdPaths\`
+- This scaffold assumes \`ai-harness\` is used locally to set up and refresh repos, not consumed as a registry-published package
 - Finish updates with \`ai-harness doctor <path> --assistant <codex|opencode>\`
 
 ## If you are migrating from scaiff

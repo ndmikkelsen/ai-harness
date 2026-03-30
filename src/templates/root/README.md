@@ -15,7 +15,8 @@ This project is scaffolded for the local AI workflow used across {{ASSISTANT_LAB
 
 - Scaffolded with `ai-harness` v{{HARNESS_VERSION}} on {{GENERATED_ON}}
 - Record the `ai-harness` version and source commit in the PR or handoff note each time you refresh this scaffold
-- Supported update flow today is local-source: pull the `ai-harness` checkout forward, rebuild `dist/`, rerun `ai-harness --mode existing <path> --assistant <codex|opencode> --init-json`, then customize only `createdPaths`
+- Supported update flow today is checkout-based: pull the `ai-harness` checkout forward, rebuild `dist/`, rerun `ai-harness --mode existing <path> --assistant <codex|opencode> --init-json`, then customize only `createdPaths`
+- This scaffold assumes `ai-harness` is used locally to set up and refresh repos, not consumed as a registry-published package
 - Finish updates with `ai-harness doctor <path> --assistant <codex|opencode>`
 
 ## If you are migrating from scaiff

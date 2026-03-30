@@ -8,18 +8,18 @@ requires:
     provides: self-hosted scaffold baseline and global harness skill flow
 provides:
   - explicit downstream scaffold baseline markers in generated repos
-  - documented local-source upgrade path and install guidance
+  - documented local checkout upgrade path and install guidance
   - explicit scaiff migration and no-alias compatibility stance
 affects: [README, templates, migration-docs, downstream-repos]
 tech-stack:
   added: []
-  patterns: [local-source distribution, versioned scaffold baseline, preserve-by-default upgrades]
+  patterns: [local-use distribution, versioned scaffold baseline, preserve-by-default upgrades]
 key-files:
   created: [.planning/phases/phase-3-distribution-readiness/SUMMARY.md, src/core/harness-release.ts]
   modified: [README.md, docs/migration-plan.md, src/templates/root/README.md, src/templates/planning/STATE.md, src/templates/codex/skills/harness/references/ai-harness-command-matrix.md, src/commands/init.ts]
 key-decisions:
   - "Generated repos now record an ai-harness baseline version and generation date in .planning/STATE.md."
-  - "Downstream updates stay local-source and preserve-by-default until a real package publication path exists."
+  - "Downstream updates stay local and preserve-by-default; ai-harness has no registry or package-publication path."
   - "scaiff remains documentation-only history; ai-harness ships no compatibility binary or alias."
 patterns-established:
   - "Generated docs should state the scaffold baseline and expected refresh flow."
@@ -43,7 +43,7 @@ completed: 2026-03-29
 
 ## Accomplishments
 - Generated repos now seed `.planning/STATE.md` and scaffolded `README.md` with `ai-harness` baseline and refresh guidance.
-- Operator-facing docs now explain the supported local-source install/update path and how to record upgrade provenance.
+- Operator-facing docs now explain the supported local install/update path and how to record upgrade provenance.
 - Compatibility messaging now makes the `scaiff` rename explicit and documents that no alias binary or package is supported.
 
 ## Task Commits
@@ -57,13 +57,13 @@ Each task was committed atomically:
 - `src/core/harness-release.ts` - exposes the current `ai-harness` version to generators.
 - `src/templates/planning/STATE.md` - records the generated scaffold baseline for downstream repos.
 - `src/templates/root/README.md` - adds update flow and scaiff migration guidance to scaffolded repos.
-- `src/templates/codex/skills/harness/references/ai-harness-command-matrix.md` - publishes install, refresh, and compatibility commands for the shipped skill.
-- `README.md` - documents the local-source distribution model, downstream upgrade expectations, and compatibility stance.
+- `src/templates/codex/skills/harness/references/ai-harness-command-matrix.md` - documents install, refresh, and compatibility commands for the shipped skill.
+- `README.md` - documents the local-use distribution model, downstream upgrade expectations, and compatibility stance.
 - `docs/migration-plan.md` - captures the settled migration and alias policy.
 
 ## Decisions Made
 - Generated repositories should start with an explicit `ai-harness` baseline so downstream operators know which scaffold version created the repo.
-- The supported upgrade story remains local-source and review-driven: rebuild, rerun existing-mode adoption, customize only `createdPaths`, then run `doctor`.
+- The supported upgrade story remains local and review-driven: rebuild, rerun existing-mode adoption, customize only `createdPaths`, then run `doctor`.
 - Older `scaiff` references should migrate to `ai-harness` and `harness`; no compatibility alias is shipped.
 
 ## Deviations from Plan
@@ -81,7 +81,7 @@ None - no external service configuration required.
 ## Next Phase Readiness
 
 - CORE-06 is now documented and validated across repo docs, scaffold templates, and shipped skill references.
-- The next distribution step can focus on whether package-manager publication is worth supporting beyond the current local-source path.
+- Future follow-up can focus on better local refresh ergonomics and review tooling.
 
 ## Verification Run
 

@@ -16,6 +16,23 @@ const manifest = getCleanupManifest('legacy-ai-frameworks-v1');
 const legacyRuntimeDir = manifest.entries.find((entry) => entry.id === 'legacy-runtime-dir')!.path;
 
 describe('CLI init', () => {
+  it('prints local install guidance in the human-readable report', async () => {
+    const workspace = await mkdtemp(path.join(os.tmpdir(), 'ai-harness-cli-init-'));
+    const targetDir = path.join(workspace, 'human-output-app');
+
+    const result = await execFile(
+      process.execPath,
+      [tsxCli, 'src/cli.ts', '--assistant', 'codex', '--skip-git', targetDir],
+      {
+        cwd: repoRoot,
+        encoding: 'utf8'
+      }
+    );
+
+    expect(result.stdout).toContain('Scaffolded human-output-app (new, codex)');
+    expect(result.stdout).toContain('Use `ai-harness` locally on your machine to scaffold repos. The documented setup path is a checkout plus `pnpm build` and `pnpm install:local`; there is no registry-published package.');
+  });
+
   it('preserves existing scaffold files by default in existing mode', async () => {
     const workspace = await mkdtemp(path.join(os.tmpdir(), 'ai-harness-cli-init-'));
     const targetDir = path.join(workspace, 'existing-preserve');

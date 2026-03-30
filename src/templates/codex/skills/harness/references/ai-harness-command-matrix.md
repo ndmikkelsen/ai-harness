@@ -5,6 +5,13 @@
 - `greenfield` (`new` mode): target path does not exist or exists and is empty
 - `existing`: target path already has files or is already a git repository
 
+## Distribution model
+
+- intended use: run `ai-harness` locally on a developer machine to scaffold or refresh repos
+- documented setup path: checked-out `ai-harness` repo + `pnpm build` + `pnpm install:local`
+- no registry/package publication path is planned
+- `dist/` is a local build artifact for the launcher and skill installer, not a release channel
+
 ## Commands
 
 ### Install or refresh the local ai-harness launcher

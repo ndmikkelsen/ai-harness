@@ -66,6 +66,7 @@ describe('scaffold snapshots', () => {
     expect(result.files).not.toContain('VISION.md');
     expect(result.files).not.toContain('STICKYNOTE.md');
     expect(result['README.md']).toContain('Scaffolded with `ai-harness` v0.1.0');
+    expect(result['README.md']).toContain('This scaffold assumes `ai-harness` is used locally to set up and refresh repos');
     expect(result['README.md']).toContain('there is no separate `scaiff` binary or package alias');
     expect(result['README.md']).toContain('Run `bd init` once in the repository before using Beads.');
     expect(result['README.md']).toContain('Review AGENTS.md, .codex/README.md, and the guides in .rules/.');

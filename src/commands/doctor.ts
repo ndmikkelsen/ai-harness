@@ -217,5 +217,11 @@ export function formatDoctorReport(result: DoctorResult): string {
     }
   }
 
+  lines.push(
+    '',
+    'Guidance:',
+    '- `ai-harness` is a local-use tool for scaffolding projects on your machine; the documented setup path is a checkout plus `pnpm build` and `pnpm install:local`, not a registry-published package.'
+  );
+
   return `${lines.join('\n')}\n`;
 }

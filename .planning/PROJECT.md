@@ -12,7 +12,7 @@ Give a repository a safe, repeatable AI development scaffold without clobbering 
 
 - Technical: preserve existing files by default, keep generators modular and testable, and keep source templates aligned with built `dist/` output.
 - Product: support both greenfield setup and existing-repo adoption, keep `harness` simple to invoke from OpenCode, maintain one shared Codex/OpenCode runtime surface, and keep the default foundation opinionated around Beads, GSD, Codex, and OpenCode.
-- Timeline: current work is focused on self-hosting the scaffold in this repository and hardening rename/install flows before broader distribution.
+- Timeline: current work is focused on self-hosting the scaffold in this repository and hardening rename/install flows around the local-use model.
 
 ## Doctrine
 
@@ -20,18 +20,19 @@ Give a repository a safe, repeatable AI development scaffold without clobbering 
 - Preserve user-owned files in existing repositories unless a narrow merge or force path is explicitly selected.
 - Remove known non-harness AI workflow droppings only through curated cleanup manifests.
 - Treat `src/templates/**` as the canonical scaffold source and this repository as the dogfooded reference implementation.
+- Treat `ai-harness` as a local-use tool on developer machines: `dist/` powers the launcher and installed skill flow, not a registry or package release channel.
 
 ## Validated Requirements
 
-- `CORE-06` - validated in Phase 3: downstream repos now record their `ai-harness` scaffold baseline, the supported local-source refresh path is explicit, and `scaiff` remains migration-only history with no shipped alias.
+- `CORE-06` - validated in Phase 3: downstream repos now record their `ai-harness` scaffold baseline, the supported local refresh path is explicit, and `scaiff` remains migration-only history with no shipped alias.
 
 ## Current State
 
-- Phase 3 is complete: distribution readiness is documented across repo docs, generated templates, and shipped skill references.
+- Phase 3 is complete: local-use distribution readiness is documented across repo docs, generated templates, and shipped skill references.
 
 ## Open Questions
 
-- When should package-manager distribution graduate from deferred to supported beyond the current local-source path?
+- How much of the local refresh flow should be automated without weakening preserve-by-default review?
 - How much of the generated runtime should stay Codex-compatible under `.codex/` versus move to more OpenCode-native surfaces later?
 
 ## Notes

@@ -60,6 +60,9 @@ export async function runInit(options: InitCommandOptions): Promise<InitResult> 
   });
 
   const notes = [...portSettings.notes];
+  notes.push(
+    'Use `ai-harness` locally on your machine to scaffold repos. The documented setup path is a checkout plus `pnpm build` and `pnpm install:local`; there is no registry-published package.'
+  );
   if (!options.skipGit && !options.dryRun) {
     notes.push(...ensureGitRepository(context.targetDir));
   }

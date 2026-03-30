@@ -145,11 +145,11 @@ pnpm install:local
 
 ## Distribution status
 
-Current supported distribution is local-source installation from a checkout of this repository.
+`ai-harness` is a local-use tool for setting up new and existing projects on your machine.
 
 - supported now: `pnpm install`, `pnpm build`, `pnpm install:local`, and `ai-harness install-skill --assistant opencode`
 - supported update path: pull the repo forward, rebuild `dist/`, refresh the local launcher, and reinstall the OpenCode skill when needed
-- deferred for later Phase 3 work: publishing a package-manager distribution before versioning and migration guidance are explicit
+- not planned: publishing `ai-harness` to a package registry; use it locally on developer machines to scaffold and refresh repositories
 
 ## Downstream scaffold generations
 
@@ -173,6 +173,7 @@ Downstream repositories should treat each scaffold or refresh as pinned to the `
 
 - it prefers `dist/src/cli.js`
 - it will try `pnpm build` if `dist/` is missing
+- `dist/` is a local build artifact used by the launcher and skill installer, not a published package channel
 - it falls back to the repo-installed `tsx` binary to run `src/cli.ts` when dependencies are already installed
 - set `AI_HARNESS_REPO` if you want the launcher to target a different checkout
 
