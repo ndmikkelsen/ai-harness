@@ -199,11 +199,41 @@ That flow gives you:
 - a local `ai-harness` command on your `PATH` backed by this checkout
 - a global OpenCode skill that can scaffold whichever repository you `cd` into
 
+## Quickstart
+
+Install the local launcher and global OpenCode skill once:
+
+```bash
+pnpm install
+pnpm build
+pnpm install:local
+ai-harness install-skill --assistant opencode
+```
+
+New repo:
+
+- OpenCode prompt: `Use harness to scaffold a new repository named my-app for OpenCode.`
+- CLI equivalent: `ai-harness my-app --assistant opencode --init-json`
+
+Existing repo:
+
+- OpenCode prompt: `Use harness to adopt this existing repository for OpenCode. Preserve existing files by default.`
+- CLI equivalent: `ai-harness --mode existing . --assistant opencode --init-json`
+
+After either flow:
+
+```bash
+ai-harness doctor . --assistant opencode
+```
+
+See `docs/harness-usage.md` for the full new-repo and existing-repo walkthroughs.
+
 BDD specs live in `apps/cli/features/`, and executable regression coverage lives in `tests/`.
 
 ## Docs
 
 - `docs/architecture.md`
+- `docs/harness-usage.md`
 - `docs/migration-plan.md`
 - `docs/ai-harness-map.md`
 - `docs/ai-harness-premise.md`
