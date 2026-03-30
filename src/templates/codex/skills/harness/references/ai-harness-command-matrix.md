@@ -28,6 +28,8 @@ pnpm install:local
 ai-harness install-skill --assistant opencode
 ```
 
+- refreshes the global `harness` skill bundle under `~/.opencode/skills/ai-harness/`
+- refreshes the managed `/gsd-autonomous` workflow under `~/.config/opencode/get-shit-done/workflows/autonomous.md`
 ### New repository
 
 ```bash

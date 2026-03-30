@@ -35,14 +35,16 @@ This repository already has working project systems for backlog tracking, planni
 
 1. Read relevant .rules/ and current .planning/ context.
 2. Review .planning/STATE.md before starting implementation.
-3. If Beads is available, start from `bd ready --json`, claim the active issue, and carry the issue ID through phase notes.
-4. For existing repos, optionally run `ai-harness --mode existing <path> --cleanup-manifest legacy-ai-frameworks-v1 --init-json` before tailoring new scaffold files.
-5. Generate a knowledge brief with ./.codex/scripts/cognee-brief.sh.
-6. On a fresh worktree, run ./.codex/scripts/bootstrap-worktree.sh.
-7. Use `.codex/workflows/autonomous-execution.md` for one-agent phase work, or `.codex/workflows/parallel-execution.md` for multi-wave execution.
-8. Validate each wave before handing off or merging into the next.
-9. Close or update Beads issues only after verification passes; create bug issues for verification gaps when needed.
-10. Finish with ./.codex/scripts/land.sh.
+3. Follow `.rules/patterns/operator-workflow.md` as the canonical operator runbook.
+4. If Beads is available, start from `bd ready --json`, claim the active issue, and continue with `/gsd-next`.
+5. For existing repos, optionally run `ai-harness --mode existing <path> --cleanup-manifest legacy-ai-frameworks-v1 --init-json` before tailoring new scaffold files.
+6. Generate a knowledge brief with ./.codex/scripts/cognee-brief.sh.
+7. On a fresh worktree, run ./.codex/scripts/bootstrap-worktree.sh.
+8. Use `.codex/workflows/autonomous-execution.md` for one-agent phase work, or `.codex/workflows/parallel-execution.md` for multi-wave execution.
+9. Run `pnpm typecheck`, `pnpm test`, `pnpm test:bdd`, and `pnpm test:smoke:dist` before landing scaffold or runtime changes.
+10. Validate each wave before handing off or merging into the next.
+11. Close or update Beads issues only after verification passes; create bug issues for verification gaps when needed.
+12. Finish with ./.codex/scripts/land.sh to publish the feature branch and open or update the PR to `dev`.
 
 ## Rules
 

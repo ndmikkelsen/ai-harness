@@ -57,7 +57,7 @@ function envrc(context: ScaffoldContext): string {
 function readme(context: ScaffoldContext): string {
   const assistantLabel = assistantDisplayName(context.assistant);
   const codexBullet = `- ${context.assistant === 'opencode' ? 'OpenCode' : 'Codex'} runtime files in .codex/ and AGENTS.md`;
-  const workflowGuideLine = 'Review AGENTS.md, .codex/README.md, and the guides in .rules/.';
+  const workflowGuideLine = 'Review .rules/patterns/operator-workflow.md, AGENTS.md, and .codex/README.md.';
 
   return loadTemplate('root/README.md', {
     APP_TITLE: context.appTitle,
