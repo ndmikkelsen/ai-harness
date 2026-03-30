@@ -214,7 +214,6 @@ ai-harness install-skill --assistant opencode
 ```
 
 That install also refreshes the managed `/gsd-autonomous` workflow used by OpenCode.
-
 New repo:
 
 - OpenCode prompt: `Use harness to scaffold a new repository named my-app for OpenCode.`

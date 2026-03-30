@@ -59,4 +59,21 @@ describe('CLI install-skill', () => {
     expect(result.stdout).toContain('The installed skill expects `ai-harness` to be available locally on your machine, typically via a checkout plus `pnpm install:local`.');
     expect(result.stdout).toContain('The install also refreshes the managed /gsd-autonomous workflow');
   });
+
+  it('prints local launcher guidance in the human-readable report', async () => {
+    const workspace = await mkdtemp(path.join(os.tmpdir(), 'ai-harness-cli-install-skill-'));
+    const targetRoot = path.join(workspace, 'opencode-skills');
+
+    const result = await execFile(
+      process.execPath,
+      [tsxCli, 'src/cli.ts', 'install-skill', '--assistant', 'opencode', '--target-root', targetRoot],
+      {
+        cwd: repoRoot,
+        encoding: 'utf8'
+      }
+    );
+
+    expect(result.stdout).toContain('Installed harness (opencode)');
+    expect(result.stdout).toContain('The installed skill expects `ai-harness` to be available locally on your machine, typically via a checkout plus `pnpm install:local`.');
+  });
 });
