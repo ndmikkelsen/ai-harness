@@ -10,10 +10,10 @@ Generated on: 2026-03-29
 
 ## Active Context
 
-- Current focus: v1.0 closeout is complete; all v1 requirements are shipped and audited across Phases 1-3.
-- Current branch: `feat/improvements`
-- Active Beads epic: None
-- Latest artifact reviewed: `.planning/milestones/v1.0/AUDIT.md`
+- Current focus: simplify the day-to-day AI workflow so Beads -> GSD -> land is interactive-first, uses real GSD command names, and includes executable Muninn-style BDD coverage for CLI behavior.
+- Current branch: `feat/ai-workflow-ux`
+- Active Beads epic: `ai-harness-f8n`
+- Latest artifact reviewed: `.rules/patterns/operator-workflow.md`
 
 ## Recent Decisions
 
@@ -26,13 +26,16 @@ Generated on: 2026-03-29
 - Generated repos now record an `ai-harness` scaffold baseline and generation date in `.planning/STATE.md`.
 - Phase 3 made the local install/update path and the no-alias `scaiff` migration stance explicit.
 - v1.0 closes with all core flows and quality gates satisfied through the Phase 1-3 delivery arc.
+- The canonical operator runbook now lives in `.rules/patterns/operator-workflow.md` and uses `/gsd-next` plus `/gsd-resume-work` as the default interactive GSD entrypoints.
+- `/land` is being re-scoped to feature-branch closeout only: push the feature branch, open or update the PR to `dev`, and never touch `main`.
+- This repo is adopting a Muninn-style executable BDD lane with `.feature`, `.plan.md`, and `.spec.ts` under `apps/cli/features/` plus `pnpm test:bdd`.
 
 ## Open Questions
 
-- How much more of the local refresh flow should be automated without weakening explicit review?
-- Which v2 ergonomics improvements should land first: refresh flow, merge/update help, or richer doctor/adoption guidance?
+- How much of the backlog-driven `/gsd-autonomous` behavior should live in repo-scaffolded docs and runtime versus companion changes in the shared GSD layer?
+- Which v2 ergonomics improvements should land first after the workflow UX pass: refresh flow, merge/update help, or richer doctor/adoption guidance?
 
 ## Next Actions
 
-- Start v2 planning around local refresh ergonomics, merge/update help, and richer repo inspection.
-- Carry the Phase 3 distribution guidance into future doctor and existing-repo upgrade improvements.
+- Finish the workflow UX pass by validating docs, BDD, landing, and dist smoke behavior together.
+- Decide whether to upstream companion changes to the shared `gsd-autonomous` workflow after the scaffold/runtime side is landed.

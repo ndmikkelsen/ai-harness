@@ -34,6 +34,7 @@ describe('runInit', () => {
     expect(result.createdPaths).toContain('.codex/README.md');
     expect(result.createdPaths).toContain('.codex/workflows/autonomous-execution.md');
     expect(result.createdPaths).toContain('.codex/skills/harness/SKILL.md');
+    expect(result.createdPaths).toContain('.rules/patterns/operator-workflow.md');
     expect(result.createdPaths).toContain('.codex/scripts/cognee-bridge.sh');
     expect(result.createdPaths).toContain('.codex/scripts/cognee-sync-planning.sh');
     expect(result.createdPaths).toContain('.codex/scripts/sync-planning-to-cognee.sh');
@@ -110,11 +111,13 @@ describe('runInit', () => {
     expect(result.createdPaths).toContain('.codex/README.md');
     expect(result.createdPaths).toContain('.codex/workflows/autonomous-execution.md');
     expect(result.createdPaths).toContain('.codex/skills/harness/SKILL.md');
+    expect(result.createdPaths).toContain('.rules/patterns/operator-workflow.md');
     expect(result.createdPaths).toContain('AGENTS.md');
     expect(result.createdPaths).toContain('.codex/docker/Dockerfile.cognee');
     expect(result.createdPaths).not.toContain('.codex/scripts/sync-to-cognee.sh');
     expect(result.createdPaths).not.toContain('.codex/templates/session-handoff.md');
     expect(codexReadme).toContain('Codex Compatibility Layer');
+    expect(codexReadme).toContain('.rules/patterns/operator-workflow.md');
     expect(codexReadme).toContain('.codex/workflows/autonomous-execution.md');
     expect(codexReadme).toContain('./.codex/scripts/sync-planning-to-cognee.sh');
     expect(codexReadme).toContain('.codex/skills/harness/SKILL.md');
@@ -149,6 +152,7 @@ describe('runInit', () => {
     expect(result.createdPaths).toContain('.codex/scripts/cognee-bridge.sh');
     expect(result.createdPaths).not.toContain('.codex/templates/session-handoff.md');
     expect(codexReadme).toContain('OpenCode Compatibility Layer');
+    expect(codexReadme).toContain('.rules/patterns/operator-workflow.md');
     expect(agentsGuide).toContain('OpenCode Workflow');
     expect(agentsGuide).toContain('.codex/');
   });

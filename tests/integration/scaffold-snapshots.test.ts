@@ -69,16 +69,17 @@ describe('scaffold snapshots', () => {
     expect(result['README.md']).toContain('This scaffold assumes `ai-harness` is used locally to set up and refresh repos');
     expect(result['README.md']).toContain('there is no separate `scaiff` binary or package alias');
     expect(result['README.md']).toContain('Run `bd init` once in the repository before using Beads.');
-    expect(result['README.md']).toContain('Review AGENTS.md, .codex/README.md, and the guides in .rules/.');
+    expect(result['README.md']).toContain('Review .rules/patterns/operator-workflow.md, AGENTS.md, and .codex/README.md.');
     expect(result['.codex/README.md']).toContain('Use native `bd` as the Beads task-tracking interface after `bd init`');
     expect(result['.codex/README.md']).toContain('./.codex/scripts/sync-planning-to-cognee.sh');
     expect(result['.codex/README.md']).toContain('.codex/workflows/autonomous-execution.md');
+    expect(result['.codex/README.md']).toContain('pnpm test:bdd');
     expect(result['.codex/README.md']).not.toContain('./.codex/scripts/sync-to-cognee.sh');
     expect(beadsGuide).toContain('Run `bd init` once per repository');
     expect(beadsGuide).toContain('Use native `bd` commands for Beads.');
     expect(autonomousWorkflow).toContain('BEADS_AVAILABLE');
     expect(autonomousWorkflow).toContain('bd ready --json');
-    expect(autonomousWorkflow).toContain('/gsd:verify-work');
+    expect(autonomousWorkflow).toContain('/gsd-next');
     expect(result).toMatchSnapshot();
   });
 

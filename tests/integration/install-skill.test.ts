@@ -12,6 +12,7 @@ describe('runInstallSkill', () => {
     const targetRoot = path.join(workspace, 'opencode-skills');
 
     const result = await runInstallSkill({
+      cwd: workspace,
       assistant: 'opencode',
       targetRoot
     });
@@ -39,6 +40,7 @@ describe('runInstallSkill', () => {
     const skillPath = path.join(installDir, 'skills', 'harness', 'SKILL.md');
 
     await runInstallSkill({
+      cwd: workspace,
       assistant: 'opencode',
       targetRoot
     });
@@ -46,6 +48,7 @@ describe('runInstallSkill', () => {
     await writeFile(skillPath, 'stale\n', 'utf8');
 
     const result = await runInstallSkill({
+      cwd: workspace,
       assistant: 'opencode',
       targetRoot
     });
