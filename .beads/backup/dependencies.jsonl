@@ -27,6 +27,7 @@
 {"created_at":"2026-03-29T19:28:12Z","created_by":"ndmikkelsen","depends_on_id":"ai-harness-b42","issue_id":"ai-harness-ct6","type":"discovered-from"}
 {"created_at":"2026-03-29T02:13:35Z","created_by":"ndmikkelsen","depends_on_id":"ai-harness-vfj","issue_id":"ai-harness-e5c","type":"discovered-from"}
 {"created_at":"2026-03-29T22:29:26Z","created_by":"ndmikkelsen","depends_on_id":"ai-harness-b42","issue_id":"ai-harness-p8s","type":"discovered-from"}
+{"created_at":"2026-03-29T23:50:46Z","created_by":"ndmikkelsen","depends_on_id":"ai-harness-p8s","issue_id":"ai-harness-q57","type":"discovered-from"}
 {"created_at":"2026-03-29T22:16:18Z","created_by":"ndmikkelsen","depends_on_id":"ai-harness-3uw","issue_id":"ai-harness-qd6","type":"discovered-from"}
 {"created_at":"2026-03-29T20:25:08Z","created_by":"ndmikkelsen","depends_on_id":"ai-harness-ct6","issue_id":"ai-harness-sam","type":"discovered-from"}
 {"created_at":"2026-03-29T23:11:19Z","created_by":"ndmikkelsen","depends_on_id":"ai-harness-p8s","issue_id":"ai-harness-x8a","type":"discovered-from"}
