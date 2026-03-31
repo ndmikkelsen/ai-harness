@@ -203,4 +203,5 @@ export interface DoctorResult {
   missing: string[];
   invalid: DoctorIssue[];
   warnings: DoctorIssue[];
+  recommendations: string[];
 }
