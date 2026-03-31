@@ -1,1 +1,1 @@
-FROM cognee/cognee:latest
+FROM cognee/cognee:v0.5.6
