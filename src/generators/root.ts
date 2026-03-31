@@ -31,6 +31,10 @@ function preCommit(): string {
   return loadTemplate('root/pre-commit.yaml');
 }
 
+function postCheckoutHook(): string {
+  return loadTemplate('root/scripts/hooks/post-checkout');
+}
+
 function envExample(context: ScaffoldContext): string {
   return loadTemplate('root/env.example', {
     APP_TITLE: context.appTitle,
@@ -71,6 +75,8 @@ function readme(context: ScaffoldContext): string {
 
 export function buildRootEntries(): ManagedEntry[] {
   return [
+    { kind: 'directory', path: 'scripts' },
+    { kind: 'directory', path: 'scripts/hooks' },
     {
       kind: 'file',
       path: '.gitignore',
@@ -95,6 +101,7 @@ export function buildRootEntries(): ManagedEntry[] {
         }
       },
     { kind: 'file', path: '.envrc', content: (context) => envrc(context) },
+    { kind: 'file', path: 'scripts/hooks/post-checkout', content: () => postCheckoutHook(), executable: true },
     { kind: 'file', path: 'README.md', content: (context) => readme(context) }
   ];
 }

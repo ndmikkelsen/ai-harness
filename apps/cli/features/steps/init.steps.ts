@@ -45,7 +45,7 @@ export function thenTheCliCreatesTheAiWorkflowScaffoldFiles(world: CliFeatureWor
 
 export function thenTheCliReportsCreatedFilesInItsSummary(world: CliFeatureWorld): void {
   expect(world.report).toContain('Created files:');
-  expect(world.report).toContain('.planning/config.json');
+  expect(world.report).toContain('scripts/hooks/post-checkout');
 }
 
 export function thenTheCliReportsPlannedChanges(world: CliFeatureWorld): void {
