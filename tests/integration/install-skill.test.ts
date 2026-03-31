@@ -37,6 +37,7 @@ describe('runInstallSkill', () => {
     expect(installedSkill).toContain('# Harness');
     expect(installedSkill).toContain('ai-harness --mode existing . --init-json');
     expect(installedWorkflow).toContain('Drain ready Beads work and incomplete GSD phase work autonomously.');
+    expect(installedWorkflow).toContain('.codex/workflows/autonomous-execution.md');
   });
 
   it('refreshes existing managed skill files on reinstall', async () => {
@@ -68,5 +69,6 @@ describe('runInstallSkill', () => {
     expect(result.writtenWorkflowPaths).toContain('get-shit-done/workflows/autonomous.md');
     await expect(readFile(skillPath, 'utf8')).resolves.toContain('# Harness');
     await expect(readFile(workflowPath, 'utf8')).resolves.toContain('Drain ready Beads work and incomplete GSD phase work autonomously.');
+    await expect(readFile(workflowPath, 'utf8')).resolves.toContain('.codex/workflows/autonomous-execution.md');
   });
 });

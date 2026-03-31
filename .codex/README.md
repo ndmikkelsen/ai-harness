@@ -28,7 +28,7 @@ Codex should use this runtime layer to maintain the harness, validate the genera
 - `./.codex/scripts/cognee-sync-planning.sh` - sync GSD planning artifacts into Cognee
 - `./.codex/scripts/sync-planning-to-cognee.sh` - user-facing planning sync entrypoint
 - `./.codex/scripts/bootstrap-worktree.sh` - seed local worktree state and link shared `.env` / `.kamal` secrets when present
-- `.codex/workflows/autonomous-execution.md` - Beads-aware single-agent phase workflow with graceful degradation
+- `.codex/workflows/autonomous-execution.md` - backlog-driven autonomous execution policy shared across Codex and OpenCode
 - `.codex/docker/Dockerfile.cognee` - container build source for the Cognee deploy template
 - `.codex/skills/harness/SKILL.md` - source skill instructions mirrored by the globally installed OpenCode `harness` skill
 
@@ -41,7 +41,7 @@ Codex should use this runtime layer to maintain the harness, validate the genera
 5. Use `ai-harness --mode existing . --init-json` to validate how this repo adopts its own scaffold without clobbering existing files.
 6. Use `ai-harness doctor . --assistant codex` to audit the current repo after runtime changes.
 7. Generate a knowledge brief with ./.codex/scripts/cognee-brief.sh when Cognee is available.
-8. Use `.codex/workflows/autonomous-execution.md` for one-agent phase work, or `.codex/workflows/parallel-execution.md` for multi-wave execution.
+8. Use `.codex/workflows/autonomous-execution.md` for one-agent backlog-driven execution, or `.codex/workflows/parallel-execution.md` for multi-wave execution.
 9. Run `pnpm typecheck`, `pnpm test`, `pnpm test:bdd`, and `pnpm test:smoke:dist` before landing scaffold or runtime changes.
 10. Close or update Beads issues only after verification passes; create bug issues if verification reveals gaps.
 11. Finish with ./.codex/scripts/land.sh to publish the feature branch and open or update the PR to `dev`.

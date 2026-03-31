@@ -29,5 +29,6 @@ Use this loop for phase-based work when Beads is available:
 
 - if a repo adds an automated or autonomous GSD driver, gate all Beads operations behind a check for both `.beads/` and the `bd` executable
 - when Beads is unavailable, skip tracking steps and continue the GSD flow rather than blocking execution
-- if Beads is available, start from ready work, create or claim the active issue before planning, keep child tasks tied to concrete plans, and close them only after verification passes
+- if Beads is available, start from ready work before roadmap-only phase work, create or claim the active issue before planning, keep child tasks tied to concrete plans, and close them only after verification passes
+- if verification reports retryable gaps, allow one automatic gap-closure cycle before stopping with follow-up tracking
 - validate Beads config keys against the installed `bd` version before codifying JSONL or events export behavior

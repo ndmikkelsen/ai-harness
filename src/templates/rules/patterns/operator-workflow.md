@@ -41,8 +41,10 @@ Use `/gsd-autonomous` when you want the system to drain ready work without promp
 
 - start from `bd ready --json` when Beads is available
 - claim the next ready issue automatically
-- route into quick work or phase work as needed
+- route into `/gsd-next` first, then into quick work or phase work as needed
+- prefer ready backlog work before roadmap-only phase work; fall back to incomplete phases only when no ready issues remain
 - keep retrying until code, validation, verification, and acceptance criteria pass or a true blocker stops progress
+- allow one automatic gap-closure cycle after verification reports `gaps_found`, then stop and hand off if gaps remain
 - close issues only after verification passes
 - land from the current feature branch before moving to the next issue
 - if you use OpenCode, rerun `ai-harness install-skill --assistant opencode` after harness updates to refresh the managed `/gsd-autonomous` workflow
