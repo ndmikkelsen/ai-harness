@@ -1,6 +1,9 @@
 service: {{APP_SLUG}}-cognee
 image: {{APP_SLUG}}/cognee
 
+servers:
+  - {{COMPUTE_HOST}}
+
 proxy:
   host: {{APP_SLUG}}-cognee.apps.compute.lan
   app_port: 8000
