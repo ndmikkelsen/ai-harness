@@ -27,7 +27,7 @@ Codex should use this runtime layer to maintain the harness, validate the genera
 - `./.codex/scripts/cognee-bridge.sh` - low-level Cognee query, upload, and cognify entrypoint
 - `./.codex/scripts/cognee-sync-planning.sh` - sync GSD planning artifacts into Cognee
 - `./.codex/scripts/sync-planning-to-cognee.sh` - user-facing planning sync entrypoint
-- `./.codex/scripts/bootstrap-worktree.sh` - seed local worktree state
+- `./.codex/scripts/bootstrap-worktree.sh` - seed local worktree state and link shared `.env` / `.kamal` secrets when present
 - `.codex/workflows/autonomous-execution.md` - Beads-aware single-agent phase workflow with graceful degradation
 - `.codex/docker/Dockerfile.cognee` - container build source for the Cognee deploy template
 - `.codex/skills/harness/SKILL.md` - source skill instructions mirrored by the globally installed OpenCode `harness` skill

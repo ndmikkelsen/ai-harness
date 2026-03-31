@@ -151,6 +151,30 @@ describe('runInit', () => {
     expect(dockerfile).not.toContain('FROM cognee/cognee:latest');
   });
 
+  it('creates a worktree bootstrap script that links shared local env files', async () => {
+    const workspace = await mkdtemp(path.join(os.tmpdir(), 'ai-harness-'));
+
+    await runInit({
+      cwd: workspace,
+      projectArg: 'bootstrap-app',
+      assistant: 'codex',
+      mode: 'auto',
+      dryRun: false,
+      force: false,
+      skipGit: true,
+      detectPorts: false
+    });
+
+    const bootstrapScript = await readFile(
+      path.join(workspace, 'bootstrap-app', '.codex', 'scripts', 'bootstrap-worktree.sh'),
+      'utf8'
+    );
+
+    expect(bootstrapScript).toContain('.env');
+    expect(bootstrapScript).toContain('.kamal/secrets');
+    expect(bootstrapScript).toContain('direnv allow');
+  });
+
   it('creates OpenCode-compatible files on the Codex scaffold when opencode is selected', async () => {
     const workspace = await mkdtemp(path.join(os.tmpdir(), 'ai-harness-'));
     const result = await runInit({
