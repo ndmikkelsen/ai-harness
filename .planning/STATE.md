@@ -10,8 +10,8 @@ Generated on: 2026-03-31
 
 ## Active Context
 
-- Current focus: v1.0 remains complete while post-v1.0 ergonomics now auto-wire worktree bootstrap hooks for new and adopted repos, and the optional Cognee deploy follow-up remains queued for final runtime verification.
-- Current branch: `feat/workflow-improvements`
+- Current focus: v1.0 remains complete while post-v1.0 ergonomics now auto-wire worktree bootstrap hooks for new and adopted repos, and the optional Cognee deploy path is now live, queryable, and documented for repeatable operator use.
+- Current branch: `feat/workflow-orientation`
 - Active Beads epic: None
 - Latest artifact reviewed: `src/core/git.ts`
 
@@ -30,19 +30,19 @@ Generated on: 2026-03-31
 - `/land` is scoped to feature-branch closeout only: push the feature branch, open or update the PR to `dev`, and never touch `main`.
 - This repo is adopting a Muninn-style executable BDD lane with `.feature`, `.plan.md`, and `.spec.ts` under `apps/cli/features/` plus `pnpm test:bdd`.
 - `ai-harness install-skill --assistant opencode` now owns both the global `harness` skill refresh and the managed OpenCode `/gsd-autonomous` workflow refresh.
-- The optional Cognee deploy template now pins `cognee/cognee:v0.5.6` instead of floating on `latest` so downstream deploys get a stable release with the Postgres migration fixes already shipped upstream.
+- The optional Cognee deploy template now pins the published `cognee/cognee:latest@sha256:eba227c33dd7f5eb997a0072f418792fd8aaa8873e9bb12240915d4e69396970` image because the upstream release tags are not consistently published to Docker Hub; this keeps downstream deploys reproducible while still picking up the newer migration fixes from upstream main.
 - The optional Cognee pgvector deploy flow now sets `ENABLE_BACKEND_ACCESS_CONTROL=false` alongside `REQUIRE_AUTHENTICATION=false` so single-tenant installs do not boot into unsupported multi-user handler validation.
+- The optional Cognee deploy flow now follows the hardened sibling-repo pattern more closely: it pins the published image digest, probes `/health`, extends kamal-proxy `response_timeout` to `300`, sets `LLM_MODEL=gpt-4o-mini`, and forces `VECTOR_DATASET_DATABASE_HANDLER=pgvector`.
+- With a funded `LLM_API_KEY` injected through `.kamal/secrets`, the committed Cognee deploy now passes end-to-end verification: `/health` and `/api/v1/settings` return `200`, `/api/v1/add` and `/api/v1/cognify` complete successfully, and `/api/v1/search` returns a grounded answer from the uploaded smoke dataset.
 - `ai-harness` now auto-wires post-checkout worktree bootstrap for both fresh scaffolds and existing-repo adoption: prefer `pre-commit` when the scaffolded hook config is present, patch the active `core.hooksPath` when a repo uses custom hooks such as Beads, and fall back to a direct `.git/hooks/post-checkout` shim when needed.
 
 ## Open Questions
 
 - Which additional shared GSD files, if any, should be managed through the same versioned OpenCode override mechanism beyond `autonomous.md`?
 - Which v2 ergonomics improvements should land first after the workflow UX pass: refresh flow, merge/update help, or richer doctor/adoption guidance?
-- How should deploy-time secrets for the optional Cognee service be supplied locally so `kamal deploy -c config/deploy.cognee.yml` can be rerun without introducing any git-tracked secrets?
 
 ## Next Actions
 
 - Merge the worktree-bootstrap automation to `dev`, then verify a fresh `git worktree add ...` inherits the local `.env*` and `.kamal/secrets*` links without manual setup.
-- Rerun `kamal deploy -c config/deploy.cognee.yml` and verify `ai-harness-cognee.apps.compute.lan` becomes healthy.
-- Submit the backlog-driven `/gsd-autonomous` behavior to the shared GSD source so the managed override can become unnecessary over time.
-- Start the next v2 ergonomics issue around local refresh, merge/update help, or richer doctor guidance.
+- Merge the worktree-bootstrap automation to `dev`, then verify a fresh `git worktree add ...` inherits the local `.env*` and `.kamal/secrets*` links without manual setup.
+- Capture any future Cognee provider changes by updating both `config/deploy.cognee.yml` and `.rules/patterns/deployment.md` so the live verification contract stays accurate.

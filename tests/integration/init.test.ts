@@ -147,8 +147,14 @@ describe('runInit', () => {
 
     expect(deployConfig).toContain('REQUIRE_AUTHENTICATION: "false"');
     expect(deployConfig).toContain('ENABLE_BACKEND_ACCESS_CONTROL: "false"');
-    expect(dockerfile).toContain('FROM cognee/cognee:v0.5.6');
-    expect(dockerfile).not.toContain('FROM cognee/cognee:latest');
+    expect(deployConfig).toContain('LLM_MODEL: gpt-4o-mini');
+    expect(deployConfig).toContain('VECTOR_DATASET_DATABASE_HANDLER: pgvector');
+    expect(deployConfig).toContain('response_timeout: 300');
+    expect(deployConfig).toContain('path: /health');
+    expect(dockerfile).toContain('Cognee release tags are not consistently published to Docker Hub.');
+    expect(dockerfile).toContain(
+      'FROM cognee/cognee:latest@sha256:eba227c33dd7f5eb997a0072f418792fd8aaa8873e9bb12240915d4e69396970'
+    );
   });
 
   it('creates a worktree bootstrap script that links shared local env files', async () => {

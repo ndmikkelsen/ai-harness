@@ -89,6 +89,7 @@ describe('scaffold snapshots', () => {
     expect(autonomousWorkflow).toContain('BEADS_AVAILABLE');
     expect(autonomousWorkflow).toContain('bd ready --json');
     expect(autonomousWorkflow).toContain('/gsd-next');
+    expect(autonomousWorkflow).toContain('gaps_found');
     expect(result).toMatchSnapshot();
   });
 

@@ -35,7 +35,7 @@ This project is scaffolded for the local AI workflow used across {{ASSISTANT_LAB
 5. Run `bd init` once in the repository before using Beads.
 6. Use `bd ready --json`, `bd update <id> --claim --json`, and `/gsd-next` as the default work loop.
 7. Land from your feature branch with `./.codex/scripts/land.sh`; it pushes the branch and opens or updates the PR to `dev`.
-8. If you use OpenCode, rerun `ai-harness install-skill --assistant opencode` after harness updates to refresh the managed `harness` skill and `/gsd-autonomous` workflow.
+8. If you use OpenCode, rerun `ai-harness install-skill --assistant opencode` after harness updates to refresh the managed `harness` skill and the `/gsd-autonomous` entrypoint that follows the shared backlog-driven workflow.
 9. Use `.codex/skills/harness/SKILL.md` when adopting or bootstrapping another repository.
 10. If you are adopting a repo with legacy AI framework files, use `ai-harness --mode existing <path> --cleanup-manifest legacy-ai-frameworks-v1 --init-json`.
 11. Create a feature branch before your first commit.

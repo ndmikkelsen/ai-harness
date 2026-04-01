@@ -18,6 +18,9 @@ Stop only for:
 
 <required_reading>
 
+Always read `.rules/patterns/operator-workflow.md` and `.codex/workflows/autonomous-execution.md` before acting.
+Treat those repo files as the source of truth for backlog priority, verification outcomes, issue closure, landing, and blocker handling.
+
 Read all files referenced by the invoking prompt's execution_context before starting.
 
 </required_reading>
@@ -67,6 +70,8 @@ Display startup banner:
 ```
 
 If `FROM_PHASE` is set, display `Phase floor: {FROM_PHASE}`.
+
+The managed OpenCode workflow is the execution entrypoint only. Shared autonomous policy lives in `.rules/patterns/operator-workflow.md` and `.codex/workflows/autonomous-execution.md`.
 
 </step>
 
