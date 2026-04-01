@@ -30,19 +30,21 @@ Generated on: 2026-03-31
 - `/land` is scoped to feature-branch closeout only: push the feature branch, open or update the PR to `dev`, and never touch `main`.
 - This repo is adopting a Muninn-style executable BDD lane with `.feature`, `.plan.md`, and `.spec.ts` under `apps/cli/features/` plus `pnpm test:bdd`.
 - `ai-harness install-skill --assistant opencode` now owns both the global `harness` skill refresh and the managed OpenCode `/gsd-autonomous` workflow refresh.
-- The optional Cognee deploy template now pins `cognee/cognee:v0.5.6` instead of floating on `latest` so downstream deploys get a stable release with the Postgres migration fixes already shipped upstream.
+- The optional Cognee deploy template now pins the published `cognee/cognee:latest@sha256:eba227c33dd7f5eb997a0072f418792fd8aaa8873e9bb12240915d4e69396970` image because the upstream release tags are not consistently published to Docker Hub; this keeps downstream deploys reproducible while still picking up the newer migration fixes from upstream main.
 - The optional Cognee pgvector deploy flow now sets `ENABLE_BACKEND_ACCESS_CONTROL=false` alongside `REQUIRE_AUTHENTICATION=false` so single-tenant installs do not boot into unsupported multi-user handler validation.
+- The optional Cognee deploy flow now follows the hardened sibling-repo pattern more closely: it pins the published image digest, probes `/health`, extends kamal-proxy `response_timeout` to `300`, sets `LLM_MODEL=gpt-4o-mini`, and forces `VECTOR_DATASET_DATABASE_HANDLER=pgvector`.
+- With the hardened deploy applied to a temporary live image, the service is healthy and the proxy no longer hides long-running failures behind `504`s: `/api/v1/add` and `/api/v1/cognify` now return `409` with Cognee's 30-second LLM connection-test timeout, and `/api/v1/search` returns `409` with the underlying OpenAI `RateLimitError` from the current key.
 - `ai-harness` now auto-wires post-checkout worktree bootstrap for both fresh scaffolds and existing-repo adoption: prefer `pre-commit` when the scaffolded hook config is present, patch the active `core.hooksPath` when a repo uses custom hooks such as Beads, and fall back to a direct `.git/hooks/post-checkout` shim when needed.
 
 ## Open Questions
 
 - Which additional shared GSD files, if any, should be managed through the same versioned OpenCode override mechanism beyond `autonomous.md`?
 - Which v2 ergonomics improvements should land first after the workflow UX pass: refresh flow, merge/update help, or richer doctor/adoption guidance?
-- How should deploy-time secrets for the optional Cognee service be supplied locally so `kamal deploy -c config/deploy.cognee.yml` can be rerun without introducing any git-tracked secrets?
+- Which funded and supported LLM credential path should the optional Cognee service use for repeatable local verification, now that the hardened deploy exposes live `409` failures rooted in Cognee's LLM connection test and OpenAI rate-limit errors rather than proxy-level `504`s?
 
 ## Next Actions
 
 - Merge the worktree-bootstrap automation to `dev`, then verify a fresh `git worktree add ...` inherits the local `.env*` and `.kamal/secrets*` links without manual setup.
-- Rerun `kamal deploy -c config/deploy.cognee.yml` and verify `ai-harness-cognee.apps.compute.lan` becomes healthy.
-- Submit the backlog-driven `/gsd-autonomous` behavior to the shared GSD source so the managed override can become unnecessary over time.
-- Start the next v2 ergonomics issue around local refresh, merge/update help, or richer doctor guidance.
+- Finish `ai-harness-rl2` by landing the hardened optional Cognee implementation: published image digest pin, `/health` proxy probe, `response_timeout: 300`, `VECTOR_DATASET_DATABASE_HANDLER=pgvector`, and explicit `LLM_MODEL=gpt-4o-mini`.
+- Then unblock `ai-harness-3rj` by supplying a funded/supported LLM path and re-running upload + cognify + query against `ai-harness-cognee.apps.compute.lan`.
+- Then complete `ai-harness-9nr` by turning the verified preflight/deploy/verification contract into durable operator guidance.
