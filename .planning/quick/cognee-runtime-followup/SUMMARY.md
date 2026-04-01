@@ -9,13 +9,13 @@
 - Cognee settings now report the explicit `gpt-4o-mini` model instead of the default `openai/gpt-5-mini` selection.
 - The deploy now also forces `VECTOR_DATASET_DATABASE_HANDLER=pgvector`, aligning the dataset handler with the configured vector database provider.
 
-## Remaining Blocker
+## Verified Runtime Contract
 
-- Upload/cognify/query are still not verified end-to-end.
-- With the hardened proxy settings, `/api/v1/add` and `/api/v1/cognify` now return explicit `409` failures with `LLM connection test timed out after 30s`, which is better than the earlier proxy `504` behavior but still blocks ingestion.
-- `/api/v1/search` now returns an explicit `409` payload containing the underlying OpenAI `RateLimitError`, confirming the current key is still not query-ready.
-- The shared `compute-stack` Cognee deployment reproduces the same external `504` search behavior, so this is likely a shared operator/provider readiness problem rather than a one-off Kamal shape bug.
-- Direct authenticated `gpt-4o-mini` chat completions from inside the running container still return HTTP `429`, which matches the exposed Cognee-side rate-limit failures.
+- A funded `LLM_API_KEY` delivered through `.kamal/secrets` allows direct authenticated `gpt-4o-mini` chat completions from inside the live container.
+- `POST /api/v1/add` now succeeds in about 3 seconds for a smoke markdown document.
+- `POST /api/v1/cognify` now succeeds in about 10 seconds for the uploaded dataset.
+- `POST /api/v1/search` now returns `200` with a grounded answer derived from the uploaded dataset.
+- The durable operator guidance now needs to preserve one important gotcha: editing `.env` alone is not enough if Kamal is reading `.kamal/secrets` (or a symlinked secrets file) for deploy-time injection.
 
 ## Next Work
 
