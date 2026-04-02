@@ -88,7 +88,7 @@ After installing or updating the skill:
 New repositories receive the full scaffold. Existing repositories create the same missing files while preserving pre-existing scaffold files by default.
 
 - root hygiene files like `.gitignore`, `.env.example`, `.gitleaks.toml`, `.pre-commit-config.yaml`
-- Beads docs for native `bd`; run `bd init` to create `.beads/`
+- Beads docs for native `bd` plus a default `.beads/config.yaml`; run `bd init` before using Beads
 - `.planning/` for GSD planning artifacts
 - `.codex/` runtime scripts, docs, templates, agents, and docker assets shared by Codex and OpenCode
 - `.opencode/worktree.jsonc` for the optional `kdco/worktree` OpenCode worktree plugin path

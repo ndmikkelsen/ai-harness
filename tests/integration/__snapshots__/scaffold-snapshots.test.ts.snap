@@ -201,6 +201,7 @@ This file is the default handoff note for the scaffolded repository.
 - Note any validation still required before landing work.
 ",
   "files": [
+    ".beads/config.yaml",
     ".codex/README.md",
     ".codex/agents/gsd-cognee-advisor.md",
     ".codex/agents/implementer.md",
@@ -459,6 +460,7 @@ This file is the default handoff note for the scaffolded repository.
 - Note any validation still required before landing work.
 ",
   "files": [
+    ".beads/config.yaml",
     ".codex/README.md",
     ".codex/agents/gsd-cognee-advisor.md",
     ".codex/agents/implementer.md",
