@@ -10,7 +10,7 @@ Generated on: 2026-03-31
 
 ## Active Context
 
-- Current focus: v1.0 remains complete while post-v1.0 ergonomics now auto-wire worktree bootstrap hooks for new and adopted repos, and the optional Cognee deploy follow-up is fully verified and closed.
+- Current focus: v1.0 remains complete while post-v1.0 ergonomics now auto-wire worktree bootstrap hooks for new and adopted repos, and the optional Cognee deploy follow-up is live, queryable, documented, and fully closed.
 - Current branch: `feat/workflow-orientation`
 - Active Beads epic: None
 - Latest artifact reviewed: `src/core/git.ts`
@@ -44,5 +44,6 @@ Generated on: 2026-03-31
 
 ## Next Actions
 
+- Merge the worktree-bootstrap automation to `dev`, then verify a fresh `git worktree add ...` inherits the local `.env*` and `.kamal/secrets*` links without manual setup.
 - Merge the worktree-bootstrap automation to `dev`, then verify a fresh `git worktree add ...` inherits the local `.env*` and `.kamal/secrets*` links without manual setup.
 - Capture any future Cognee provider changes by updating both `config/deploy.cognee.yml` and `.rules/patterns/deployment.md` so the live verification contract stays accurate.
