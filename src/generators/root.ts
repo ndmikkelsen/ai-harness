@@ -35,6 +35,10 @@ function postCheckoutHook(): string {
   return loadTemplate('root/scripts/hooks/post-checkout');
 }
 
+function opencodeWorktreeConfig(): string {
+  return loadTemplate('root/opencode-worktree.jsonc');
+}
+
 function envExample(context: ScaffoldContext): string {
   return loadTemplate('root/env.example', {
     APP_TITLE: context.appTitle,
@@ -77,6 +81,7 @@ export function buildRootEntries(): ManagedEntry[] {
   return [
     { kind: 'directory', path: 'scripts' },
     { kind: 'directory', path: 'scripts/hooks' },
+    { kind: 'directory', path: '.opencode' },
     {
       kind: 'file',
       path: '.gitignore',
@@ -101,6 +106,7 @@ export function buildRootEntries(): ManagedEntry[] {
         }
       },
     { kind: 'file', path: '.envrc', content: (context) => envrc(context) },
+    { kind: 'file', path: '.opencode/worktree.jsonc', content: () => opencodeWorktreeConfig() },
     { kind: 'file', path: 'scripts/hooks/post-checkout', content: () => postCheckoutHook(), executable: true },
     { kind: 'file', path: 'README.md', content: (context) => readme(context) }
   ];
