@@ -5,28 +5,27 @@ import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 
 import { runInstallSkill } from '../../src/commands/install-skill.js';
-import { buildGsdDefaultsEntries, buildOpenCodeConfigEntries } from '../../src/core/opencode-skill.js';
+import { buildOpenCodeConfigEntries } from '../../src/core/opencode-skill.js';
 
 describe('runInstallSkill', () => {
   it('installs the OpenCode skill bundle into the requested skills root', async () => {
     const workspace = await mkdtemp(path.join(os.tmpdir(), 'ai-harness-install-skill-'));
     const targetRoot = path.join(workspace, 'opencode-skills');
     const configRoot = path.join(workspace, 'opencode-config');
-    const gsdRoot = path.join(workspace, '.gsd');
 
     const result = await runInstallSkill({
       cwd: workspace,
       assistant: 'opencode',
       targetRoot,
-      configRoot,
-      gsdRoot
+      configRoot
     });
 
     expect(result.assistant).toBe('opencode');
     expect(result.skillName).toBe('harness');
     expect(result.installDir).toBe(path.join(targetRoot, 'ai-harness'));
     expect(result.workflowDir).toBe(path.join(configRoot, 'get-shit-done', 'workflows'));
-    expect(result.gsdRoot).toBe(gsdRoot);
+    expect(result.openCodeRuntimeConfigFilePath).toBe(path.join(configRoot, 'opencode.jsonc'));
+    expect(result.supermemoryConfigFilePath).toBe(path.join(configRoot, 'supermemory.jsonc'));
     expect(result.writtenPaths).toEqual(
       expect.arrayContaining([
         'skills/harness/SKILL.md',
@@ -36,7 +35,6 @@ describe('runInstallSkill', () => {
     );
     expect(result.writtenConfigPaths).toContain('oh-my-opencode.json');
     expect(result.writtenWorkflowPaths).toContain('get-shit-done/workflows/autonomous.md');
-    expect(result.writtenDefaultsPaths).toContain('defaults.json');
 
     const installedSkill = await readFile(path.join(result.installDir, 'skills', 'harness', 'SKILL.md'), 'utf8');
     const installedCommandMatrix = await readFile(
@@ -45,89 +43,82 @@ describe('runInstallSkill', () => {
     );
     const installedOpenCodeDefaults = await readFile(path.join(configRoot, 'oh-my-opencode.json'), 'utf8');
     const installedWorkflow = await readFile(path.join(result.workflowDir, 'autonomous.md'), 'utf8');
-    const installedGsdDefaults = await readFile(path.join(gsdRoot, 'defaults.json'), 'utf8');
     expect(installedSkill).toContain('# Harness');
     expect(installedSkill).toContain('ai-harness --mode existing . --init-json');
     expect(installedSkill).toContain('.rules/patterns/omo-agent-contract.md');
     expect(installedSkill).toContain('~/.config/opencode/oh-my-opencode.json');
-    expect(installedSkill).toContain('~/.gsd/defaults.json');
     expect(installedCommandMatrix).toContain('~/.config/opencode/oh-my-opencode.json');
-    expect(installedCommandMatrix).toContain('~/.gsd/defaults.json');
     expect(installedCommandMatrix).toContain('Optional OpenCode worktree plugin');
     expect(installedOpenCodeDefaults).toContain('"sisyphus": {');
     expect(installedOpenCodeDefaults).toContain('"model": "openai/gpt-5.4"');
     expect(installedOpenCodeDefaults).toContain('"model": "openai/gpt-5.3-codex"');
     expect(installedOpenCodeDefaults).toContain('"model": "opencode/big-pickle"');
-    expect(installedWorkflow).toContain('Drain ready Beads work and incomplete GSD phase work autonomously.');
+    expect(installedWorkflow).toContain('Drain ready Beads work autonomously using the repo\'s OMO contract');
     expect(installedWorkflow).toContain('.codex/workflows/autonomous-execution.md');
-    expect(installedWorkflow).toContain('/gsd-next');
-    expect(installedWorkflow).toContain('Do not skip a ready issue in favor of roadmap phase work.');
-    expect(installedGsdDefaults).toContain('"model_profile": "inherit"');
-    expect(installedGsdDefaults).toContain('"gsd-planner": "openai/gpt-5.3-codex"');
-    expect(installedGsdDefaults).toContain('"gsd-executor": "openai/gpt-5.4"');
-    expect(installedGsdDefaults).toContain('"gsd-codebase-mapper": "opencode/big-pickle"');
+    expect(installedWorkflow).toContain('attempt a Cognee brief before broad planning or repo-wide exploration');
+    expect(installedWorkflow).not.toContain('/gsd-');
+    expect(result.notes).toEqual(
+      expect.arrayContaining([
+        expect.stringContaining('Optional supermemory setup: run `bunx opencode-supermemory@latest install --no-tui --disable-context-recovery`.') ,
+        expect.stringContaining('Supermemory plugin registration lives in'),
+        expect.stringContaining('Supermemory is not registered yet.'),
+        expect.stringContaining('Supermemory API key not detected.'),
+        expect.stringContaining('disabled_hooks: ["anthropic-context-window-limit-recovery"]'),
+        expect.stringContaining('Verify supermemory with `opencode -c`')
+      ])
+    );
   });
 
   it('refreshes existing managed skill and defaults files on reinstall', async () => {
     const workspace = await mkdtemp(path.join(os.tmpdir(), 'ai-harness-install-skill-'));
     const targetRoot = path.join(workspace, 'opencode-skills');
     const configRoot = path.join(workspace, 'opencode-config');
-    const gsdRoot = path.join(workspace, '.gsd');
     const installDir = path.join(targetRoot, 'ai-harness');
     const skillPath = path.join(installDir, 'skills', 'harness', 'SKILL.md');
     const defaultsPath = path.join(configRoot, 'oh-my-opencode.json');
     const workflowPath = path.join(configRoot, 'get-shit-done', 'workflows', 'autonomous.md');
-    const gsdDefaultsPath = path.join(gsdRoot, 'defaults.json');
 
     await runInstallSkill({
       cwd: workspace,
       assistant: 'opencode',
       targetRoot,
-      configRoot,
-      gsdRoot
+      configRoot
     });
 
     await writeFile(skillPath, 'stale\n', 'utf8');
     await writeFile(defaultsPath, 'stale\n', 'utf8');
     await writeFile(workflowPath, 'stale\n', 'utf8');
-    await writeFile(gsdDefaultsPath, 'stale\n', 'utf8');
 
     const result = await runInstallSkill({
       cwd: workspace,
       assistant: 'opencode',
       targetRoot,
-      configRoot,
-      gsdRoot
+      configRoot
     });
 
     expect(result.writtenPaths).toContain('skills/harness/SKILL.md');
     expect(result.writtenConfigPaths).toContain('oh-my-opencode.json');
     expect(result.writtenWorkflowPaths).toContain('get-shit-done/workflows/autonomous.md');
-    expect(result.writtenDefaultsPaths).toContain('defaults.json');
     await expect(readFile(skillPath, 'utf8')).resolves.toContain('# Harness');
     await expect(readFile(skillPath, 'utf8')).resolves.toContain('.rules/patterns/omo-agent-contract.md');
     await expect(readFile(skillPath, 'utf8')).resolves.toContain('~/.config/opencode/oh-my-opencode.json');
     await expect(readFile(defaultsPath, 'utf8')).resolves.toContain('"sisyphus": {');
-    await expect(readFile(workflowPath, 'utf8')).resolves.toContain('Drain ready Beads work and incomplete GSD phase work autonomously.');
+    await expect(readFile(workflowPath, 'utf8')).resolves.toContain('Drain ready Beads work autonomously using the repo\'s OMO contract');
     await expect(readFile(workflowPath, 'utf8')).resolves.toContain('.codex/workflows/autonomous-execution.md');
-    await expect(readFile(workflowPath, 'utf8')).resolves.toContain('/gsd-next');
-    await expect(readFile(gsdDefaultsPath, 'utf8')).resolves.toContain('"gsd-executor": "openai/gpt-5.4"');
+    await expect(readFile(workflowPath, 'utf8')).resolves.not.toContain('/gsd-');
   });
 
-  it('preserves unrelated OpenCode and GSD JSON config on rerun', async () => {
+  it('preserves unrelated OpenCode JSON config on rerun', async () => {
     const workspace = await mkdtemp(path.join(os.tmpdir(), 'ai-harness-install-skill-'));
     const targetRoot = path.join(workspace, 'opencode-skills');
     const configRoot = path.join(workspace, 'opencode-config');
-    const gsdRoot = path.join(workspace, '.gsd');
     const defaultsPath = path.join(configRoot, 'oh-my-opencode.json');
-    const gsdDefaultsPath = path.join(gsdRoot, 'defaults.json');
 
     await runInstallSkill({
       cwd: workspace,
       assistant: 'opencode',
       targetRoot,
-      configRoot,
-      gsdRoot
+      configRoot
     });
 
     await writeFile(
@@ -165,48 +156,20 @@ describe('runInstallSkill', () => {
       'utf8'
     );
 
-    await writeFile(
-      gsdDefaultsPath,
-      `${JSON.stringify(
-        {
-          mode: 'interactive',
-          model_profile: 'budget',
-          resolve_model_ids: true,
-          custom_flag: true,
-          model_overrides: {
-            'gsd-planner': 'wrong/model',
-            'gsd-custom-agent': 'user/model'
-          }
-        },
-        null,
-        2
-      )}\n`,
-      'utf8'
-    );
-
     const result = await runInstallSkill({
       cwd: workspace,
       assistant: 'opencode',
       targetRoot,
-      configRoot,
-      gsdRoot
+      configRoot
     });
 
     expect(result.writtenConfigPaths).toContain('oh-my-opencode.json');
-    expect(result.writtenDefaultsPaths).toContain('defaults.json');
 
     const mergedOpenCodeDefaults = JSON.parse(await readFile(defaultsPath, 'utf8')) as {
       provider: { custom: { apiBase: string } };
       plugin: string[];
       agents: Record<string, { model: string; variant?: string }>;
       categories: Record<string, { model: string; variant?: string }>;
-    };
-    const mergedGsdDefaults = JSON.parse(await readFile(gsdDefaultsPath, 'utf8')) as {
-      mode: string;
-      model_profile: string;
-      resolve_model_ids: string;
-      custom_flag: boolean;
-      model_overrides: Record<string, string>;
     };
 
     expect(mergedOpenCodeDefaults.provider.custom.apiBase).toBe('https://example.test');
@@ -215,66 +178,83 @@ describe('runInstallSkill', () => {
     expect(mergedOpenCodeDefaults.categories.customCategory).toEqual({ model: 'user/category-model' });
     expect(mergedOpenCodeDefaults.agents.sisyphus).toEqual({ model: 'openai/gpt-5.4', variant: 'high' });
     expect(mergedOpenCodeDefaults.categories.writing).toEqual({ model: 'openai/gpt-5.3-codex', variant: 'medium' });
-
-    expect(mergedGsdDefaults.mode).toBe('interactive');
-    expect(mergedGsdDefaults.custom_flag).toBe(true);
-    expect(mergedGsdDefaults.model_profile).toBe('inherit');
-    expect(mergedGsdDefaults.resolve_model_ids).toBe('omit');
-    expect(mergedGsdDefaults.model_overrides['gsd-custom-agent']).toBe('user/model');
-    expect(mergedGsdDefaults.model_overrides['gsd-planner']).toBe('openai/gpt-5.3-codex');
   });
 
-  it('replaces malformed managed defaults files with generated content', async () => {
+  it('detects supermemory plugin registration and API key guidance from existing config', async () => {
     const workspace = await mkdtemp(path.join(os.tmpdir(), 'ai-harness-install-skill-'));
     const targetRoot = path.join(workspace, 'opencode-skills');
     const configRoot = path.join(workspace, 'opencode-config');
-    const gsdRoot = path.join(workspace, '.gsd');
+    const runtimeConfigPath = path.join(configRoot, 'opencode.jsonc');
     const defaultsPath = path.join(configRoot, 'oh-my-opencode.json');
-    const gsdDefaultsPath = path.join(gsdRoot, 'defaults.json');
-    const generatedOpenCodeDefaults = buildOpenCodeConfigEntries()[0]?.content();
-    const generatedGsdDefaults = buildGsdDefaultsEntries()[0]?.content();
-
-    expect(generatedOpenCodeDefaults).toBeDefined();
-    expect(generatedGsdDefaults).toBeDefined();
+    const supermemorySettingsPath = path.join(configRoot, 'supermemory.jsonc');
 
     await runInstallSkill({
       cwd: workspace,
       assistant: 'opencode',
       targetRoot,
-      configRoot,
-      gsdRoot
+      configRoot
     });
 
-    await writeFile(defaultsPath, '{"provider": {\n', 'utf8');
-    await writeFile(gsdDefaultsPath, '{"model_overrides": [\n', 'utf8');
+    await writeFile(runtimeConfigPath, '{"plugin":["opencode-supermemory"]}\n', 'utf8');
+    await writeFile(defaultsPath, '{"disabled_hooks":["anthropic-context-window-limit-recovery"]}\n', 'utf8');
+    await writeFile(supermemorySettingsPath, '{"apiKey":"sm_test"}\n', 'utf8');
 
     const result = await runInstallSkill({
       cwd: workspace,
       assistant: 'opencode',
       targetRoot,
-      configRoot,
-      gsdRoot
+      configRoot
+    });
+
+    expect(result.notes).toEqual(
+      expect.arrayContaining([
+        expect.stringContaining('Supermemory plugin registration detected'),
+        expect.stringContaining('Supermemory API key source detected'),
+        expect.stringContaining('compatibility hook is already disabled')
+      ])
+    );
+  });
+
+  it('replaces malformed managed OpenCode defaults files with generated content', async () => {
+    const workspace = await mkdtemp(path.join(os.tmpdir(), 'ai-harness-install-skill-'));
+    const targetRoot = path.join(workspace, 'opencode-skills');
+    const configRoot = path.join(workspace, 'opencode-config');
+    const defaultsPath = path.join(configRoot, 'oh-my-opencode.json');
+    const generatedOpenCodeDefaults = buildOpenCodeConfigEntries()[0]?.content();
+
+    expect(generatedOpenCodeDefaults).toBeDefined();
+
+    await runInstallSkill({
+      cwd: workspace,
+      assistant: 'opencode',
+      targetRoot,
+      configRoot
+    });
+
+    await writeFile(defaultsPath, '{"provider": {\n', 'utf8');
+
+    const result = await runInstallSkill({
+      cwd: workspace,
+      assistant: 'opencode',
+      targetRoot,
+      configRoot
     });
 
     expect(result.writtenConfigPaths).toContain('oh-my-opencode.json');
-    expect(result.writtenDefaultsPaths).toContain('defaults.json');
     await expect(readFile(defaultsPath, 'utf8')).resolves.toBe(generatedOpenCodeDefaults);
-    await expect(readFile(gsdDefaultsPath, 'utf8')).resolves.toBe(generatedGsdDefaults);
   });
 
   it('surfaces permission-denied errors when refreshing managed defaults files', async () => {
     const workspace = await mkdtemp(path.join(os.tmpdir(), 'ai-harness-install-skill-'));
     const targetRoot = path.join(workspace, 'opencode-skills');
     const configRoot = path.join(workspace, 'opencode-config');
-    const gsdRoot = path.join(workspace, '.gsd');
     const defaultsPath = path.join(configRoot, 'oh-my-opencode.json');
 
     await runInstallSkill({
       cwd: workspace,
       assistant: 'opencode',
       targetRoot,
-      configRoot,
-      gsdRoot
+      configRoot
     });
 
     await writeFile(defaultsPath, '{"stale": true}\n', 'utf8');
@@ -285,8 +265,7 @@ describe('runInstallSkill', () => {
         cwd: workspace,
         assistant: 'opencode',
         targetRoot,
-        configRoot,
-        gsdRoot
+        configRoot
       })
     ).rejects.toMatchObject({
       code: 'EACCES',

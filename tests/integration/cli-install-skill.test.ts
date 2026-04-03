@@ -16,7 +16,6 @@ describe('CLI install-skill', () => {
     const workspace = await mkdtemp(path.join(os.tmpdir(), 'ai-harness-cli-install-skill-'));
     const targetRoot = path.join(workspace, 'opencode-skills');
     const configRoot = path.join(workspace, 'opencode-config');
-    const gsdRoot = path.join(workspace, '.gsd');
 
     const result = await execFile(
       process.execPath,
@@ -30,8 +29,6 @@ describe('CLI install-skill', () => {
         targetRoot,
         '--config-root',
         configRoot,
-        '--gsd-root',
-        gsdRoot,
         '--json'
       ],
       {
@@ -47,8 +44,6 @@ describe('CLI install-skill', () => {
       workflowFilePath: string;
       writtenWorkflowPaths: string[];
       writtenConfigPaths: string[];
-      gsdDefaultsFilePath: string;
-      writtenDefaultsPaths: string[];
     };
 
     expect(payload.assistant).toBe('opencode');
@@ -57,15 +52,12 @@ describe('CLI install-skill', () => {
     expect(payload.writtenConfigPaths).toContain('oh-my-opencode.json');
     expect(payload.workflowFilePath).toBe(path.join(configRoot, 'get-shit-done', 'workflows', 'autonomous.md'));
     expect(payload.writtenWorkflowPaths).toContain('get-shit-done/workflows/autonomous.md');
-    expect(payload.gsdDefaultsFilePath).toBe(path.join(gsdRoot, 'defaults.json'));
-    expect(payload.writtenDefaultsPaths).toContain('defaults.json');
   });
 
   it('prints the managed global file guidance in the human-readable report', async () => {
     const workspace = await mkdtemp(path.join(os.tmpdir(), 'ai-harness-cli-install-skill-'));
     const targetRoot = path.join(workspace, 'opencode-skills');
     const configRoot = path.join(workspace, 'opencode-config');
-    const gsdRoot = path.join(workspace, '.gsd');
 
     const result = await execFile(
       process.execPath,
@@ -78,9 +70,7 @@ describe('CLI install-skill', () => {
         '--target-root',
         targetRoot,
         '--config-root',
-        configRoot,
-        '--gsd-root',
-        gsdRoot
+        configRoot
       ],
       {
         cwd: repoRoot,
@@ -90,11 +80,12 @@ describe('CLI install-skill', () => {
 
     expect(result.stdout).toContain('Installed harness (opencode)');
     expect(result.stdout).toContain('The installed skill expects `ai-harness` to be available locally on your machine, typically via a checkout plus `pnpm install:local`.');
-    expect(result.stdout).toContain('The install also refreshes the managed /gsd-autonomous workflow');
+    expect(result.stdout).toContain('The install also refreshes the managed autonomous workflow');
     expect(result.stdout).toContain('OpenCode config files written: 1');
-    expect(result.stdout).toContain('GSD defaults written: 1');
     expect(result.stdout).toContain('The install also refreshes the managed OpenCode defaults at');
-    expect(result.stdout).toContain('The install also refreshes the managed GSD defaults at');
+    expect(result.stdout).toContain('Optional supermemory setup: run `bunx opencode-supermemory@latest install --no-tui --disable-context-recovery`.');
+    expect(result.stdout).toContain('Supermemory is not registered yet.');
+    expect(result.stdout).toContain('Supermemory API key not detected.');
   });
 
   it('emits the managed defaults in a temp HOME install', async () => {
@@ -118,10 +109,7 @@ describe('CLI install-skill', () => {
       '"model": "openai/gpt-5.4"'
     );
     await expect(readFile(path.join(workspace, '.config', 'opencode', 'get-shit-done', 'workflows', 'autonomous.md'), 'utf8')).resolves.toContain(
-      'Drain ready Beads work and incomplete GSD phase work autonomously.'
-    );
-    await expect(readFile(path.join(workspace, '.gsd', 'defaults.json'), 'utf8')).resolves.toContain(
-      '"gsd-project-researcher": "opencode/big-pickle"'
+      'Drain ready Beads work autonomously using the repo\'s OMO contract'
     );
   });
 });

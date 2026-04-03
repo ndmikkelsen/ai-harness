@@ -155,7 +155,6 @@ export interface InstallSkillCommandOptions {
   assistant: AssistantTarget;
   targetRoot?: string;
   configRoot?: string;
-  gsdRoot?: string;
 }
 
 export interface InstallSkillResult {
@@ -163,20 +162,18 @@ export interface InstallSkillResult {
   skillName: string;
   targetRoot: string;
   configRoot: string;
-  gsdRoot: string;
   installDir: string;
   workflowDir: string;
   workflowFilePath: string;
   openCodeDefaultsFilePath: string;
-  gsdDefaultsFilePath: string;
+  openCodeRuntimeConfigFilePath: string;
+  supermemoryConfigFilePath: string;
   writtenPaths: string[];
   unchangedPaths: string[];
   writtenConfigPaths: string[];
   unchangedConfigPaths: string[];
   writtenWorkflowPaths: string[];
   unchangedWorkflowPaths: string[];
-  writtenDefaultsPaths: string[];
-  unchangedDefaultsPaths: string[];
   notes: string[];
 }
 
