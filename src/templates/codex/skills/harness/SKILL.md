@@ -1,6 +1,6 @@
 ---
 name: harness
-description: Use the ai-harness CLI to scaffold new and existing repositories for Codex/OpenCode with GSD, Beads, and Cognee. For existing repositories, gather project context first and then customize only newly created scaffold files.
+description: Use the ai-harness CLI to scaffold new and existing repositories for Codex/OpenCode with Beads, Cognee, and the shared `.codex/` runtime surface. For existing repositories, gather project context first and then customize only newly created scaffold files.
 ---
 
 # Harness
@@ -27,7 +27,7 @@ Use this skill when the user wants to bootstrap a repository with `ai-harness`, 
 5. In existing repos, customize only the files listed in `createdPaths`, guided by `references/scaffold-customization-map.md`
 6. Run `ai-harness doctor <target> --assistant <codex|opencode>` after setup
 7. If the user relies on OpenCode worktrees, point them at the scaffolded `.opencode/worktree.jsonc` and `ocx add kdco/worktree --from https://registry.kdco.dev`
-8. If the user relies on OpenCode, remind them that `ai-harness install-skill --assistant opencode` refreshes the global `harness` skill, the managed `~/.config/opencode/oh-my-opencode.json` defaults, the managed `/gsd-autonomous` entrypoint, and the managed `~/.gsd/defaults.json` routing defaults
+8. If the user relies on OpenCode, remind them that `ai-harness install-skill --assistant opencode` refreshes the global `harness` skill, the managed `~/.config/opencode/oh-my-opencode.json` defaults, and the managed autonomous workflow under `~/.config/opencode/get-shit-done/workflows/autonomous.md`
 9. Summarize what was created, what was preserved, what was removed, and any follow-up gaps
 
 ## Existing Repository Adaptation
@@ -37,7 +37,7 @@ Before editing scaffold files in an existing project, gather:
 - git status, branch, remotes, and recent commits
 - Beads state if `bd` or `.beads/` is available
 - Cognee brief if `.codex/scripts/cognee-brief.sh` already exists
-- project docs like `README*`, `docs/**/*.md`, `.planning/*`, `.rules/**/*`, and `AGENTS.md`
+- project docs like `README*`, `docs/**/*.md`, repo-local plan or handoff docs when present, `.rules/**/*`, and `AGENTS.md`
 - manifest files using `references/manifest-discovery.md`
 
 Use `assets/adoption-notes-template.md` as a scratch document if the repo is large or the context is noisy.
@@ -46,12 +46,10 @@ Use `assets/adoption-notes-template.md` as a scratch document if the repo is lar
 
 Prefer to tailor newly created files in this order:
 
-1. `.planning/PROJECT.md`
-2. `.planning/REQUIREMENTS.md`
-3. `.planning/ROADMAP.md`
-4. `.planning/STATE.md`
-5. `.codex/README.md`
-6. `AGENTS.md`
-7. `STICKYNOTE.example.md`
+1. `.codex/README.md`
+2. `AGENTS.md`
+3. `.rules/patterns/operator-workflow.md`
+4. `.rules/patterns/omo-agent-contract.md`
+5. `STICKYNOTE.example.md`
 
 Do not add secrets to `.env.example`; keep placeholder values only.

@@ -1,11 +1,11 @@
-# Codex GSD Cognee Advisor
+# Codex Cognee Advisor
 
 Use this role before planning or resuming work when a quick repository knowledge brief would reduce duplicate exploration.
 
 ## Responsibilities
 
 - Query the local Cognee bridge when available
-- Fall back to .rules/, .planning/, and repo search when Cognee is unavailable
+- Fall back to `.rules/`, issue context, repo docs, and handoff notes when Cognee is unavailable
 - Return concise findings with file references and likely follow-up questions
 
 ## Rules

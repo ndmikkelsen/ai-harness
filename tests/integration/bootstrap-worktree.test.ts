@@ -31,6 +31,9 @@ describe('bootstrap-worktree hook', () => {
     const bootstrapScript = await readFile(path.join(repoRoot, '.codex', 'scripts', 'bootstrap-worktree.sh'), 'utf8');
     const postCheckoutHook = await readFile(path.join(repoRoot, '.beads', 'hooks', 'post-checkout'), 'utf8');
 
+    expect(bootstrapScript).not.toContain('/gsd-');
+    expect(bootstrapScript).not.toContain('.planning/STATE.md');
+
     await mkdir(path.join(repoDir, '.codex', 'scripts'), { recursive: true });
     await mkdir(path.join(repoDir, '.beads', 'hooks'), { recursive: true });
     await mkdir(path.join(repoDir, '.kamal'), { recursive: true });
@@ -95,6 +98,9 @@ describe('bootstrap-worktree hook', () => {
     const bootstrapScriptPath = path.join(repoRoot, '.codex', 'scripts', 'bootstrap-worktree.sh');
     const bootstrapScript = await readFile(bootstrapScriptPath, 'utf8');
     const postCheckoutHook = await readFile(path.join(repoRoot, '.beads', 'hooks', 'post-checkout'), 'utf8');
+
+    expect(bootstrapScript).not.toContain('/gsd-');
+    expect(bootstrapScript).not.toContain('.planning/STATE.md');
 
     await mkdir(path.join(repoDir, '.codex', 'scripts'), { recursive: true });
     await mkdir(path.join(repoDir, '.beads', 'hooks'), { recursive: true });
@@ -167,6 +173,9 @@ describe('bootstrap-worktree hook', () => {
 
     const bootstrapScript = await readFile(path.join(repoRoot, '.codex', 'scripts', 'bootstrap-worktree.sh'), 'utf8');
     const postCheckoutHook = await readFile(path.join(repoRoot, '.beads', 'hooks', 'post-checkout'), 'utf8');
+
+    expect(bootstrapScript).not.toContain('/gsd-');
+    expect(bootstrapScript).not.toContain('.planning/STATE.md');
 
     await mkdir(path.join(repoDir, '.codex', 'scripts'), { recursive: true });
     await mkdir(path.join(repoDir, '.beads', 'hooks'), { recursive: true });

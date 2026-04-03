@@ -7,7 +7,6 @@ Codex should use this runtime layer to maintain the harness, validate the genera
 
 - .rules/ is the source of truth for architecture and workflow patterns
 - `.rules/patterns/omo-agent-contract.md` is the normative OMO lane and tool contract
-- .planning/ is the GSD execution and handoff workspace
 - .codex/scripts/ contains the live Cognee and planning sync plumbing
 - README.md plus docs/ai-harness-premise.md, docs/ai-harness-map.md, and docs/architecture.md describe the real product and architecture
 - Use native `bd` as the Beads task-tracking interface after `bd init`
@@ -26,7 +25,7 @@ Codex should use this runtime layer to maintain the harness, validate the genera
 ## Runtime Surface
 
 - `./.codex/scripts/cognee-bridge.sh` - low-level Cognee query, upload, and cognify entrypoint
-- `./.codex/scripts/cognee-sync-planning.sh` - sync GSD planning artifacts into Cognee
+- `./.codex/scripts/cognee-sync-planning.sh` - sync repo-local planning artifacts into Cognee when a repo still uses them
 - `./.codex/scripts/sync-planning-to-cognee.sh` - user-facing planning sync entrypoint
 - `./.codex/scripts/bootstrap-worktree.sh` - seed local worktree state and link shared `.env` / `.kamal` secrets when present
 - `./.opencode/worktree.jsonc` - optional OpenCode worktree plugin config that reuses `bootstrap-worktree.sh` after worktree creation
@@ -36,10 +35,10 @@ Codex should use this runtime layer to maintain the harness, validate the genera
 
 ## Default Workflow
 
-1. Read `README.md`, `docs/ai-harness-premise.md`, and `.planning/STATE.md` before editing scaffold behavior.
+1. Read `README.md`, `docs/ai-harness-premise.md`, and the active repo-local handoff or plan context before editing scaffold behavior.
 2. For scaffold changes, update `src/templates/**` and relevant generators before rebuilding `dist/`.
 3. Follow `.rules/patterns/operator-workflow.md` as the canonical operator runbook.
-4. If Beads is available, use `bd ready --json`, claim the active issue, and start from `/gsd-next`.
+4. If Beads is available, use `bd ready --json`, claim the active issue, and work from repo-local plan context plus verification evidence.
 5. Use `ai-harness --mode existing . --init-json` to validate how this repo adopts its own scaffold without clobbering existing files.
 6. Use `ai-harness doctor . --assistant codex` to audit the current repo after runtime changes.
 7. If you use OpenCode worktrees, install `kdco/worktree` with `ocx add kdco/worktree --from https://registry.kdco.dev`; the scaffolded `.opencode/worktree.jsonc` runs `./.codex/scripts/bootstrap-worktree.sh --quiet` after each worktree is created.
@@ -52,7 +51,7 @@ Codex should use this runtime layer to maintain the harness, validate the genera
 ## Rules
 
 - Do not create parallel planning systems under .codex/.
-- Treat .codex/ as the runtime surface for assistant-specific scripts and docs while keeping `.planning/` and `.rules/` canonical.
+- Treat .codex/ as the runtime surface for assistant-specific scripts and docs while keeping Beads and `.rules/` canonical.
 - Keep OMO policy references pointed to `.rules/patterns/omo-agent-contract.md` instead of restating doctrine in adapter docs.
 - Keep source templates, generated docs, and built `dist/` artifacts in sync.
 - Follow `.rules/patterns/omo-agent-contract.md` for Cognee-required lanes and deterministic fallback or blocked outcomes.

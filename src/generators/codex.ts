@@ -26,8 +26,8 @@ function reviewer(): string {
   return loadTemplate('codex/agents/reviewer.md');
 }
 
-function gsdCogneeAdvisor(): string {
-  return loadTemplate('codex/agents/gsd-cognee-advisor.md');
+function cogneeAdvisor(): string {
+  return loadTemplate('codex/agents/cognee-advisor.md');
 }
 
 function harnessSkill(): string {
@@ -96,7 +96,7 @@ export function buildCodexEntries(): ManagedEntry[] {
     { kind: 'file', path: '.codex/agents/orchestrator.md', content: () => orchestrator() },
     { kind: 'file', path: '.codex/agents/implementer.md', content: () => implementer() },
     { kind: 'file', path: '.codex/agents/reviewer.md', content: () => reviewer() },
-    { kind: 'file', path: '.codex/agents/gsd-cognee-advisor.md', content: () => gsdCogneeAdvisor() },
+    { kind: 'file', path: '.codex/agents/cognee-advisor.md', content: () => cogneeAdvisor() },
     {
       kind: 'file',
       path: '.codex/skills/harness/SKILL.md',

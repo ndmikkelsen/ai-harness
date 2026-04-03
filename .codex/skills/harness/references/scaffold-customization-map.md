@@ -3,16 +3,12 @@
 Customize only files that `ai-harness` reported in `createdPaths`.
 If cleanup was requested, review `cleanup.actions` first so you know which legacy files were removed, preserved, or still need confirmation.
 
-## Planning files
+## Workflow docs
 
-- `.planning/PROJECT.md`
-  - fill in the real product summary, value proposition, constraints, and open questions
-- `.planning/REQUIREMENTS.md`
-  - derive initial core flows, out-of-scope items, and traceability placeholders from the repo context
-- `.planning/ROADMAP.md`
-  - outline realistic first phases based on current architecture and backlog clues
-- `.planning/STATE.md`
-  - record current branch, active focus, and recent decisions from repo evidence
+- `.rules/patterns/operator-workflow.md`
+  - keep the OMO + Beads loop intact, but tune examples and repo-specific cues to the actual project
+- `.rules/patterns/omo-agent-contract.md`
+  - preserve the contract structure and only adjust adapter notes when the repository has clear evidence for them
 
 ## Runtime docs
 
@@ -35,7 +31,7 @@ If cleanup was requested, review `cleanup.actions` first so you know which legac
 
 - existing `README.md`
 - existing `AGENTS.md`
-- existing `.planning/*`
+- existing repo-local plan or handoff docs
 - existing deploy manifests
 
 If docs and manifests disagree, prefer the most recent or most operationally specific source and call out the ambiguity.
