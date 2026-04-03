@@ -106,7 +106,11 @@ export function thenMissingAiWorkflowFilesAreCreated(world: CliFeatureWorld): vo
   const result = requireResult(world);
 
   expect(result.createdPaths).toEqual(
-    expect.arrayContaining(['.planning/config.json', '.codex/README.md', '.codex/workflows/autonomous-execution.md'])
+    expect.arrayContaining([
+      '.codex/README.md',
+      '.codex/workflows/autonomous-execution.md',
+      '.rules/patterns/operator-workflow.md'
+    ])
   );
 }
 

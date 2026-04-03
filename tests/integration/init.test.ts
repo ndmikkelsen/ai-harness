@@ -30,9 +30,7 @@ describe('runInit', () => {
     expect(result.mode).toBe('new');
     expect(result.assistant).toBe('codex');
     expect(result.createdPaths).toContain('.gitignore');
-    expect(result.createdPaths).toContain('.planning/config.json');
     expect(result.createdPaths).toContain('.opencode/worktree.jsonc');
-    expect(result.createdPaths).toContain('.planning/REQUIREMENTS.md');
     expect(result.createdPaths).toContain('.codex/README.md');
     expect(result.createdPaths).toContain('.codex/workflows/autonomous-execution.md');
     expect(result.createdPaths).toContain('.codex/skills/harness/SKILL.md');
@@ -55,7 +53,7 @@ describe('runInit', () => {
     expect(result.cleanup.enabled).toBe(false);
   });
 
-  it('seeds GSD planning artifacts with official core documents', async () => {
+  it('does not scaffold planning artifacts by default', async () => {
     const workspace = await mkdtemp(path.join(os.tmpdir(), 'ai-harness-'));
 
     await runInit({
@@ -70,23 +68,14 @@ describe('runInit', () => {
     });
 
     const projectDir = path.join(workspace, 'planning-app');
-    const requirements = await readFile(path.join(projectDir, '.planning', 'REQUIREMENTS.md'), 'utf8');
-    const roadmap = await readFile(path.join(projectDir, '.planning', 'ROADMAP.md'), 'utf8');
-    const state = await readFile(path.join(projectDir, '.planning', 'STATE.md'), 'utf8');
-    const phasesGuide = await readFile(path.join(projectDir, '.planning', 'phases', 'README.md'), 'utf8');
-    const quickGuide = await readFile(path.join(projectDir, '.planning', 'quick', 'README.md'), 'utf8');
     const stickyExample = await readFile(path.join(projectDir, 'STICKYNOTE.example.md'), 'utf8');
 
-    expect(requirements).toContain('# Requirements: Planning App');
-    expect(requirements).toContain('## Traceability');
-    expect(roadmap).toContain('## Phase Overview');
-    expect(state).toContain('## Current Status');
-    expect(state).toContain(`Scaffold baseline: \`ai-harness\` v${AI_HARNESS_VERSION}`);
-    expect(phasesGuide).toContain('.planning/phases/<phase-slug>/');
-    expect(quickGuide).toContain('.planning/quick/');
     expect(stickyExample).toContain('# Session Handoff');
     expect(stickyExample).toContain('- Current branch:');
     expect(stickyExample).toContain('- Note any validation still required before landing work.');
+    await expect(readFile(path.join(projectDir, '.planning', 'REQUIREMENTS.md'), 'utf8')).rejects.toThrow();
+    await expect(readFile(path.join(projectDir, '.planning', 'ROADMAP.md'), 'utf8')).rejects.toThrow();
+    await expect(readFile(path.join(projectDir, '.planning', 'STATE.md'), 'utf8')).rejects.toThrow();
     await expect(readFile(path.join(projectDir, '.planning', 'TRACEABILITY.md'), 'utf8')).rejects.toThrow();
     await expect(readFile(path.join(projectDir, 'CONSTITUTION.md'), 'utf8')).rejects.toThrow();
     await expect(readFile(path.join(projectDir, 'VISION.md'), 'utf8')).rejects.toThrow();
@@ -235,7 +224,7 @@ describe('runInit', () => {
     });
 
     const projectDir = path.join(workspace, 'cognee-policy-app');
-    const cogneePolicy = await readFile(path.join(projectDir, '.rules', 'patterns', 'cognee-gsd-integration.md'), 'utf8');
+    const omoContract = await readFile(path.join(projectDir, '.rules', 'patterns', 'omo-agent-contract.md'), 'utf8');
     const autonomousWorkflow = await readFile(
       path.join(projectDir, '.codex', 'workflows', 'autonomous-execution.md'),
       'utf8'
@@ -245,8 +234,8 @@ describe('runInit', () => {
       'utf8'
     );
 
-    expect(cogneePolicy).toContain('must attempt a Cognee brief before broad repository exploration');
-    expect(cogneePolicy).toContain('deterministic redirect or blocked outcome instead of a silent skip');
+    expect(omoContract).toContain('planning` and `research` lanes require a Cognee attempt before broader repo exploration');
+    expect(omoContract).toContain('must produce a deterministic `blocked` or redirect outcome rather than a silent skip');
     expect(autonomousWorkflow).toContain('COGNEE_AVAILABLE');
     expect(autonomousWorkflow).toContain('continue only when the work remains locally verifiable');
     expect(autonomousWorkflow).toContain('.rules/patterns/omo-agent-contract.md');
@@ -292,7 +281,6 @@ describe('runInit', () => {
     expect(result.skippedPaths).toContain('.env.example');
     expect(result.createdPaths).not.toContain('.gitignore');
     expect(result.createdPaths).not.toContain('.env.example');
-    expect(result.createdPaths).toContain('.planning/config.json');
     expect(result.createdPaths).toContain('.codex/README.md');
     expect(result.createdPaths).toContain('.codex/workflows/autonomous-execution.md');
     expect(result.createdPaths).toContain('.codex/skills/harness/SKILL.md');
@@ -477,12 +465,13 @@ describe('runInit', () => {
     await expect(readFile(path.join(targetDir, 'CLAUDE.md'), 'utf8')).rejects.toThrow();
   });
 
-  it('removes the deprecated traceability placeholder only when confirmation is provided', async () => {
+  it('removes the legacy planning workspace only when confirmation is provided', async () => {
     const workspace = await mkdtemp(path.join(os.tmpdir(), 'ai-harness-'));
-    const targetDir = path.join(workspace, 'existing-confirmed-traceability-cleanup');
+    const targetDir = path.join(workspace, 'existing-confirmed-planning-cleanup');
 
     await mkdir(path.join(targetDir, '.planning'), { recursive: true });
     await writeFile(path.join(targetDir, '.planning', 'TRACEABILITY.md'), '# traceability\n', 'utf8');
+    await writeFile(path.join(targetDir, '.planning', 'PROJECT.md'), '# Custom Project\n', 'utf8');
 
     const result = await runInit({
       cwd: workspace,
@@ -494,12 +483,13 @@ describe('runInit', () => {
       cleanupManifestId: 'legacy-ai-frameworks-v1',
       skipGit: true,
       detectPorts: false,
-      confirmCleanup: async (entry) => entry.path === '.planning/TRACEABILITY.md'
+      confirmCleanup: async (entry) => entry.path === '.planning'
     });
 
     expect(result.cleanup.status).toBe('applied');
-    expect(result.cleanup.removedPaths).toContain('.planning/TRACEABILITY.md');
+    expect(result.cleanup.removedPaths).toContain('.planning');
     await expect(readFile(path.join(targetDir, '.planning', 'TRACEABILITY.md'), 'utf8')).rejects.toThrow();
+    await expect(readFile(path.join(targetDir, '.planning', 'PROJECT.md'), 'utf8')).rejects.toThrow();
   });
 
   it('preserves mixed custom AI files while removing curated leftovers and creating missing harness files', async () => {
@@ -508,10 +498,8 @@ describe('runInit', () => {
 
     await mkdir(path.join(targetDir, '.codex', 'scripts'), { recursive: true });
     await mkdir(path.join(targetDir, '.github', 'prompts'), { recursive: true });
-    await mkdir(path.join(targetDir, '.planning'), { recursive: true });
     await writeFile(path.join(targetDir, '.codex', 'scripts', 'sync-to-cognee.sh'), '#!/usr/bin/env bash\n', 'utf8');
     await writeFile(path.join(targetDir, '.github', 'prompts', 'review.md'), '# custom prompt\n', 'utf8');
-    await writeFile(path.join(targetDir, '.planning', 'PROJECT.md'), '# Custom Project\n', 'utf8');
     await writeFile(path.join(targetDir, '.env.example'), 'EXISTING_ONLY=true\n', 'utf8');
 
     const result = await runInit({
@@ -529,10 +517,9 @@ describe('runInit', () => {
     expect(result.cleanup.status).toBe('applied');
     expect(result.cleanup.removedPaths).toContain('.codex/scripts/sync-to-cognee.sh');
     expect(result.createdPaths).toEqual(
-      expect.arrayContaining(['.codex/README.md', 'AGENTS.md', '.planning/REQUIREMENTS.md'])
+      expect.arrayContaining(['.codex/README.md', 'AGENTS.md'])
     );
-    expect(result.skippedPaths).toEqual(expect.arrayContaining(['.planning/PROJECT.md', '.env.example']));
-    expect(await readFile(path.join(targetDir, '.planning', 'PROJECT.md'), 'utf8')).toBe('# Custom Project\n');
+    expect(result.skippedPaths).toEqual(expect.arrayContaining(['.env.example']));
     expect(await readFile(path.join(targetDir, '.github', 'prompts', 'review.md'), 'utf8')).toBe('# custom prompt\n');
     await expect(readFile(path.join(targetDir, '.codex', 'scripts', 'sync-to-cognee.sh'), 'utf8')).rejects.toThrow();
   });

@@ -225,10 +225,8 @@ exit 0
     const targetDir = path.join(workspace, 'existing-mixed');
 
     await mkdir(path.join(targetDir, '.codex', 'scripts'), { recursive: true });
-    await mkdir(path.join(targetDir, '.planning'), { recursive: true });
     await mkdir(path.join(targetDir, '.github', 'prompts'), { recursive: true });
     await writeFile(path.join(targetDir, '.codex', 'scripts', 'sync-to-cognee.sh'), '#!/usr/bin/env bash\n', 'utf8');
-    await writeFile(path.join(targetDir, '.planning', 'PROJECT.md'), '# Custom Project\n', 'utf8');
     await writeFile(path.join(targetDir, '.github', 'prompts', 'review.md'), '# keep\n', 'utf8');
 
     const result = await execFile(
@@ -260,8 +258,6 @@ exit 0
     expect(payload.cleanup.status).toBe('applied');
     expect(payload.cleanup.removedPaths).toContain('.codex/scripts/sync-to-cognee.sh');
     expect(payload.createdPaths).toEqual(expect.arrayContaining(['.codex/README.md', 'AGENTS.md']));
-    expect(payload.skippedPaths).toContain('.planning/PROJECT.md');
-    expect(await readFile(path.join(targetDir, '.planning', 'PROJECT.md'), 'utf8')).toBe('# Custom Project\n');
     expect(await readFile(path.join(targetDir, '.github', 'prompts', 'review.md'), 'utf8')).toBe('# keep\n');
   });
 
