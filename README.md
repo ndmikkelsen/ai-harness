@@ -8,7 +8,7 @@ The CLI can:
 
 - scaffold a brand new project directory
 - adopt an existing repository without clobbering user files
-- generate the local AI workflow structure for Codex/OpenCode, plus GSD, Beads, and Cognee
+- generate the local AI workflow structure for Codex/OpenCode, OMO policy, Beads, and Cognee
 - keep implementation concerns separated into command, core, and generator layers
 
 ## Why this repo exists
@@ -75,7 +75,6 @@ That command refreshes these managed global files:
 - `~/.opencode/skills/ai-harness/skills/harness/`
 - `~/.config/opencode/oh-my-opencode.json`
 - `~/.config/opencode/get-shit-done/workflows/autonomous.md`
-- `~/.gsd/defaults.json`
 
 After installing or updating the skill:
 
@@ -89,17 +88,16 @@ New repositories receive the full scaffold. Existing repositories create the sam
 
 - root hygiene files like `.gitignore`, `.env.example`, `.gitleaks.toml`, `.pre-commit-config.yaml`
 - Beads docs for native `bd` plus a default `.beads/config.yaml`; run `bd init` before using Beads
-- `.planning/` for GSD planning artifacts
 - `.codex/` runtime scripts, docs, templates, agents, and docker assets shared by Codex and OpenCode
 - `.opencode/worktree.jsonc` for the optional `kdco/worktree` OpenCode worktree plugin path
 - `.codex/skills/harness/` for reusable repository setup guidance
 - `AGENTS.md` for the repo-level Codex/OpenCode operating guide
 - `.kamal/` and `config/` deployment templates
-- `.rules/`, `STICKYNOTE.example.md`, and `.planning/` as the canonical guidance surface
+- `.rules/` and `STICKYNOTE.example.md` as the canonical guidance surface
 
 ## Foundation doctrine
 
-- `ai-harness` installs an opinionated Beads + GSD + Codex/OpenCode foundation, with Cognee attempt/fallback behavior governed by `.rules/patterns/omo-agent-contract.md`
+- `ai-harness` installs an opinionated OMO + Beads + Codex/OpenCode foundation, with Cognee attempt/fallback behavior governed by `.rules/patterns/omo-agent-contract.md`
 - the canonical assistant runtime surface is `.codex/`, shared by both Codex and OpenCode
 - `src/templates/**` is the source of truth for scaffold content, this repository dogfoods those templates, and `dist/` is the built copy of that source
 - existing repositories preserve user-owned files by default and only merge select root files when explicitly requested
@@ -126,7 +124,7 @@ New repositories receive the full scaffold. Existing repositories create the sam
 5. rerun with `--merge-root-files` only if you explicitly want `.gitignore` and `.env.example` merged
 6. finish with `ai-harness doctor <path> --assistant <codex|opencode>`
 
-## Beads + GSD loop
+## Beads + OMO loop
 
 The canonical operator flow lives in `.rules/patterns/operator-workflow.md`.
 
@@ -134,12 +132,12 @@ The default interactive path is:
 
 1. `bd ready --json`
 2. `bd update <id> --claim --json`
-3. `/gsd-next`
-4. If GSD routes you into phase work, continue with `/gsd-discuss-phase <n>`, `/gsd-plan-phase <n>`, `/gsd-execute-phase <n>`, and `/gsd-verify-work <n>`
+3. `./.codex/scripts/cognee-brief.sh "<query>"` before broad planning or repo-wide research
+4. implement and verify using `.rules/patterns/operator-workflow.md` and `.codex/workflows/autonomous-execution.md`
 5. `bd close <id> --reason "Verified" --json`
 6. execution/autonomous landing lane runs `./.codex/scripts/land.sh`
 
-Use `/gsd-resume-work` to re-enter an active phase and `/gsd-autonomous` when you want a backlog-driven power mode that keeps going until work is verified or truly blocked.
+Use `.rules/patterns/omo-agent-contract.md` for lane authority, Cognee fallback, and landing rules.
 
 ## OpenCode worktrees
 
@@ -151,7 +149,7 @@ Install the plugin with:
 ocx add kdco/worktree --from https://registry.kdco.dev
 ```
 
-That config keeps the existing `./.codex/scripts/bootstrap-worktree.sh` flow as the post-create bootstrap path, so new worktrees still seed `STICKYNOTE.md`, link shared `.env*` and `.kamal/secrets*` files, and keep the Beads/GSD workflow intact.
+That config keeps the existing `./.codex/scripts/bootstrap-worktree.sh` flow as the post-create bootstrap path, so new worktrees still seed `STICKYNOTE.md`, link shared `.env*` and `.kamal/secrets*` files, and keep the OMO + Beads + Cognee workflow intact.
 
 ## Development
 
@@ -175,8 +173,7 @@ pnpm install:local
 
 Downstream repositories should treat each scaffold or refresh as pinned to the `ai-harness` version and source commit that produced it.
 
-- new scaffolds now seed `.planning/STATE.md` with the `ai-harness` version and generated date so repos have an explicit starting baseline
-- when you refresh an existing repo, record the previous and new `ai-harness` versions plus the source commit in the update PR, handoff note, or `.planning/STATE.md`
+- when you refresh an existing repo, record the previous and new `ai-harness` versions plus the source commit in the update PR or handoff note
 - supported upgrade flow remains preserve-by-default: pull this repo forward, run `pnpm build`, rerun `ai-harness --mode existing <path> --assistant <codex|opencode> --init-json`, customize only the files listed in `createdPaths`, then finish with `ai-harness doctor <path> --assistant <codex|opencode>`
 - there is no general in-place migrator yet; use the existing-repo adoption flow and explicit review instead of assuming managed files will merge automatically
 
@@ -218,8 +215,8 @@ That flow gives you:
 
 - a local `ai-harness` command on your `PATH` backed by this checkout
 - a global OpenCode skill that can scaffold whichever repository you `cd` into
-- managed OpenCode and GSD defaults refreshed under `~/.config/opencode/oh-my-opencode.json` and `~/.gsd/defaults.json`
-- a managed backlog-driven `/gsd-autonomous` workflow refreshed under `~/.config/opencode/get-shit-done/workflows/autonomous.md`
+- managed OpenCode defaults refreshed under `~/.config/opencode/oh-my-opencode.json`
+- a managed backlog-driven OMO autonomous workflow refreshed under `~/.config/opencode/get-shit-done/workflows/autonomous.md`
 
 ## Current-state operator runbook
 
@@ -258,17 +255,14 @@ Day-to-day loop:
 ```bash
 bd ready --json
 bd update <id> --claim --json
-/gsd-next
-# if routed into phase work:
-/gsd-discuss-phase <n>
-/gsd-plan-phase <n>
-/gsd-execute-phase <n>
-/gsd-verify-work <n>
+./.codex/scripts/cognee-brief.sh "<query>"
+# then execute and verify using .rules/patterns/operator-workflow.md
+# and .codex/workflows/autonomous-execution.md
 bd close <id> --reason "Verified: <artifact or phase> passed" --json
 execution/autonomous landing lane runs `./.codex/scripts/land.sh`
 ```
 
-Use `/gsd-resume-work` to re-enter active phase work.
+Use `.rules/patterns/omo-agent-contract.md` to decide lane authority, Cognee fallback, and landing ownership.
 
 See `docs/harness-usage.md` for the detailed walkthrough.
 

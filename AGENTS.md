@@ -4,15 +4,16 @@
 
 ## Overview
 
-This repository is prepared for Codex through a focused runtime layer while keeping .rules/ and .planning/ as the canonical project systems.
+This repository is prepared for Codex through a focused runtime layer while keeping .rules/, Beads, and .codex workflows as the canonical operating systems.
 
 ## Codex Workflow
 
 Codex works in this repository through a focused runtime layer. The canonical systems remain:
 
 - .rules/ for architecture and workflow rules
-- .planning/ for GSD planning, execution, and handoff artifacts
-- .codex/scripts/ for working Cognee and planning sync backends
+- `.rules/patterns/omo-agent-contract.md` for lane and tool policy
+- native `bd` for Beads backlog tracking
+- .codex/scripts/ for Cognee and runtime automation
 
 Use the Codex compatibility docs and scripts under .codex/ as entrypoints, not as a separate source of truth.
 For OMO lane and tool policy, treat `.rules/patterns/omo-agent-contract.md` as the normative source and keep this file adapter-only.
@@ -20,12 +21,12 @@ For OMO lane and tool policy, treat `.rules/patterns/omo-agent-contract.md` as t
 ### Codex Operating Sequence
 
 1. Read the relevant .rules/ documents before changing code or infrastructure.
-2. Inspect .planning/STATE.md and any active phase docs in .planning/.
-3. Use native `bd` for task tracking after the repository is initialized with `bd init`.
-4. For planning, research, or autonomous startup work, query Cognee with ./.codex/scripts/cognee-brief.sh "<query>".
-5. If you use OpenCode worktrees, prefer the scaffolded `.opencode/worktree.jsonc` with `kdco/worktree`; otherwise run ./.codex/scripts/bootstrap-worktree.sh on a fresh worktree.
-6. Use `.rules/patterns/operator-workflow.md` and `/gsd-next` as the default interactive work loop.
-7. If you are in an execution/autonomous landing lane, land the session with ./.codex/scripts/land.sh.
+2. Initialize Beads with `bd init` if needed, then start from `bd ready --json` and claim one issue.
+3. For planning, research, or autonomous startup work, query Cognee with `./.codex/scripts/cognee-brief.sh "<query>"` before broad repo exploration.
+4. Follow `.rules/patterns/operator-workflow.md` plus `.codex/workflows/autonomous-execution.md` as the default execution loop.
+5. If you use OpenCode worktrees, prefer the scaffolded `.opencode/worktree.jsonc` with `kdco/worktree`; otherwise run `./.codex/scripts/bootstrap-worktree.sh` on a fresh worktree.
+6. Close Beads work only after verification passes.
+7. If you are in an execution/autonomous landing lane, land the session with `./.codex/scripts/land.sh`.
 
 ### Codex Guardrails
 
@@ -104,21 +105,19 @@ bd close bd-42 --reason "Completed" --json
 
 1. **Check ready work**: `bd ready --json` shows unblocked issues
 2. **Claim your task atomically**: `bd update <id> --claim --json`
-3. **Use the interactive default**: `/gsd-next` routes to the next useful GSD step without extra command hunting
-4. **Use the explicit phase loop when needed**: `/gsd-discuss-phase <n>` -> `/gsd-plan-phase <n>` -> `/gsd-execute-phase <n>` -> `/gsd-verify-work <n>`
-4. **Work on it**: Implement, test, document
+3. **Attempt a Cognee brief**: `./.codex/scripts/cognee-brief.sh "<query>"` before broad planning or repo-wide research
+4. **Work on it**: Implement, test, and verify against repo-local requirements
 5. **Discover new work?** Create linked issue:
    - `bd create "Found bug" --description="Details about what was found" -p 1 --deps discovered-from:<parent-id>`
 6. **Complete only after verification passes**: `bd close <id> --reason "Verified"`
 
-### Beads + GSD Harmonization
+### Beads + OMO Harmonization
 
-- Prefer the loop `bd ready -> claim -> /gsd-next -> /gsd-verify-work -> bd close`
-- When phase work is required, use `/gsd-discuss-phase <n> -> /gsd-plan-phase <n> -> /gsd-execute-phase <n> -> /gsd-verify-work <n>`
+- Prefer the loop `bd ready -> claim -> cognee brief -> implement -> verify -> bd close`
 - Use `.codex/workflows/autonomous-execution.md` for one-agent phase execution, or `.codex/workflows/parallel-execution.md` for multi-wave work
 - Reference active Beads issue IDs in phase context and handoff notes when the work maps to a phase
-- If `/gsd-verify-work <n>` finds gaps, create bug or follow-up issues instead of closing the parent issue early
-- If `.beads/` or `bd` is unavailable, continue with GSD rather than blocking execution
+- If verification finds gaps, create bug or follow-up issues instead of closing the parent issue early
+- If `.beads/` or `bd` is unavailable, continue using `.rules/patterns/operator-workflow.md` and local verification steps rather than blocking execution
 
 ### Project-Local Beads State
 

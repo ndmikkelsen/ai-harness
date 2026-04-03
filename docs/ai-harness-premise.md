@@ -7,7 +7,6 @@
 It supports:
 - new project scaffolding
 - existing repository adoption
-- GSD planning artifacts
 - Beads task tracking
 - Cognee integration hooks
 - Codex/OpenCode runtime support through `.codex/`
@@ -17,10 +16,10 @@ It supports:
 The scaffold keeps one canonical project workflow and layers assistant-specific entrypoints on top of it.
 
 Canonical systems:
-- `.planning/` for GSD planning and execution state
 - `.rules/` for workflow and architecture guidance
 - `.codex/` for Codex/OpenCode runtime scripts, guidance, and adapters
 - native `bd` for Beads task tracking after `bd init`
+- repo-local plan or handoff docs when a repository already keeps them
 
 ## Product intent
 
@@ -37,7 +36,7 @@ The most important product promises are:
 
 The harness is intentionally opinionated.
 
-- foundation installed by default: Beads, GSD, Codex, and OpenCode, with Cognee governed by lane-aware attempt/fallback policy
+- foundation installed by default: Beads, Codex/OpenCode runtime docs, and Cognee hooks governed by lane-aware attempt/fallback policy
 - source of truth: `src/templates/**` for scaffold content, `src/generators/**` for mapping that content into repo outputs, and `dist/` as the built copy
 - preserve by default: existing repositories keep user-owned files unless the user explicitly opts into force or a narrow merge path
 - cleanup by curation only: known non-harness AI workflow droppings are removed only through explicit manifests, never broad heuristic deletion
@@ -47,7 +46,7 @@ The harness is intentionally opinionated.
 
 When `ai-harness` adopts an existing repository it should be clear what happens:
 
-- installs: the missing harness foundation files, including root hygiene, `.planning/`, `.rules/`, `.codex/`, deployment starters, and `STICKYNOTE.example.md`
+- installs: the missing harness foundation files, including root hygiene, `.rules/`, `.codex/`, deployment starters, and `STICKYNOTE.example.md`
 - preserves: existing user-owned docs, prompts, scripts, and workflow files that are not explicitly managed or explicitly selected for safe merge
 - removes: only known conflicting AI workflow artifacts covered by a curated cleanup manifest and only when the cleanup option is requested
 - reports: created, skipped, merged, removed, and prompt-required cleanup actions through the scaffold result surface
@@ -57,19 +56,19 @@ When `ai-harness` adopts an existing repository it should be clear what happens:
 | Component | Decision | Notes |
 | --- | --- | --- |
 | Beads integration | Keep native `bd` only | Remove the legacy wrapper, remove unused Beads templates, keep docs aligned with upstream Beads |
-| GSD planning | Keep official GSD core | Align scaffold with `PROJECT`, `REQUIREMENTS`, `ROADMAP`, `STATE`, `config`, research, phases, quick tasks, milestones, and codebase mapping |
+| Repo-local planning artifacts | Do not scaffold by default | Preserve or reference existing repo-local plans when a repository already uses them; do not install a default `.planning/` tree |
 | Cognee integration | Keep planning-focused core | Keep bridge, brief, planning sync, and deploy pieces; remove the broad repo sync helper |
 | OpenCode overlay | Keep lean runtime docs | Keep `AGENTS.md`, `.codex/README.md`, `.codex/agents/*`, `.codex/workflows/parallel-execution.md`, and `.codex/templates/phase-execution.md`; remove dead template files |
 | Codex/OpenCode runtime | Keep `.codex/` only | Use `.codex/` as the only assistant runtime surface |
 | Deploy templates | Keep with infra assumptions | Keep `.kamal/secrets.example`, `config/deploy.yml`, and `config/deploy.cognee.yml`; treat `deploy.yml` as a starter and `deploy.cognee.yml` as the concrete service template |
-| Governance docs | Keep lean docs only | Remove root governance placeholders, keep `STICKYNOTE.example.md`, and use `AGENTS.md` + `.planning/` + `.rules/` as the main guidance surface |
+| Governance docs | Keep lean docs only | Remove root governance placeholders, keep `STICKYNOTE.example.md`, and use `AGENTS.md` + `.rules/` + `.codex/` as the main guidance surface |
 
 ## Operating model
 
 - `src/templates/**` is the source of truth for generated scaffold content
 - `src/generators/**` maps those templates into concrete repository outputs
 - `dist/` must stay in sync with source after scaffold or runtime changes
-- this repository dogfoods the scaffold so repo-level docs and planning artifacts should reflect the real product, not placeholder starter text
+- this repository dogfoods the scaffold so repo-level docs and runtime artifacts should reflect the real product, not placeholder starter text
 
 ## Beads decision
 
@@ -79,14 +78,13 @@ Approved direction:
 - use native `bd` commands directly
 - do not maintain a repo-local wrapper that only proxies to `bd`
 
-## GSD decision
+## Planning surface decision
 
 Approved direction:
-- align the scaffold to the official GSD planning shape
-- keep `.planning/config.json`, `PROJECT.md`, `REQUIREMENTS.md`, `ROADMAP.md`, and `STATE.md`
-- keep `.planning/research/`, `.planning/phases/`, `.planning/quick/`, `.planning/milestones/`, and `.planning/codebase/`
-- remove the standalone `TRACEABILITY.md` placeholder and keep traceability inside `REQUIREMENTS.md`
-- replace shallow placeholders with starter docs that match the real GSD workflow
+- do not scaffold a default `.planning/` tree
+- keep repo-local planning docs optional and repository-owned
+- rely on Beads, `.rules/`, `.codex/`, and existing repo docs for the default harness workflow
+- only reference or sync repo-local planning artifacts when a repository already keeps them
 
 ## Governance docs decision
 
@@ -94,7 +92,7 @@ Approved direction:
 - keep root governance lean and avoid extra placeholder policy documents
 - keep `STICKYNOTE.example.md` as the reusable local handoff template
 - do not scaffold `STICKYNOTE.md`; let worktree bootstrap or landing flows create it locally
-- treat `AGENTS.md`, `.codex/README.md`, `.rules/`, and `.planning/` as the active documentation surface for this harness
+- treat `AGENTS.md`, `.codex/README.md`, `.rules/`, and `.codex/workflows/` as the active documentation surface for this harness
 
 ## Runtime decision
 
@@ -118,8 +116,8 @@ Approved direction:
 - keep `.codex/scripts/cognee-bridge.sh`, `.codex/scripts/cognee-brief.sh`, `.codex/scripts/cognee-sync-planning.sh`, and `.codex/scripts/sync-planning-to-cognee.sh`
 - keep `.codex/docker/Dockerfile.cognee` and `config/deploy.cognee.yml`
 - remove `.codex/scripts/sync-to-cognee.sh`
-- keep Cognee planning-focused, with lane-aware attempt/fallback behavior instead of broad repository sync
-- expand the Cognee guidance in `.rules/patterns/cognee-gsd-integration.md`
+- keep Cognee focused on high-signal planning and execution context, with lane-aware attempt/fallback behavior instead of broad repository sync
+- keep the `.rules/patterns/` Cognee compatibility guidance aligned with the OMO contract and repo-local fallback model
 
 ## Deploy template decision
 
