@@ -15,10 +15,6 @@ function operatorWorkflow(): string {
   return loadTemplate('rules/patterns/operator-workflow.md');
 }
 
-function gsdWorkflow(): string {
-  return loadTemplate('rules/patterns/gsd-workflow.md');
-}
-
 function beadsIntegration(): string {
   return loadTemplate('rules/patterns/beads-integration.md');
 }
@@ -29,10 +25,6 @@ function omoAgentContract(): string {
 
 function envSecurity(): string {
   return loadTemplate('rules/patterns/env-security.md');
-}
-
-function gsdCogneeIntegration(): string {
-  return loadTemplate('rules/patterns/cognee-gsd-integration.md');
 }
 
 function deploymentPatterns(): string {
@@ -62,16 +54,6 @@ export function buildRuleEntries(): ManagedEntry[] {
       kind: 'file',
       path: '.rules/patterns/git-workflow.md',
       content: () => gitWorkflow()
-    },
-    {
-      kind: 'file',
-      path: '.rules/patterns/gsd-workflow.md',
-      content: () => gsdWorkflow()
-    },
-    {
-      kind: 'file',
-      path: '.rules/patterns/cognee-gsd-integration.md',
-      content: () => gsdCogneeIntegration()
     },
     {
       kind: 'file',
