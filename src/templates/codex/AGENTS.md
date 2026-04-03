@@ -4,15 +4,16 @@
 
 ## Overview
 
-This repository is prepared for {{COMPAT_LABEL}} through a focused runtime layer while keeping .rules/ and .planning/ as the canonical project systems.
+This repository is prepared for {{COMPAT_LABEL}} through a focused runtime layer while keeping .rules/, Beads, and .codex workflows as the canonical operating systems.
 
 ## {{COMPAT_LABEL}} Workflow
 
 {{COMPAT_LABEL}} works in this repository through a focused runtime layer. The canonical systems remain:
 
 - .rules/ for architecture and workflow rules
-- .planning/ for GSD planning, execution, and handoff artifacts
-- .codex/scripts/ for working Cognee and planning sync backends
+- `.rules/patterns/omo-agent-contract.md` for lane and tool policy
+- native `bd` for Beads backlog tracking
+- .codex/scripts/ for Cognee and runtime automation
 
 Use the {{COMPAT_LABEL}} compatibility docs and scripts under .codex/ as entrypoints, not as a separate source of truth.
 For OMO lane and tool policy, treat `.rules/patterns/omo-agent-contract.md` as the normative source and keep this file adapter-only.
@@ -20,12 +21,12 @@ For OMO lane and tool policy, treat `.rules/patterns/omo-agent-contract.md` as t
 ### {{COMPAT_LABEL}} Operating Sequence
 
 1. Read the relevant .rules/ documents before changing code or infrastructure.
-2. Inspect .planning/STATE.md and any active phase docs in .planning/.
-3. Use native `bd` for task tracking after the repository is initialized with `bd init`.
-4. For planning, research, or autonomous startup work, query Cognee with ./.codex/scripts/cognee-brief.sh "<query>".
-5. If you use OpenCode worktrees, prefer the scaffolded `.opencode/worktree.jsonc` with `kdco/worktree`; otherwise run ./.codex/scripts/bootstrap-worktree.sh on a fresh worktree.
-6. Use `.rules/patterns/operator-workflow.md` and `/gsd-next` as the default interactive work loop.
-7. If you are in an execution/autonomous landing lane, land the session with ./.codex/scripts/land.sh.
+2. Initialize Beads with `bd init` if needed, then start from `bd ready --json` and claim one issue.
+3. For planning, research, or autonomous startup work, query Cognee with `./.codex/scripts/cognee-brief.sh "<query>"` before broad repo exploration.
+4. Follow `.rules/patterns/operator-workflow.md` plus `.codex/workflows/autonomous-execution.md` as the default execution loop.
+5. If you use OpenCode worktrees, prefer the scaffolded `.opencode/worktree.jsonc` with `kdco/worktree`; otherwise run `./.codex/scripts/bootstrap-worktree.sh` on a fresh worktree.
+6. Close Beads work only after verification passes.
+7. If you are in an execution/autonomous landing lane, land the session with `./.codex/scripts/land.sh`.
 
 ### {{COMPAT_LABEL}} Guardrails
 
@@ -42,12 +43,12 @@ For OMO lane and tool policy, treat `.rules/patterns/omo-agent-contract.md` as t
 - Only execution/autonomous landing lanes should run `./.codex/scripts/land.sh`.
 - Planning, research, and review lanes must hand off instead of publishing.
 
-### Beads + GSD Loop
+### Beads + OMO Loop
 
-- When Beads is available, use `bd ready --json` and `bd update <id> --claim --json` before phase work.
+- When Beads is available, use `bd ready --json` and `bd update <id> --claim --json` before implementation work.
 - Use `.codex/workflows/autonomous-execution.md` for one-agent phase execution, or `.codex/workflows/parallel-execution.md` for multi-wave work.
 - Carry the active Beads issue ID through phase notes, execution context, and handoff docs.
-- Use `/gsd-next` first, then `/gsd-discuss-phase <n>`, `/gsd-plan-phase <n>`, `/gsd-execute-phase <n>`, and `/gsd-verify-work <n>` when phase work is required.
+- Attempt a Cognee brief with `./.codex/scripts/cognee-brief.sh "<query>"` before broad planning or repo-wide research.
 - Close Beads issues only after verification passes.
 - If verification finds gaps, create follow-up Beads bug issues instead of closing the parent work early.
-- If `.beads/` or `bd` is unavailable, continue the GSD workflow without blocking on issue tracking.
+- If `.beads/` or `bd` is unavailable, continue with `.rules/patterns/operator-workflow.md` and local verification steps without blocking on issue tracking.

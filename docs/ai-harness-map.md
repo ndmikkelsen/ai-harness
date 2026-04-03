@@ -5,10 +5,11 @@
 `ai-harness` is a TypeScript CLI that bootstraps a repository for a Codex/OpenCode-first development workflow.
 
 The kept systems are:
-- GSD for planning and execution context
 - Beads for task tracking through native `bd`
-- Cognee for lane-aware knowledge briefs and planning sync
+- Cognee for lane-aware knowledge briefs and optional planning sync
+- `.rules/` for workflow and architecture policy
 - `.codex/` for the assistant runtime surface shared by Codex and OpenCode
+- repo-local plan or handoff docs when a repository already has them
 
 ## Runtime Shape
 
@@ -21,7 +22,7 @@ The kept systems are:
 ### Core generators
 
 - `src/generators/root.ts` creates root docs and optional root-file merge behavior for adoption mode
-- `src/generators/planning.ts` creates the official GSD planning surface
+- `src/generators/planning.ts` intentionally emits no default planning scaffold
 - `src/generators/codex.ts` creates the only assistant runtime surface under `.codex/`
 - `src/generators/config.ts` creates `.kamal/` and `config/` deploy templates
 - `src/generators/rules.ts` creates workflow and architecture guidance under `.rules/`
@@ -29,17 +30,11 @@ The kept systems are:
 
 ## Generated Repository Shape
 
-### Planning
+### Repo-local planning context
 
-- `.planning/PROJECT.md`
-- `.planning/REQUIREMENTS.md`
-- `.planning/ROADMAP.md`
-- `.planning/STATE.md`
-- `.planning/research/`
-- `.planning/phases/`
-- `.planning/quick/`
-- `.planning/milestones/`
-- `.planning/codebase/`
+- no default `.planning/` tree is generated
+- existing repositories may keep their own plan, phase, or handoff docs
+- Cognee sync scripts may still consume repo-local planning artifacts when they already exist
 
 ### Assistant runtime
 
@@ -63,9 +58,9 @@ The kept systems are:
 
 ### Rules and local docs
 
-- `.rules/patterns/gsd-workflow.md`
 - `.rules/patterns/beads-integration.md`
-- `.rules/patterns/cognee-gsd-integration.md`
+- `.rules/patterns/operator-workflow.md`
+- `.rules/patterns/omo-agent-contract.md`
 - `.rules/patterns/git-workflow.md`
 - `.rules/patterns/env-security.md`
 - `STICKYNOTE.example.md`

@@ -172,14 +172,28 @@ export async function runDoctor(options: DoctorCommandOptions): Promise<DoctorRe
     'status',
     'open_risks'
   ];
+  const staleGsdArtifactPaths = ['.rules/patterns/gsd-workflow.md', '.rules/patterns/cognee-gsd-integration.md'];
+  const staleGsdMarkers = ['/gsd-', '~/.gsd/defaults.json', 'gsd-workflow.md', 'cognee-gsd-integration.md'];
+  const staleGsdScanPaths = [
+    'AGENTS.md',
+    'README.md',
+    '.codex/README.md',
+    '.codex/skills/harness/SKILL.md',
+    '.codex/skills/harness/references/ai-harness-command-matrix.md',
+    '.codex/skills/harness/references/scaffold-customization-map.md',
+    '.codex/scripts/bootstrap-worktree.sh',
+    '.codex/workflows/autonomous-execution.md',
+    '.rules/index.md',
+    '.rules/patterns/beads-integration.md',
+    '.rules/patterns/operator-workflow.md',
+    '.rules/patterns/omo-agent-contract.md'
+  ];
   const alignmentManagedPaths = new Set([
     'AGENTS.md',
     '.codex/README.md',
     '.codex/workflows/autonomous-execution.md',
     '.rules/patterns/omo-agent-contract.md',
     '.rules/patterns/operator-workflow.md',
-    '.rules/patterns/gsd-workflow.md',
-    '.rules/patterns/cognee-gsd-integration.md',
     '.opencode/worktree.jsonc',
     '.beads/hooks/post-checkout',
     'scripts/hooks/post-checkout'
@@ -306,6 +320,36 @@ export async function runDoctor(options: DoctorCommandOptions): Promise<DoctorRe
     });
   }
 
+  for (const artifactPath of staleGsdArtifactPaths) {
+    if (await fileExists(targetDir, artifactPath)) {
+      alignmentInvalid.push({
+        path: artifactPath,
+        reason: 'stale GSD alignment artifact present',
+        category: 'alignment',
+        severity: 'fail'
+      });
+    }
+  }
+
+  for (const scanPath of staleGsdScanPaths) {
+    const content = await readFileIfPresent(targetDir, scanPath);
+    if (content === null) {
+      continue;
+    }
+
+    const marker = staleGsdMarkers.find((candidate) => content.includes(candidate));
+    if (!marker) {
+      continue;
+    }
+
+    alignmentInvalid.push({
+      path: scanPath,
+      reason: `contains stale GSD workflow reference: ${marker}`,
+      category: 'alignment',
+      severity: 'fail'
+    });
+  }
+
   const autonomousWorkflow = await readFileIfPresent(targetDir, '.codex/workflows/autonomous-execution.md');
   if (autonomousWorkflow !== null && !autonomousWorkflow.includes(omoContractPath)) {
     alignmentInvalid.push({
@@ -347,7 +391,6 @@ export async function runDoctor(options: DoctorCommandOptions): Promise<DoctorRe
   }
 
   const handoffWorkflowDocs = [
-    { path: '.rules/patterns/gsd-workflow.md', content: await readFileIfPresent(targetDir, '.rules/patterns/gsd-workflow.md') },
     {
       path: '.codex/workflows/autonomous-execution.md',
       content: await readFileIfPresent(targetDir, '.codex/workflows/autonomous-execution.md')

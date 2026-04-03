@@ -10,7 +10,8 @@ import { runCleanup } from '../../src/core/cleanup.js';
 const manifest = getCleanupManifest('legacy-ai-frameworks-v1');
 const legacyRuntimeDir = manifest.entries.find((entry) => entry.id === 'legacy-runtime-dir')!.path;
 const legacyRuntimeGuide = manifest.entries.find((entry) => entry.id === 'legacy-runtime-guide')!.path;
-const legacyTraceabilityDoc = manifest.entries.find((entry) => entry.id === 'legacy-planning-traceability')?.path;
+const legacyPlanningDir = manifest.entries.find((entry) => entry.id === 'legacy-gsd-planning-workspace')!.path;
+const legacyGsdWorkflowRule = manifest.entries.find((entry) => entry.id === 'legacy-gsd-workflow-rule')!.path;
 
 describe('cleanup manifests', () => {
   it('exposes the curated legacy cleanup manifest', () => {
@@ -20,7 +21,8 @@ describe('cleanup manifests', () => {
       expect.arrayContaining([
         expect.objectContaining({ path: legacyRuntimeGuide, disposition: 'prompt-before-delete' }),
         expect.objectContaining({ path: legacyRuntimeDir, disposition: 'prompt-before-delete' }),
-        expect.objectContaining({ path: legacyTraceabilityDoc, disposition: 'prompt-before-delete' }),
+        expect.objectContaining({ path: legacyPlanningDir, disposition: 'prompt-before-delete' }),
+        expect.objectContaining({ path: legacyGsdWorkflowRule, disposition: 'prompt-before-delete' }),
         expect.objectContaining({ path: '.codex/scripts/sync-to-cognee.sh', disposition: 'safe-delete' })
       ])
     );
@@ -94,23 +96,45 @@ describe('runCleanup', () => {
     );
   });
 
-  it('deletes the deprecated traceability placeholder only when explicitly confirmed', async () => {
+  it('deletes the legacy planning workspace only when explicitly confirmed', async () => {
     const targetDir = await mkdtemp(path.join(os.tmpdir(), 'ai-harness-cleanup-'));
     await mkdir(path.join(targetDir, '.planning'), { recursive: true });
     await writeFile(path.join(targetDir, '.planning', 'TRACEABILITY.md'), '# traceability\n', 'utf8');
+    await writeFile(path.join(targetDir, '.planning', 'PROJECT.md'), '# project\n', 'utf8');
 
     const result = await runCleanup({
       targetDir,
       manifestId: 'legacy-ai-frameworks-v1',
       dryRun: false,
-      confirmCleanup: async (entry) => entry.path === '.planning/TRACEABILITY.md'
+      confirmCleanup: async (entry) => entry.path === '.planning'
     });
 
     expect(result.status).toBe('applied');
-    expect(result.removedPaths).toContain('.planning/TRACEABILITY.md');
+    expect(result.removedPaths).toContain('.planning');
     expect(result.actions).toEqual(
       expect.arrayContaining([
-        expect.objectContaining({ path: '.planning/TRACEABILITY.md', status: 'deleted' })
+        expect.objectContaining({ path: '.planning', status: 'deleted' })
+      ])
+    );
+  });
+
+  it('deletes a legacy GSD workflow rule only when explicitly confirmed', async () => {
+    const targetDir = await mkdtemp(path.join(os.tmpdir(), 'ai-harness-cleanup-'));
+    await mkdir(path.join(targetDir, '.rules', 'patterns'), { recursive: true });
+    await writeFile(path.join(targetDir, '.rules', 'patterns', 'gsd-workflow.md'), '# gsd workflow\n', 'utf8');
+
+    const result = await runCleanup({
+      targetDir,
+      manifestId: 'legacy-ai-frameworks-v1',
+      dryRun: false,
+      confirmCleanup: async (entry) => entry.path === '.rules/patterns/gsd-workflow.md'
+    });
+
+    expect(result.status).toBe('applied');
+    expect(result.removedPaths).toContain('.rules/patterns/gsd-workflow.md');
+    expect(result.actions).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ path: '.rules/patterns/gsd-workflow.md', status: 'deleted' })
       ])
     );
   });

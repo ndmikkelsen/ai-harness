@@ -39,7 +39,7 @@ export function thenTheCliCreatesTheAiWorkflowScaffoldFiles(world: CliFeatureWor
 
   expect(result.mode).toBe('new');
   expect(result.createdPaths).toEqual(
-    expect.arrayContaining(['.planning/config.json', '.codex/README.md', 'STICKYNOTE.example.md'])
+    expect.arrayContaining(['.codex/README.md', '.rules/patterns/operator-workflow.md', 'STICKYNOTE.example.md'])
   );
 }
 
@@ -75,5 +75,5 @@ export async function thenTheCodexOpencodeRuntimeFilesAreAvailable(world: CliFea
   const autonomousWorkflow = await readTargetFile(world, '.codex/workflows/autonomous-execution.md');
 
   expect(agentsGuide).toContain('.rules/patterns/operator-workflow.md');
-  expect(autonomousWorkflow).toContain('/gsd-next');
+  expect(autonomousWorkflow).toContain('bd ready --json');
 }

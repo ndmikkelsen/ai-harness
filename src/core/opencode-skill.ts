@@ -1,7 +1,7 @@
 import os from 'node:os';
 import path from 'node:path';
 
-import type { GsdDefaultsEntry, OpenCodeConfigEntry, OpenCodeSkillEntry, OpenCodeWorkflowEntry } from './types.js';
+import type { OpenCodeConfigEntry, OpenCodeSkillEntry, OpenCodeWorkflowEntry } from './types.js';
 import { loadTemplate } from './template-loader.js';
 
 type JsonObject = Record<string, unknown>;
@@ -50,33 +50,10 @@ function mergeOpenCodeDefaults(existingContent: string, generatedContent: string
   return mergedContent === existingContent ? null : mergedContent;
 }
 
-function mergeGsdDefaults(existingContent: string, generatedContent: string): string | null {
-  const existing = parseJsonObject(existingContent);
-  const generated = parseJsonObject(generatedContent);
-
-  if (existing === null || generated === null) {
-    return generatedContent;
-  }
-
-  const generatedOverrides = (generated.model_overrides ?? {}) as JsonObject;
-  const existingOverrides = (existing.model_overrides ?? {}) as JsonObject;
-
-  const merged: JsonObject = {
-    ...existing,
-    model_profile: generated.model_profile,
-    resolve_model_ids: generated.resolve_model_ids,
-    model_overrides: {
-      ...existingOverrides,
-      ...generatedOverrides
-    }
-  };
-
-  const mergedContent = stableJsonStringify(merged);
-  return mergedContent === existingContent ? null : mergedContent;
-}
-
 export const OPENCODE_SKILL_REPO_NAME = 'ai-harness';
 export const OPENCODE_SKILL_NAME = 'harness';
+export const SUPERMEMORY_PLUGIN_NAME = 'opencode-supermemory';
+export const OMO_SUPERMEMORY_DISABLED_HOOK = 'anthropic-context-window-limit-recovery';
 
 export function defaultOpenCodeSkillsRoot(): string {
   return path.join(os.homedir(), '.opencode', 'skills');
@@ -84,10 +61,6 @@ export function defaultOpenCodeSkillsRoot(): string {
 
 export function defaultOpenCodeConfigRoot(): string {
   return path.join(os.homedir(), '.config', 'opencode');
-}
-
-export function defaultGsdRoot(): string {
-  return path.join(os.homedir(), '.gsd');
 }
 
 export function openCodeSkillInstallDir(targetRoot = defaultOpenCodeSkillsRoot()): string {
@@ -102,8 +75,12 @@ export function openCodeDefaultsFilePath(configRoot = defaultOpenCodeConfigRoot(
   return path.join(configRoot, 'oh-my-opencode.json');
 }
 
-export function gsdDefaultsFilePath(gsdRoot = defaultGsdRoot()): string {
-  return path.join(gsdRoot, 'defaults.json');
+export function openCodeRuntimeConfigFilePath(configRoot = defaultOpenCodeConfigRoot()): string {
+  return path.join(configRoot, 'opencode.jsonc');
+}
+
+export function supermemoryConfigFilePath(configRoot = defaultOpenCodeConfigRoot()): string {
+  return path.join(configRoot, 'supermemory.jsonc');
 }
 
 export function buildOpenCodeSkillEntries(): OpenCodeSkillEntry[] {
@@ -150,16 +127,6 @@ export function buildOpenCodeConfigEntries(): OpenCodeConfigEntry[] {
       path: 'oh-my-opencode.json',
       content: () => loadTemplate('opencode/oh-my-opencode.json'),
       merge: mergeOpenCodeDefaults
-    }
-  ];
-}
-
-export function buildGsdDefaultsEntries(): GsdDefaultsEntry[] {
-  return [
-    {
-      path: 'defaults.json',
-      content: () => loadTemplate('gsd/defaults.json'),
-      merge: mergeGsdDefaults
     }
   ];
 }

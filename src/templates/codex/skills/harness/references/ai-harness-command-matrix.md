@@ -30,8 +30,7 @@ ai-harness install-skill --assistant opencode
 
 - refreshes the global `harness` skill bundle under `~/.opencode/skills/ai-harness/`
 - refreshes the managed OpenCode defaults at `~/.config/opencode/oh-my-opencode.json`
-- refreshes the managed `/gsd-autonomous` entrypoint under `~/.config/opencode/get-shit-done/workflows/autonomous.md`
-- refreshes the managed GSD defaults at `~/.gsd/defaults.json`
+- refreshes the managed autonomous workflow under `~/.config/opencode/get-shit-done/workflows/autonomous.md`
 - the shared autonomous policy now lives in repo files like `.rules/patterns/operator-workflow.md` and `.codex/workflows/autonomous-execution.md`
 - installs the validated routing split: `openai/gpt-5.4` for primary execution, `openai/gpt-5.3-codex` for planning/writing helpers, and `opencode/big-pickle` for cheap discovery/background work
 

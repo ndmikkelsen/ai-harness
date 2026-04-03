@@ -7,7 +7,6 @@ Use `.rules/` for repo-local workflow and architecture guidance.
 - `patterns/operator-workflow.md`
 - `patterns/omo-agent-contract.md`
 - `patterns/git-workflow.md`
-- `patterns/gsd-workflow.md`
 - `patterns/beads-integration.md`
 - `patterns/bdd-workflow.md`
 - `patterns/deployment.md`

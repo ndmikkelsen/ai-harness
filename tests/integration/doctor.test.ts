@@ -1,4 +1,4 @@
-import { chmod, mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
+import { chmod, mkdir, mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
 
@@ -278,6 +278,79 @@ describe('runDoctor', () => {
     );
   });
 
+  it('fails when a stale GSD alignment artifact is still present', async () => {
+    const workspace = await mkdtemp(path.join(os.tmpdir(), 'ai-harness-doctor-'));
+
+    await runInit({
+      cwd: workspace,
+      projectArg: 'doctor-stale-gsd-file',
+      assistant: 'codex',
+      mode: 'auto',
+      dryRun: false,
+      force: false,
+      skipGit: true,
+      detectPorts: false
+    });
+
+    const targetDir = path.join(workspace, 'doctor-stale-gsd-file');
+    await mkdir(path.join(targetDir, '.rules', 'patterns'), { recursive: true });
+    await writeFile(path.join(targetDir, '.rules', 'patterns', 'gsd-workflow.md'), '# legacy gsd workflow\n', 'utf8');
+
+    const result = await runDoctor({
+      cwd: workspace,
+      targetArg: targetDir,
+      assistant: 'codex',
+      json: false
+    });
+
+    expect(result.status).toBe('fail');
+    expect(result.invalid).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          path: '.rules/patterns/gsd-workflow.md',
+          reason: 'stale GSD alignment artifact present'
+        })
+      ])
+    );
+  });
+
+  it('fails when a managed workflow doc regresses to GSD command guidance', async () => {
+    const workspace = await mkdtemp(path.join(os.tmpdir(), 'ai-harness-doctor-'));
+
+    await runInit({
+      cwd: workspace,
+      projectArg: 'doctor-stale-gsd-token',
+      assistant: 'codex',
+      mode: 'auto',
+      dryRun: false,
+      force: false,
+      skipGit: true,
+      detectPorts: false
+    });
+
+    const targetDir = path.join(workspace, 'doctor-stale-gsd-token');
+    const workflowPath = path.join(targetDir, '.rules', 'patterns', 'operator-workflow.md');
+    const workflow = await readFile(workflowPath, 'utf8');
+    await writeFile(workflowPath, `${workflow}\nLegacy command: /gsd-next\n`, 'utf8');
+
+    const result = await runDoctor({
+      cwd: workspace,
+      targetArg: targetDir,
+      assistant: 'codex',
+      json: false
+    });
+
+    expect(result.status).toBe('fail');
+    expect(result.invalid).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          path: '.rules/patterns/operator-workflow.md',
+          reason: 'contains stale GSD workflow reference: /gsd-'
+        })
+      ])
+    );
+  });
+
   it('fails when a Codex repo is missing a shared backend file', async () => {
     const workspace = await mkdtemp(path.join(os.tmpdir(), 'ai-harness-doctor-'));
 
@@ -401,6 +474,7 @@ describe('runDoctor', () => {
     });
 
     const targetDir = path.join(workspace, 'doctor-deprecated');
+    await mkdir(path.join(targetDir, '.planning'), { recursive: true });
     await writeFile(path.join(targetDir, '.planning', 'TRACEABILITY.md'), '# traceability\n', 'utf8');
     await writeFile(path.join(targetDir, '.codex', 'scripts', 'sync-to-cognee.sh'), '#!/usr/bin/env bash\n', 'utf8');
 
@@ -418,7 +492,7 @@ describe('runDoctor', () => {
     expect(result.warnings).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          path: '.planning/TRACEABILITY.md',
+          path: '.planning',
           reason: expect.stringContaining('--cleanup-manifest legacy-ai-frameworks-v1')
         }),
         expect.objectContaining({

@@ -2,18 +2,19 @@ import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 
 import {
+  OMO_SUPERMEMORY_DISABLED_HOOK,
   OPENCODE_SKILL_NAME,
-  buildGsdDefaultsEntries,
+  SUPERMEMORY_PLUGIN_NAME,
   buildOpenCodeConfigEntries,
   buildOpenCodeSkillEntries,
   buildOpenCodeWorkflowEntries,
-  defaultGsdRoot,
   defaultOpenCodeConfigRoot,
   defaultOpenCodeSkillsRoot,
-  gsdDefaultsFilePath,
   openCodeDefaultsFilePath,
+  openCodeRuntimeConfigFilePath,
   openCodeWorkflowInstallDir,
-  openCodeSkillInstallDir
+  openCodeSkillInstallDir,
+  supermemoryConfigFilePath
 } from '../core/opencode-skill.js';
 import type {
   InstallSkillTemplateEntry,
@@ -57,20 +58,18 @@ export async function runInstallSkill(options: InstallSkillCommandOptions): Prom
 
   const targetRoot = path.resolve(options.cwd, options.targetRoot ?? defaultOpenCodeSkillsRoot());
   const configRoot = path.resolve(options.cwd, options.configRoot ?? defaultOpenCodeConfigRoot());
-  const gsdRoot = path.resolve(options.cwd, options.gsdRoot ?? defaultGsdRoot());
   const installDir = openCodeSkillInstallDir(targetRoot);
   const workflowDir = openCodeWorkflowInstallDir(configRoot);
   const openCodeDefaultsPath = openCodeDefaultsFilePath(configRoot);
+  const openCodeRuntimeConfigPath = openCodeRuntimeConfigFilePath(configRoot);
+  const supermemoryConfigPath = supermemoryConfigFilePath(configRoot);
   const resolvedWorkflowFilePath = path.join(configRoot, 'get-shit-done', 'workflows', 'autonomous.md');
-  const resolvedGsdDefaultsFilePath = gsdDefaultsFilePath(gsdRoot);
   const writtenPaths: string[] = [];
   const unchangedPaths: string[] = [];
   const writtenConfigPaths: string[] = [];
   const unchangedConfigPaths: string[] = [];
   const writtenWorkflowPaths: string[] = [];
   const unchangedWorkflowPaths: string[] = [];
-  const writtenDefaultsPaths: string[] = [];
-  const unchangedDefaultsPaths: string[] = [];
 
   await mkdir(installDir, { recursive: true });
 
@@ -103,43 +102,54 @@ export async function runInstallSkill(options: InstallSkillCommandOptions): Prom
     unchangedWorkflowPaths.push(entry.path);
   }
 
-  for (const entry of buildGsdDefaultsEntries()) {
-    const status = await writeInstallEntry(gsdRoot, entry);
-    if (status === 'written') {
-      writtenDefaultsPaths.push(entry.path);
-      continue;
-    }
-    unchangedDefaultsPaths.push(entry.path);
-  }
+  const runtimeConfigContent = await readFile(outputOrFallback(openCodeRuntimeConfigPath), 'utf8').catch(() => null);
+  const supermemorySettingsContent = await readFile(outputOrFallback(supermemoryConfigPath), 'utf8').catch(() => null);
+  const openCodeDefaultsContent = await readFile(outputOrFallback(openCodeDefaultsPath), 'utf8').catch(() => null);
+  const hasSupermemoryPlugin = runtimeConfigContent?.includes(SUPERMEMORY_PLUGIN_NAME) ?? false;
+  const hasSupermemoryApiKey = Boolean(process.env.SUPERMEMORY_API_KEY) || (supermemorySettingsContent?.includes('"apiKey"') ?? false);
+  const hasDisabledRecoveryHook = openCodeDefaultsContent?.includes(OMO_SUPERMEMORY_DISABLED_HOOK) ?? false;
 
   return {
     assistant: options.assistant,
     skillName: OPENCODE_SKILL_NAME,
     targetRoot,
     configRoot,
-    gsdRoot,
     installDir,
     workflowDir,
     workflowFilePath: resolvedWorkflowFilePath,
     openCodeDefaultsFilePath: openCodeDefaultsPath,
-    gsdDefaultsFilePath: resolvedGsdDefaultsFilePath,
+    openCodeRuntimeConfigFilePath: openCodeRuntimeConfigPath,
+    supermemoryConfigFilePath: supermemoryConfigPath,
     writtenPaths,
     unchangedPaths,
     writtenConfigPaths,
     unchangedConfigPaths,
     writtenWorkflowPaths,
     unchangedWorkflowPaths,
-    writtenDefaultsPaths,
-    unchangedDefaultsPaths,
     notes: [
       'Restart OpenCode after installing or updating global skills.',
       'Make sure the `ai-harness` CLI is on your PATH before invoking the installed skill.',
       'The installed skill expects `ai-harness` to be available locally on your machine, typically via a checkout plus `pnpm install:local`.',
       `The install also refreshes the managed OpenCode defaults at ${openCodeDefaultsPath}.`,
-      `The install also refreshes the managed \/gsd-autonomous workflow at ${resolvedWorkflowFilePath}.`,
-      `The install also refreshes the managed GSD defaults at ${resolvedGsdDefaultsFilePath}.`
+      `The install also refreshes the managed autonomous workflow at ${resolvedWorkflowFilePath}.`,
+      `Optional supermemory setup: run \`bunx ${SUPERMEMORY_PLUGIN_NAME}@latest install --no-tui --disable-context-recovery\`.`,
+      `Supermemory plugin registration lives in ${openCodeRuntimeConfigPath}; settings live in ${supermemoryConfigPath}.`,
+      hasSupermemoryPlugin
+        ? 'Supermemory plugin registration detected in the OpenCode runtime config.'
+        : `Supermemory is not registered yet. Add \`${SUPERMEMORY_PLUGIN_NAME}\` to ${openCodeRuntimeConfigPath} or run the official installer.`,
+      hasSupermemoryApiKey
+        ? 'Supermemory API key source detected via SUPERMEMORY_API_KEY or supermemory.jsonc.'
+        : 'Supermemory API key not detected. Set SUPERMEMORY_API_KEY or add an apiKey entry to supermemory.jsonc before relying on memory injection.',
+      hasDisabledRecoveryHook
+        ? `Oh-my-opencode compatibility hook is already disabled in ${openCodeDefaultsPath}.`
+        : `If you enable supermemory with oh-my-opencode, add \`disabled_hooks: ["${OMO_SUPERMEMORY_DISABLED_HOOK}"]\` to ${openCodeDefaultsPath}.`,
+      'Verify supermemory with `opencode -c` and confirm the plugin is listed in Available Tools.'
     ]
   };
+}
+
+function outputOrFallback(filePath: string): string {
+  return filePath;
 }
 
 export function formatInstallSkillReport(result: InstallSkillResult): string {
@@ -150,9 +160,7 @@ export function formatInstallSkillReport(result: InstallSkillResult): string {
     `OpenCode config files written: ${result.writtenConfigPaths.length}`,
     `OpenCode config files unchanged: ${result.unchangedConfigPaths.length}`,
     `Workflow files written: ${result.writtenWorkflowPaths.length}`,
-    `Workflow files unchanged: ${result.unchangedWorkflowPaths.length}`,
-    `GSD defaults written: ${result.writtenDefaultsPaths.length}`,
-    `GSD defaults unchanged: ${result.unchangedDefaultsPaths.length}`
+    `Workflow files unchanged: ${result.unchangedWorkflowPaths.length}`
   ];
 
   if (result.writtenPaths.length > 0) {
@@ -172,13 +180,6 @@ export function formatInstallSkillReport(result: InstallSkillResult): string {
   if (result.writtenWorkflowPaths.length > 0) {
     lines.push('', 'Written workflow files:');
     for (const entry of result.writtenWorkflowPaths) {
-      lines.push(`- ${entry}`);
-    }
-  }
-
-  if (result.writtenDefaultsPaths.length > 0) {
-    lines.push('', 'Written GSD defaults files:');
-    for (const entry of result.writtenDefaultsPaths) {
       lines.push(`- ${entry}`);
     }
   }

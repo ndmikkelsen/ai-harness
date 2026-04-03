@@ -22,7 +22,6 @@ try {
   const cli = path.join(buildDir, 'src', 'cli.js');
   const skillRoot = path.join(workspace, 'opencode-skills');
   const configRoot = path.join(workspace, 'opencode-config');
-  const gsdRoot = path.join(workspace, '.gsd');
 
   const runCli = (args) => {
     execFileSync(process.execPath, [cli, ...args], {
@@ -35,7 +34,7 @@ try {
   runCli(['--assistant', 'codex', '--skip-git', '--dry-run', path.join(workspace, 'smoke-codex')]);
   runCli(['--assistant', 'opencode', '--skip-git', '--dry-run', path.join(workspace, 'smoke-opencode')]);
   runCli(['--assistant', 'codex', '--skip-git', path.join(workspace, 'smoke-verified-codex')]);
-  runCli(['install-skill', '--assistant', 'opencode', '--target-root', skillRoot, '--config-root', configRoot, '--gsd-root', gsdRoot]);
+  runCli(['install-skill', '--assistant', 'opencode', '--target-root', skillRoot, '--config-root', configRoot]);
 } finally {
   rmSync(workspace, { recursive: true, force: true });
 }

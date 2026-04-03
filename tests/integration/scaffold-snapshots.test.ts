@@ -90,7 +90,7 @@ describe('scaffold snapshots', () => {
     expect(autonomousWorkflow).toContain('BEADS_AVAILABLE');
     expect(autonomousWorkflow).toContain('.rules/patterns/omo-agent-contract.md');
     expect(autonomousWorkflow).toContain('bd ready --json');
-    expect(autonomousWorkflow).toContain('/gsd-next');
+    expect(autonomousWorkflow).toContain('repo-local plan context');
     expect(autonomousWorkflow).toContain('gaps_found');
     expect(result).toMatchSnapshot();
   });

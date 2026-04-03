@@ -28,7 +28,7 @@ Only if `.codex/scripts/cognee-brief.sh` already exists.
 
 - `README*`
 - `docs/**/*.md`
-- `.planning/*`
+- repo-local plan or handoff docs when present
 - `.rules/**/*`
 - `AGENTS.md`
 - `STICKYNOTE*`
@@ -44,7 +44,7 @@ Use `manifest-discovery.md`.
 - app or service boundaries
 - deployment model
 - current workstream or roadmap hints
-- any repo-specific conventions that should shape `AGENTS.md` or `.planning/*`
+- any repo-specific conventions that should shape `AGENTS.md`, `.rules/**/*`, or `.codex/**/*`
 
 ## Legacy AI framework cleanup
 
