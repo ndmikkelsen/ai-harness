@@ -21,6 +21,6 @@
 - current supported install path is local checkout based: `pnpm install`, `pnpm build`, `pnpm install:local`, and `ai-harness install-skill --assistant opencode`
 - `ai-harness` is intentionally a local-use tool for developer machines; there is no package-manager or registry publication path planned
 - downstream repos should treat each scaffold or refresh as pinned to the `ai-harness` version and source commit used for that run
-- generated repos now start with a scaffold baseline note in `.planning/STATE.md`; refresh PRs should record the old and new `ai-harness` versions as part of the handoff
+- generated repos no longer receive a default `.planning/` scaffold; refresh PRs should record the old and new `ai-harness` versions plus any repo-local planning or handoff artifacts that were intentionally updated
 - there is no separate `scaiff` compatibility alias; older references should move to `ai-harness` and the `harness` skill directly
 - keep source templates, self-scaffolded repo files, and built `dist/` assets aligned as the product evolves

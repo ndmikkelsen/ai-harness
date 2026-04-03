@@ -34,21 +34,35 @@ const LEGACY_AI_FRAMEWORKS_V1: CleanupManifest = {
       path: 'CONSTITUTION.md',
       kind: 'file',
       disposition: 'prompt-before-delete',
-      reason: 'legacy governance placeholder replaced by .planning/, .rules/, and AGENTS.md'
+      reason: 'legacy governance placeholder replaced by `.rules/`, repo-local workflow docs, and AGENTS.md'
     },
     {
       id: 'legacy-governance-vision',
       path: 'VISION.md',
       kind: 'file',
       disposition: 'prompt-before-delete',
-      reason: 'legacy vision placeholder replaced by .planning/PROJECT.md and requirements docs'
+      reason: 'legacy vision placeholder replaced by README.md, AGENTS.md, and repo-local handoff or planning docs'
     },
     {
-      id: 'legacy-planning-traceability',
-      path: '.planning/TRACEABILITY.md',
+      id: 'legacy-gsd-planning-workspace',
+      path: '.planning',
+      kind: 'directory',
+      disposition: 'prompt-before-delete',
+      reason: 'legacy GSD planning workspace no longer scaffolds by default and should be removed only when you explicitly migrate away from it'
+    },
+    {
+      id: 'legacy-gsd-workflow-rule',
+      path: '.rules/patterns/gsd-workflow.md',
       kind: 'file',
       disposition: 'prompt-before-delete',
-      reason: 'legacy traceability placeholder replaced by traceability inside .planning/REQUIREMENTS.md'
+      reason: 'legacy GSD workflow rule replaced by OMO + Beads + Cognee operator guidance'
+    },
+    {
+      id: 'legacy-gsd-cognee-rule',
+      path: '.rules/patterns/cognee-gsd-integration.md',
+      kind: 'file',
+      disposition: 'prompt-before-delete',
+      reason: 'legacy GSD-era Cognee rule replaced by the OMO contract and operator workflow docs'
     },
     {
       id: 'legacy-broad-cognee-sync',
